@@ -6,7 +6,7 @@ import Image from 'next/image'
 import React, { useLayoutEffect, useState } from 'react'
 import styles from '../styles/Home.module.css'
 import 'antd/dist/antd.css';
-import { Layout, Menu, Breadcrumb } from 'antd';
+import { Layout, Menu, Breadcrumb, Avatar, Button } from 'antd';
 import {
   UsergroupAddOutlined,
   PieChartOutlined,
@@ -14,6 +14,8 @@ import {
   SnippetsOutlined,
   UserOutlined,
   BookOutlined,
+  SettingOutlined,
+  PlusOutlined,
 } from '@ant-design/icons';
 
 const { Header, Content, Footer, Sider } = Layout;
@@ -22,10 +24,6 @@ const { SubMenu } = Menu;
 export default function AppLayout({ children }: any) {
 
   const [collapsed, seCollapse] = useState(false);
-  
-  useLayoutEffect(() => {
-
-  }, [collapsed])
 
   return (
     <Layout className="min-h-screen h-screen" >
@@ -71,10 +69,28 @@ export default function AppLayout({ children }: any) {
       <Layout className="site-layout">
         {/* <Header className="site-layout-background" style={{ padding: 0 }} /> */}
         <Content className="m-4">
-          <Breadcrumb className="">
-            <Breadcrumb.Item>User</Breadcrumb.Item>
-            <Breadcrumb.Item>Bill</Breadcrumb.Item>
-          </Breadcrumb>
+          <div className="flex justify-between">
+            <Breadcrumb className="font-bold text-3xl">
+              <Breadcrumb.Item>Home</Breadcrumb.Item>
+              <Breadcrumb.Item>Dashboard</Breadcrumb.Item>
+            </Breadcrumb>
+            <div className="flex gap-2">
+            <div>
+                <Button type="primary" shape="circle" size="large" icon={<PlusOutlined />}>
+                </Button>
+              </div>
+              <div>
+                <Button type="primary" shape="circle" size="large" icon={<SettingOutlined />}>
+                </Button>
+              </div>
+              <div>
+                <Button type="primary" shape="circle" size="large">
+                  A
+                </Button>
+              </div>
+            </div>
+          </div>
+
           <div className="site-layout-background p-4 my-4 mx-1 min-h-[360px]" >
             {children}
           </div>
