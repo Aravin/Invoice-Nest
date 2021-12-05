@@ -4,7 +4,7 @@ export class Organization {
   @PrimaryGeneratedColumn()
   organizationId: number;
 
-  @Column({ type: 'varchar', length: 48 })
+  @Column({ type: 'varchar', length: 96 })
   name: string;
 
   @Column({ type: 'varchar', length: 96 })

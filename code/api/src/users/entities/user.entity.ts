@@ -4,10 +4,10 @@ export class User {
   @PrimaryGeneratedColumn()
   userId: number;
 
-  @Column({ type: 'varchar', length: 48 })
+  @Column({ type: 'varchar', length: 36 })
   firstName: string;
 
-  @Column({ type: 'varchar', length: 48 })
+  @Column({ type: 'varchar', length: 36 })
   lastName: string;
 
   @Column({ type: 'varchar', length: 96 })

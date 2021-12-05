@@ -4,7 +4,7 @@ export class SalesPerson {
   @PrimaryGeneratedColumn()
   salesPersonId: number;
 
-  @Column({ type: 'varchar', length: 96 })
+  @Column({ type: 'varchar', length: 72 })
   name: string;
 
   @Column({ type: 'varchar', length: 24 })
