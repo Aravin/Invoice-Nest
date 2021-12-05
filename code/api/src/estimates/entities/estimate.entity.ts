@@ -7,9 +7,11 @@ import {
   ManyToOne,
   ManyToMany,
   JoinTable,
+  Entity,
 } from 'typeorm';
 import { Organization } from 'src/organizations/entities/organization.entity';
 
+@Entity()
 export class Estimate {
   @PrimaryGeneratedColumn()
   estimateId: number;
@@ -49,7 +51,7 @@ export class Estimate {
   @Column({ type: 'varchar', length: 12 })
   discountType: string;
 
-  @Column({ type: 'smallint', length: 12 })
+  @Column({ type: 'smallint' })
   discountValue: number;
 
   @Column({ type: 'money' })

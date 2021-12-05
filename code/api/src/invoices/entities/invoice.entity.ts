@@ -7,9 +7,11 @@ import {
   ManyToOne,
   ManyToMany,
   JoinTable,
+  Entity,
 } from 'typeorm';
 import { Customer } from '../../customers/entities/customer.entity';
 
+@Entity()
 export class Invoice {
   @PrimaryGeneratedColumn()
   invoiceId: number;
@@ -49,7 +51,7 @@ export class Invoice {
   @Column({ type: 'varchar', length: 12 })
   discountType: string;
 
-  @Column({ type: 'smallint', length: 12 })
+  @Column({ type: 'smallint' })
   discountValue: number;
 
   @Column({ type: 'money' })

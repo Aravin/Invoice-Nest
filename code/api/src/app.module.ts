@@ -11,21 +11,16 @@ import { UsersModule } from './users/users.module';
 import { OrganizationsModule } from './organizations/organizations.module';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { ConfigModule } from '@nestjs/config';
+import { getConnectionOptions } from 'typeorm';
 
 @Module({
   imports: [
     ConfigModule.forRoot(),
-    TypeOrmModule.forRoot({
-      type: 'postgres',
-      host: process.env.DB_HOST,
-      port: Number(process.env.DB_PORT),
-      username: process.env.DB_USR,
-      password: process.env.DB_PWD,
-      database: process.env.DB_NAME,
-      entities: ['dist/**/*.entity{.ts,.js}'],
-      synchronize: true,
-      logging: true,
-      // ssl: false,
+    TypeOrmModule.forRootAsync({
+      useFactory: async () =>
+        Object.assign(await getConnectionOptions(), {
+          autoLoadEntities: true,
+        }),
     }),
     TaxesModule,
     SalesPersonsModule,
