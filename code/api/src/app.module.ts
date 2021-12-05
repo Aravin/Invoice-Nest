@@ -7,9 +7,10 @@ import { SalesPersonsModule } from './sales-persons/sales-persons.module';
 import { ItemsModule } from './items/items.module';
 import { CustomersModule } from './customers/customers.module';
 import { InvoicesModule } from './invoices/invoices.module';
+import { EstimatesModule } from './estimates/estimates.module';
 
 @Module({
-  imports: [TaxesModule, SalesPersonsModule, ItemsModule, CustomersModule, InvoicesModule],
+  imports: [TaxesModule, SalesPersonsModule, ItemsModule, CustomersModule, InvoicesModule, EstimatesModule],
   controllers: [AppController, TaxesController],
   providers: [AppService],
 })
