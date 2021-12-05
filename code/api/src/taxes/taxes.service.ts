@@ -1,9 +1,17 @@
 import { Injectable } from '@nestjs/common';
+import { InjectRepository } from '@nestjs/typeorm';
+import { Repository } from 'typeorm';
 import { CreateTaxDto } from './dto/create-tax.dto';
 import { UpdateTaxDto } from './dto/update-tax.dto';
+import { Tax } from './entities/tax.entity';
 
 @Injectable()
 export class TaxesService {
+  constructor(
+    @InjectRepository(Tax)
+    private taxRepository: Repository<Tax>,
+  ) {}
+
   create(createTaxDto: CreateTaxDto) {
     return 'This action adds a new tax';
   }

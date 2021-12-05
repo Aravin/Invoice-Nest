@@ -1,9 +1,17 @@
 import { Injectable } from '@nestjs/common';
+import { InjectRepository } from '@nestjs/typeorm';
+import { Repository } from 'typeorm';
 import { CreateInvoiceDto } from './dto/create-invoice.dto';
 import { UpdateInvoiceDto } from './dto/update-invoice.dto';
+import { Invoice } from './entities/invoice.entity';
 
 @Injectable()
 export class InvoicesService {
+  constructor(
+    @InjectRepository(Invoice)
+    private invoiceRepository: Repository<Invoice>,
+  ) {}
+
   create(createInvoiceDto: CreateInvoiceDto) {
     return 'This action adds a new invoice';
   }
