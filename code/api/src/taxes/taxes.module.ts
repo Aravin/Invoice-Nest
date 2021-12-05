@@ -4,6 +4,6 @@ import { TaxesController } from './taxes.controller';
 
 @Module({
   controllers: [TaxesController],
-  providers: [TaxesService]
+  providers: [TaxesService],
 })
 export class TaxesModule {}

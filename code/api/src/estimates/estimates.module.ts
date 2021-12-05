@@ -4,6 +4,6 @@ import { EstimatesController } from './estimates.controller';
 
 @Module({
   controllers: [EstimatesController],
-  providers: [EstimatesService]
+  providers: [EstimatesService],
 })
 export class EstimatesModule {}
