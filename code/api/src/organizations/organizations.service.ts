@@ -13,22 +13,22 @@ export class OrganizationsService {
   ) {}
 
   create(createOrganizationDto: CreateOrganizationDto) {
-    return 'This action adds a new organization';
+    return this.organizationRepository.insert(createOrganizationDto);
   }
 
   findAll() {
-    return `This action returns all organizations`;
+    return this.organizationRepository.find();
   }
 
   findOne(id: number) {
-    return `This action returns a #${id} organization`;
+    return this.organizationRepository.findOne(id);
   }
 
   update(id: number, updateOrganizationDto: UpdateOrganizationDto) {
-    return `This action updates a #${id} organization`;
+    return this.organizationRepository.update(id, updateOrganizationDto);
   }
 
   remove(id: number) {
-    return `This action removes a #${id} organization`;
+    return this.organizationRepository.softDelete(id);
   }
 }

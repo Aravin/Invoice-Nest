@@ -13,22 +13,22 @@ export class EstimatesService {
   ) {}
 
   create(createEstimateDto: CreateEstimateDto) {
-    return 'This action adds a new estimate';
+    return this.estimateRepository.insert(createEstimateDto);
   }
 
   findAll() {
-    return `This action returns all estimates`;
+    return this.estimateRepository.find();
   }
 
   findOne(id: number) {
-    return `This action returns a #${id} estimate`;
+    return this.estimateRepository.findOne(id);
   }
 
   update(id: number, updateEstimateDto: UpdateEstimateDto) {
-    return `This action updates a #${id} estimate`;
+    return this.estimateRepository.update(id, updateEstimateDto);
   }
 
   remove(id: number) {
-    return `This action removes a #${id} estimate`;
+    return this.estimateRepository.delete(id);
   }
 }

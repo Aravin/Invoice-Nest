@@ -13,22 +13,22 @@ export class TaxesService {
   ) {}
 
   create(createTaxDto: CreateTaxDto) {
-    return 'This action adds a new tax';
+    return this.taxRepository.insert(createTaxDto);
   }
 
   findAll() {
-    return `This action returns all taxes`;
+    return this.taxRepository.find();
   }
 
   findOne(id: number) {
-    return `This action returns a #${id} tax`;
+    return this.taxRepository.findOne(id);
   }
 
   update(id: number, updateTaxDto: UpdateTaxDto) {
-    return `This action updates a #${id} tax`;
+    return this.taxRepository.update(id, updateTaxDto);
   }
 
   remove(id: number) {
-    return `This action removes a #${id} tax`;
+    return this.taxRepository.delete(id);
   }
 }

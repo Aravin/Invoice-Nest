@@ -13,22 +13,22 @@ export class CustomersService {
   ) {}
 
   create(createCustomerDto: CreateCustomerDto) {
-    return 'This action adds a new customer';
+    return this.customerRepository.insert(createCustomerDto);
   }
 
   findAll() {
-    return `This action returns all customers`;
+    return this.customerRepository.find();
   }
 
   findOne(id: number) {
-    return `This action returns a #${id} customer`;
+    return this.customerRepository.findOne(id);
   }
 
   update(id: number, updateCustomerDto: UpdateCustomerDto) {
-    return `This action updates a #${id} customer`;
+    return this.customerRepository.update(id, updateCustomerDto);
   }
 
   remove(id: number) {
-    return `This action removes a #${id} customer`;
+    return this.customerRepository.delete(id);
   }
 }

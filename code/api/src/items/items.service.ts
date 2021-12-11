@@ -13,22 +13,22 @@ export class ItemsService {
   ) {}
 
   create(createItemDto: CreateItemDto) {
-    return 'This action adds a new item';
+    return this.itemRepository.insert(createItemDto);
   }
 
   findAll() {
-    return `This action returns all items`;
+    return this.itemRepository.find();
   }
 
   findOne(id: number) {
-    return `This action returns a #${id} item`;
+    return this.itemRepository.findOne(id);
   }
 
   update(id: number, updateItemDto: UpdateItemDto) {
-    return `This action updates a #${id} item`;
+    return this.itemRepository.update(id, updateItemDto);
   }
 
   remove(id: number) {
-    return `This action removes a #${id} item`;
+    return this.itemRepository.delete(id);
   }
 }

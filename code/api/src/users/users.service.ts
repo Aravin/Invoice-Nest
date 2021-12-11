@@ -13,22 +13,22 @@ export class UsersService {
   ) {}
 
   create(createUserDto: CreateUserDto) {
-    return 'This action adds a new user';
+    return this.usersRepository.insert(createUserDto);
   }
 
   findAll() {
-    return `This action returns all users`;
+    return this.usersRepository.find();
   }
 
   findOne(id: number) {
-    return `This action returns a #${id} user`;
+    return this.usersRepository.findOne(id);
   }
 
   update(id: number, updateUserDto: UpdateUserDto) {
-    return `This action updates a #${id} user`;
+    return this.usersRepository.update(id, updateUserDto);
   }
 
   remove(id: number) {
-    return `This action removes a #${id} user`;
+    return this.usersRepository.softDelete(id);
   }
 }

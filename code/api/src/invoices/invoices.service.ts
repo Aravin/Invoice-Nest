@@ -13,22 +13,22 @@ export class InvoicesService {
   ) {}
 
   create(createInvoiceDto: CreateInvoiceDto) {
-    return 'This action adds a new invoice';
+    return this.invoiceRepository.insert(createInvoiceDto);
   }
 
   findAll() {
-    return `This action returns all invoices`;
+    return this.invoiceRepository.find();
   }
 
   findOne(id: number) {
-    return `This action returns a #${id} invoice`;
+    return this.invoiceRepository.findOne(id);
   }
 
   update(id: number, updateInvoiceDto: UpdateInvoiceDto) {
-    return `This action updates a #${id} invoice`;
+    return this.invoiceRepository.update(id, updateInvoiceDto);
   }
 
   remove(id: number) {
-    return `This action removes a #${id} invoice`;
+    return this.invoiceRepository.delete(id);
   }
 }
