@@ -13,22 +13,22 @@ export class SalesPersonsService {
   ) {}
 
   create(createSalesPersonDto: CreateSalesPersonDto) {
-    return 'This action adds a new salesPerson';
+    return this.salesPersonRepository.insert(createSalesPersonDto);
   }
 
   findAll() {
-    return `This action returns all salesPersons`;
+    return this.salesPersonRepository.find();
   }
 
   findOne(id: number) {
-    return `This action returns a #${id} salesPerson`;
+    return this.salesPersonRepository.findOne(id);
   }
 
   update(id: number, updateSalesPersonDto: UpdateSalesPersonDto) {
-    return `This action updates a #${id} salesPerson`;
+    return this.salesPersonRepository.update(id, updateSalesPersonDto);
   }
 
   remove(id: number) {
-    return `This action removes a #${id} salesPerson`;
+    return this.salesPersonRepository.delete(id);
   }
 }
