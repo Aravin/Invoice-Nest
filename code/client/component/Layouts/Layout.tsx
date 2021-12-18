@@ -17,6 +17,7 @@ import {
   SettingOutlined,
   PlusOutlined,
 } from '@ant-design/icons';
+import { useRouter } from 'next/router'
 
 const { Header, Content, Footer, Sider } = Layout;
 const { SubMenu } = Menu;
@@ -24,6 +25,20 @@ const { SubMenu } = Menu;
 export default function AppLayout({ children }: any) {
 
   const [collapsed, seCollapse] = useState(false);
+  const router = useRouter();
+
+  const handleClick = (e: any) => {
+    
+    switch(e.key) {
+      case 'dashboard':
+        router.push('/');
+        break;
+
+      default:
+        router.push(e.key)
+        break;
+    }
+  };
 
   return (
     <Layout className="min-h-screen h-screen" >
@@ -36,23 +51,23 @@ export default function AppLayout({ children }: any) {
           collapsed &&
           <div className="logo flex-1 text-center align-middle text-white text-lg font-bold pt-0.5">RN</div>
         }
-        <Menu theme="dark" defaultSelectedKeys={['1']} mode="inline">
-          <Menu.Item key="1" icon={<PieChartOutlined />}>
+        <Menu theme="dark" defaultSelectedKeys={['1']} mode="inline" onClick={handleClick}>
+          <Menu.Item key="dashboard" icon={<PieChartOutlined />}>
             Dashboard
           </Menu.Item>
-          <Menu.Item key="2" icon={<BookOutlined />}>
+          <Menu.Item key="invoices" icon={<BookOutlined />}>
             Invoices
           </Menu.Item>
-          <Menu.Item key="3" icon={<SnippetsOutlined />}>
+          <Menu.Item key="estimates" icon={<SnippetsOutlined />}>
             Estimates
           </Menu.Item>
-          <Menu.Item key="4" icon={<UsergroupAddOutlined />}>
+          <Menu.Item key="customers" icon={<UsergroupAddOutlined />}>
             Customers
           </Menu.Item>
-          <Menu.Item key="5" icon={<AppstoreOutlined />}>
+          <Menu.Item key="items" icon={<AppstoreOutlined />}>
             Items
           </Menu.Item>
-          <Menu.Item key="6" icon={<UserOutlined />}>
+          <Menu.Item key="salesPersons" icon={<UserOutlined />}>
             Sales Persons
           </Menu.Item>
           {/* <SubMenu key="sub1" icon={<UserOutlined />} title="Customers">
