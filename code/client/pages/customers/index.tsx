@@ -1,10 +1,18 @@
+import { PageHeader } from 'antd'
 import type { NextPage } from 'next'
 import React, { } from 'react'
+import CreateCustomer from '../../component/Customer/CreateCustomer'
 
 const CustomerPage: NextPage = () => {
   return (
     <div>
-      Customer Page
+      <PageHeader
+        className="site-page-header"
+        title="Customer"
+        subTitle="Add New Customer"
+      />
+
+      <CreateCustomer></CreateCustomer>
     </div>
   )
 }

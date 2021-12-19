@@ -28,8 +28,8 @@ export default function AppLayout({ children }: any) {
   const router = useRouter();
 
   const handleClick = (e: any) => {
-    
-    switch(e.key) {
+
+    switch (e.key) {
       case 'dashboard':
         router.push('/');
         break;
@@ -41,8 +41,8 @@ export default function AppLayout({ children }: any) {
   };
 
   return (
-    <Layout className="min-h-screen h-screen" >
-      <Sider collapsible collapsed={collapsed} onCollapse={() => seCollapse(!collapsed)}>
+    <Layout className="h-screen">
+      <Sider collapsible collapsed={collapsed} onCollapse={() => seCollapse(!collapsed)} >
         {
           !collapsed &&
           <div className="logo flex-1 text-center align-middle text-white text-lg font-bold pt-0.5">ResumeNest.com</div>
@@ -83,34 +83,30 @@ export default function AppLayout({ children }: any) {
       </Sider>
       <Layout className="site-layout">
         {/* <Header className="site-layout-background" style={{ padding: 0 }} /> */}
-        <Content className="m-4">
+        <Content className="m-2 h-full">
           <div className="flex justify-between">
-            <Breadcrumb className="font-bold text-3xl">
-              <Breadcrumb.Item>Home</Breadcrumb.Item>
-              <Breadcrumb.Item>Dashboard</Breadcrumb.Item>
-            </Breadcrumb>
-            <div className="flex gap-2">
             <div>
-                <Button type="primary" shape="circle" size="large" icon={<PlusOutlined />}>
+              <Button type="primary" shape="circle" size="middle" icon={<PlusOutlined />}>
+            </Button>
+            </div>
+            <div className="flex gap-2">
+              <div>
+                <Button type="primary" shape="circle" size="middle" icon={<SettingOutlined />}>
                 </Button>
               </div>
               <div>
-                <Button type="primary" shape="circle" size="large" icon={<SettingOutlined />}>
-                </Button>
-              </div>
-              <div>
-                <Button type="primary" shape="circle" size="large">
+                <Button type="primary" shape="circle" size="middle">
                   A
                 </Button>
               </div>
             </div>
           </div>
 
-          <div className="site-layout-background p-4 my-4 mx-1 min-h-[360px]" >
+          <div className="site-layout-background my-4 mx-1 overflow-y-scroll" style={{'height': '98%'}} >
             {children}
           </div>
         </Content>
-        <Footer className="text-center">InvoiceNest.com ©2018 Created by Aravin with 💝</Footer>
+        <Footer className="text-center"></Footer>
       </Layout>
     </Layout>
   )
