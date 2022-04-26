@@ -51,8 +51,8 @@ export default function CreateInvoice() {
       <Form
         layout='horizontal'
         name="basic"
-        labelCol={{ span: 3 }}
-        wrapperCol={{ span: 9 }}
+        labelCol={{ sm: {span: 8}, lg: {span: 4} }}
+        wrapperCol={{ sm: {span: 12}, lg: {span: 8} }}
         initialValues={{ remember: true }}
         onFinish={onFinish}
         onFinishFailed={onFinishFailed}
@@ -67,7 +67,7 @@ export default function CreateInvoice() {
             // onChange={onChange}
             // onSearch={onSearch}
             filterOption={(input, option) =>
-              option?.children.toLowerCase().indexOf(input.toLowerCase()) >= 0
+              (option?.children + '').toLowerCase().indexOf(input.toLowerCase()) >= 0
             }
           >
             <Select.Option value="Aravind A">Aravind A</Select.Option>
@@ -77,12 +77,12 @@ export default function CreateInvoice() {
         </Form.Item>
 
         <Form.Item label="Invoice Number">
-            <Input />
-          </Form.Item>
+          <Input />
+        </Form.Item>
 
-          <Form.Item label="Order Number">
-            <Input />
-          </Form.Item>
+        <Form.Item label="Order Number">
+          <Input />
+        </Form.Item>
 
         <Form.Item label="Invoice Date">
           <DatePicker />
@@ -98,7 +98,7 @@ export default function CreateInvoice() {
             placeholder="Select a Sales Person"
             optionFilterProp="children"
             filterOption={(input, option) =>
-              option?.children.toLowerCase().indexOf(input.toLowerCase()) >= 0
+              (option?.children + '').toLowerCase().indexOf(input.toLowerCase()) >= 0
             }
           >
             <Select.Option value="Aravind A">Aravind A</Select.Option>
@@ -107,10 +107,8 @@ export default function CreateInvoice() {
           </Select>
         </Form.Item>
 
-
-
         <Row className='p-4 m-4'>
-          <Col span={18}>
+          <Col xs={24} xl={18}>
             <Table
               columns={columns}
               dataSource={data}
@@ -118,19 +116,17 @@ export default function CreateInvoice() {
               pagination={false}
             />
           </Col>
-          <Col span={6}></Col>
         </Row>
 
         <Row className='p-4 m-4'>
-          <Col span={12}></Col>
-          <Col span={12}>
+          <Col sm={{span: 24}} lg={{push: 12, span: 12}} >
             <Form.Item label="Sub Total">
               <Input />
             </Form.Item>
             <Form.Item label="Tax">
               <Input />
             </Form.Item>
-            <Form.Item label="Shipping Charge">
+            <Form.Item label="Shipping">
               <Input />
             </Form.Item>
             <Form.Item label="Discount">
