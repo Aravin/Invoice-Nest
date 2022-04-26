@@ -19,8 +19,8 @@ export default function CreateCustomer() {
       <Form
         layout='horizontal'
         name="basic"
-        labelCol={{ span: 6 }}
-        wrapperCol={{ span: 18 }}
+        labelCol={{ sm: {span: 8}, lg: {span: 4} }}
+        wrapperCol={{ sm: {span: 12}, lg: {span: 8} }}
         initialValues={{ remember: true }}
         onFinish={onFinish}
         onFinishFailed={onFinishFailed}
@@ -81,7 +81,7 @@ export default function CreateCustomer() {
             placeholder="Select a Sales Person"
             optionFilterProp="children"
             filterOption={(input, option) =>
-              option?.children.toLowerCase().indexOf(input.toLowerCase()) >= 0
+              (option?.children + '').toLowerCase().indexOf(input.toLowerCase()) >= 0
             }
           >
             <Select.Option value="Aravind A">Aravind A</Select.Option>
