@@ -1,4 +1,4 @@
-import { PageHeader } from 'antd'
+import { Col, PageHeader, Row } from 'antd'
 import type { NextPage } from 'next'
 import React, { } from 'react'
 import CreateCustomer from '../../component/Customer/CreateCustomer'

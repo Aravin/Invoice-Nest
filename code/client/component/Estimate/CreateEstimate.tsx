@@ -3,7 +3,7 @@ import { Form, Input, Button, Checkbox, Select, DatePicker, Space, Table, Col, R
 import { MinusCircleOutlined, PlusOutlined } from '@ant-design/icons';
 import TextArea from 'antd/lib/input/TextArea';
 
-export default function CreateInvoice() {
+export default function CreateEstimate() {
 
   const onFinish = (values: any) => {
     console.log('Success:', values);
@@ -76,7 +76,7 @@ export default function CreateInvoice() {
           </Select>
         </Form.Item>
 
-        <Form.Item label="Invoice Number">
+        <Form.Item label="Estimate Number">
           <Input />
         </Form.Item>
 
@@ -84,7 +84,7 @@ export default function CreateInvoice() {
           <Input />
         </Form.Item>
 
-        <Form.Item label="Invoice Date">
+        <Form.Item label="Estimate Date">
           <DatePicker />
         </Form.Item>
 

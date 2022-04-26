@@ -4,7 +4,7 @@ import { MinusCircleOutlined, PlusOutlined } from '@ant-design/icons';
 import TextArea from 'antd/lib/input/TextArea';
 const { TabPane } = Tabs;
 
-export default function CreateCustomer() {
+export default function CreateItem() {
 
   const onFinish = (values: any) => {
     console.log('Success:', values);
@@ -27,40 +27,16 @@ export default function CreateCustomer() {
         autoComplete="off"
       >
 
-        <Form.Item label="First Name">
+        <Form.Item label="Name">
           <Input />
         </Form.Item>
 
-        <Form.Item label="Last Name">
-          <Input />
-        </Form.Item>
-
-        <Form.Item label="Company Name">
-          <Input />
-        </Form.Item>
-
-        <Form.Item label="Email">
-          <Input />
-        </Form.Item>
-
-        <Form.Item label="Phone">
-          <Input />
-        </Form.Item>
-
-        <Form.Item label="Website">
-          <Input />
-        </Form.Item>
-
-        <Form.Item label="PAN">
-          <Input />
-        </Form.Item>
-
-        <Form.Item label="GST">
-          <Input />
-        </Form.Item>
-
-        <Form.Item label="Address">
+        <Form.Item label="Description">
           <TextArea rows={2} />
+        </Form.Item>
+
+        <Form.Item label="Price">
+          <Input />
         </Form.Item>
 
         <Form.Item label="Remarks">
