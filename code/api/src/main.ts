@@ -2,6 +2,9 @@ import { VersioningType } from '@nestjs/common';
 import { NestFactory } from '@nestjs/core';
 import { SwaggerModule, DocumentBuilder } from '@nestjs/swagger';
 import { AppModule } from './app.module';
+import helmet from 'helmet';
+import * as csurf from 'csurf';
+import * as session from 'express-session';
 
 declare const module: any;
 
@@ -12,7 +15,10 @@ async function bootstrap() {
     type: VersioningType.URI,
     defaultVersion: '1',
   });
+  app.use(session({ secret: 'epix.io' })); // TODO: move to .env
+  app.use(csurf({ session: true }));
   app.enableCors();
+  app.use(helmet());
 
   const config = new DocumentBuilder()
     .setTitle('Invoice Nest')

@@ -12,9 +12,15 @@ import { OrganizationsModule } from './organizations/organizations.module';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { ConfigModule } from '@nestjs/config';
 import { getConnectionOptions } from 'typeorm';
+import { ThrottlerGuard, ThrottlerModule } from '@nestjs/throttler';
+import { APP_GUARD } from '@nestjs/core';
 
 @Module({
   imports: [
+    ThrottlerModule.forRoot({
+      ttl: 60,
+      limit: 10,
+    }),
     ConfigModule.forRoot(),
     TypeOrmModule.forRootAsync({
       useFactory: async () =>
@@ -33,6 +39,12 @@ import { getConnectionOptions } from 'typeorm';
   ],
   exports: [TypeOrmModule],
   controllers: [AppController],
-  providers: [AppService],
+  providers: [
+    AppService,
+    {
+      provide: APP_GUARD,
+      useClass: ThrottlerGuard,
+    },
+  ],
 })
 export class AppModule {}
