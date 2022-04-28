@@ -11,54 +11,48 @@ export class Customer {
   @Column({ type: 'varchar', length: 36 })
   lastName: string;
 
-  @Column({ type: 'varchar', length: 96 })
+  @Column({ type: 'varchar', length: 96, nullable: true })
   company: string;
 
-  @Column({ type: 'varchar', length: 96 })
+  @Column({ type: 'varchar', length: 96, nullable: true })
   email: string;
 
-  @Column({ type: 'varchar', length: 18 })
+  @Column({ type: 'varchar', length: 18, nullable: true })
   phone: string;
 
-  @Column({ type: 'varchar', length: 256 })
+  @Column({ type: 'varchar', length: 256, nullable: true })
   website: string;
 
-  @Column({ type: 'varchar', length: 10 })
+  @Column({ type: 'varchar', length: 10, nullable: true })
+  gst: string;
+
+  @Column({ type: 'varchar', length: 10, nullable: true })
   pan: string;
 
-  @Column({ type: 'varchar', length: 96 })
-  billingAddressLine1: string;
+  @Column({ type: 'varchar', length: 10, nullable: true })
+  ssn: string;
 
-  @Column({ type: 'varchar', length: 96 })
-  billingAddressLine2: string;
+  @Column({ type: 'varchar', length: 10, nullable: true })
+  taxId: string;
 
-  @Column({ type: 'varchar', length: 72 })
-  billingCountry: string;
+  @Column({ type: 'varchar', length: 96, nullable: true })
+  addressLine1: string;
 
-  @Column({ type: 'varchar', length: 72 })
-  billingState: string;
+  @Column({ type: 'varchar', length: 96, nullable: true })
+  addressLine2: string;
 
-  @Column({ type: 'varchar', length: 72 })
-  billingCity: string;
+  @Column({ type: 'varchar', length: 72, nullable: true })
+  country: string;
 
-  @Column({ type: 'varchar', length: 96 })
-  shippingAttn: string;
+  @Column({ type: 'varchar', length: 72, nullable: true })
+  state: string;
 
-  @Column({ type: 'varchar', length: 96 })
-  shippingAddressLine1: string;
+  @Column({ type: 'varchar', length: 72, nullable: true })
+  city: string;
 
-  @Column({ type: 'varchar', length: 96 })
-  shippingAddressLine2: string;
+  @Column({ type: 'varchar', length: 10, nullable: true })
+  zip: string;
 
-  @Column({ type: 'varchar', length: 72 })
-  shippingCountry: string;
-
-  @Column({ type: 'varchar', length: 72 })
-  shippingState: string;
-
-  @Column({ type: 'varchar', length: 72 })
-  shippingCity: string;
-
-  @Column({ type: 'text' })
+  @Column({ type: 'text', nullable: true })
   remarks: string;
 }

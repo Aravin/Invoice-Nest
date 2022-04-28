@@ -13,7 +13,7 @@ export class ItemsService {
   ) {}
 
   create(createItemDto: CreateItemDto) {
-    return this.itemRepository.insert(createItemDto);
+    return this.itemRepository.insert(createItemDto as any);
   }
 
   findAll() {
@@ -25,7 +25,7 @@ export class ItemsService {
   }
 
   update(id: number, updateItemDto: UpdateItemDto) {
-    return this.itemRepository.update(id, updateItemDto);
+    return this.itemRepository.update(id, updateItemDto as any);
   }
 
   remove(id: number) {

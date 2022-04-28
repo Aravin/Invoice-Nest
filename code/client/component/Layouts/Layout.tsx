@@ -1,12 +1,8 @@
 // import Navbar from './navbar'
 // import Footer from './footer'
-import type { NextPage } from 'next'
-import Head from 'next/head'
-import Image from 'next/image'
-import React, { useLayoutEffect, useState } from 'react'
-import styles from '../styles/Home.module.css'
+import React, { useState } from 'react'
 import 'antd/dist/antd.css';
-import { Layout, Menu, Breadcrumb, Avatar, Button } from 'antd';
+import { Layout, Menu, Button, Dropdown } from 'antd';
 import {
   UsergroupAddOutlined,
   PieChartOutlined,
@@ -28,7 +24,6 @@ export default function AppLayout({ children }: any) {
   const router = useRouter();
 
   const handleClick = (e: any) => {
-
     switch (e.key) {
       case 'dashboard':
         router.push('/');
@@ -39,6 +34,34 @@ export default function AppLayout({ children }: any) {
         break;
     }
   };
+
+  const menu = (
+    <Menu
+      items={[
+        {
+          label: (
+            <a target="_blank" rel="noopener noreferrer" href="https://www.antgroup.com">
+              1st menu item
+            </a>
+          ),
+        },
+        {
+          label: (
+            <a target="_blank" rel="noopener noreferrer" href="https://www.aliyun.com">
+              2nd menu item
+            </a>
+          ),
+        },
+        {
+          label: (
+            <a target="_blank" rel="noopener noreferrer" href="https://www.luohanacademy.com">
+              3rd menu item
+            </a>
+          ),
+        },
+      ]}
+    />
+  );
 
   return (
     <Layout className="h-screen">
@@ -87,12 +110,15 @@ export default function AppLayout({ children }: any) {
           <div className="flex justify-between">
             <div>
               <Button type="primary" shape="circle" size="middle" icon={<PlusOutlined />}>
-            </Button>
+              </Button>
             </div>
             <div className="flex gap-2">
               <div>
-                <Button type="primary" shape="circle" size="middle" icon={<SettingOutlined />}>
-                </Button>
+                <Dropdown overlay={menu} placement="bottomRight">
+                  <Button type="primary" shape="circle" size="middle" icon={<SettingOutlined />} />
+                </Dropdown>
+                {/* <Button type="primary" shape="circle" size="middle" icon={<SettingOutlined />}>
+                </Button> */}
               </div>
               <div>
                 <Button type="primary" shape="circle" size="middle">
@@ -102,7 +128,7 @@ export default function AppLayout({ children }: any) {
             </div>
           </div>
 
-          <div className="site-layout-background my-4 mx-1 overflow-y-scroll" style={{'height': '98%'}} >
+          <div className="site-layout-background my-4 mx-1 overflow-y-scroll" style={{ 'height': '98%' }} >
             {children}
           </div>
         </Content>

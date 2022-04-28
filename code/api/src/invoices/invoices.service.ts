@@ -13,7 +13,7 @@ export class InvoicesService {
   ) {}
 
   create(createInvoiceDto: CreateInvoiceDto) {
-    return this.invoiceRepository.insert(createInvoiceDto);
+    return this.invoiceRepository.insert(createInvoiceDto as any);
   }
 
   findAll() {
@@ -25,7 +25,7 @@ export class InvoicesService {
   }
 
   update(id: number, updateInvoiceDto: UpdateInvoiceDto) {
-    return this.invoiceRepository.update(id, updateInvoiceDto);
+    return this.invoiceRepository.update(id, updateInvoiceDto as any);
   }
 
   remove(id: number) {

@@ -1,1 +1,5 @@
-export class CreateTaxDto {}
+export class CreateTaxDto {
+  name: string;
+  description: string;
+  rate: string;
+}
