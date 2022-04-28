@@ -10,7 +10,9 @@ import {
 import { EstimatesService } from './estimates.service';
 import { CreateEstimateDto } from './dto/create-estimate.dto';
 import { UpdateEstimateDto } from './dto/update-estimate.dto';
+import { ApiTags } from '@nestjs/swagger';
 
+@ApiTags('Estimates')
 @Controller('estimates')
 export class EstimatesController {
   constructor(private readonly estimatesService: EstimatesService) {}

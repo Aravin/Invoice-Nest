@@ -10,7 +10,9 @@ import {
 import { OrganizationsService } from './organizations.service';
 import { CreateOrganizationDto } from './dto/create-organization.dto';
 import { UpdateOrganizationDto } from './dto/update-organization.dto';
+import { ApiTags } from '@nestjs/swagger';
 
+@ApiTags('Organizations')
 @Controller('organizations')
 export class OrganizationsController {
   constructor(private readonly organizationsService: OrganizationsService) {}

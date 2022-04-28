@@ -18,9 +18,8 @@ async function bootstrap() {
 
   const config = new DocumentBuilder()
     .setTitle('Invoice Nest')
-    .setDescription('Invoice Nest API description')
+    .setDescription('Invoice Nest OpenAPI Spec')
     .setVersion('1.0')
-    .addTag('invoices')
     .build();
 
   const document = SwaggerModule.createDocument(app, config);
