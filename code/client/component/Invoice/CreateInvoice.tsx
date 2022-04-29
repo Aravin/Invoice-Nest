@@ -18,14 +18,14 @@ export default function CreateInvoice() {
       title: 'Item Name',
       dataIndex: 'name',
       render: (text: string) => <a>{text}</a>,
-      width: '20%'
+      width: '22%'
     },
     {
       title: 'Item Description',
       className: 'description',
       dataIndex: 'description',
       // align: 'right',
-      width: '50%'
+      width: '48%'
     },
     {
       title: 'Quantity',
@@ -44,15 +44,21 @@ export default function CreateInvoice() {
     },
   ];
 
-  const data = [{}];
+  const data = [{
+    name: <Form.Item className='w-full h-full'> <Input /> </Form.Item>,
+    description: <Form.Item> <Input /> </Form.Item>,
+    quantity: <Form.Item> <Input /> </Form.Item>,
+    price: <Form.Item> <Input /> </Form.Item>,
+    amount: <Form.Item> <Input /> </Form.Item>,
+  }];
 
   return (
     <>
       <Form
         layout='horizontal'
         name="basic"
-        labelCol={{ sm: {span: 8}, lg: {span: 4} }}
-        wrapperCol={{ sm: {span: 12}, lg: {span: 8} }}
+        labelCol={{ sm: { span: 8 }, lg: { span: 4 } }}
+        wrapperCol={{ sm: { span: 12 }, lg: { span: 8 } }}
         initialValues={{ remember: true }}
         onFinish={onFinish}
         onFinishFailed={onFinishFailed}
@@ -119,7 +125,7 @@ export default function CreateInvoice() {
         </Row>
 
         <Row className='p-4 m-4'>
-          <Col sm={{span: 24}} lg={{push: 12, span: 12}} >
+          <Col sm={{ span: 24 }} lg={{ push: 12, span: 12 }} >
             <Form.Item label="Sub Total">
               <Input />
             </Form.Item>
