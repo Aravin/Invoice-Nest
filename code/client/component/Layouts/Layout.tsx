@@ -12,6 +12,7 @@ import {
   BookOutlined,
   SettingOutlined,
   PlusOutlined,
+  LogoutOutlined,
 } from '@ant-design/icons';
 import { useRouter } from 'next/router'
 
@@ -35,32 +36,30 @@ export default function AppLayout({ children }: any) {
     }
   };
 
-  const menu = (
-    <Menu
-      items={[
-        {
-          label: (
-            <a target="_blank" rel="noopener noreferrer" href="https://www.antgroup.com">
-              1st menu item
-            </a>
-          ),
-        },
-        {
-          label: (
-            <a target="_blank" rel="noopener noreferrer" href="https://www.aliyun.com">
-              2nd menu item
-            </a>
-          ),
-        },
-        {
-          label: (
-            <a target="_blank" rel="noopener noreferrer" href="https://www.luohanacademy.com">
-              3rd menu item
-            </a>
-          ),
-        },
-      ]}
-    />
+  const addNewMenu = (
+    <Menu>
+      <Menu.Item>Add Estimate</Menu.Item>
+      <Menu.Item>Add Invoice</Menu.Item>
+      <Menu.Item>Add Customer</Menu.Item>
+      <Menu.Item>Add Item</Menu.Item>
+      <Menu.Item>Add Sales Person</Menu.Item>
+    </Menu>
+  );
+
+  const settingsMenu = (
+    <Menu>
+      <Menu.Item>Organization</Menu.Item>
+      <Menu.Item>Users</Menu.Item>
+      <Menu.Item>Settings</Menu.Item>
+      <Menu.Item>Taxes</Menu.Item>
+    </Menu>
+  );
+
+  const accountMenu = (
+    <Menu>
+      <Menu.Item icon={<UserOutlined />}>My Account</Menu.Item>
+      <Menu.Item icon={<LogoutOutlined />}>Logout</Menu.Item>
+    </Menu>
   );
 
   return (
@@ -109,21 +108,20 @@ export default function AppLayout({ children }: any) {
         <Content className="m-2 h-full">
           <div className="flex justify-between">
             <div>
-              <Button type="primary" shape="circle" size="middle" icon={<PlusOutlined />}>
-              </Button>
+              <Dropdown overlay={addNewMenu} placement="bottomLeft">
+                <Button type="primary" shape="circle" size="middle" icon={<PlusOutlined />} />
+              </Dropdown>
             </div>
             <div className="flex gap-2">
               <div>
-                <Dropdown overlay={menu} placement="bottomRight">
+                <Dropdown overlay={settingsMenu} placement="bottomRight">
                   <Button type="primary" shape="circle" size="middle" icon={<SettingOutlined />} />
                 </Dropdown>
-                {/* <Button type="primary" shape="circle" size="middle" icon={<SettingOutlined />}>
-                </Button> */}
               </div>
               <div>
-                <Button type="primary" shape="circle" size="middle">
-                  A
-                </Button>
+                <Dropdown overlay={accountMenu} placement="bottomRight">
+                  <Button type="primary" shape="circle" size="middle"> A </Button>
+                </Dropdown>
               </div>
             </div>
           </div>
