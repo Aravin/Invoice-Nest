@@ -1,7 +1,7 @@
 import { PageHeader } from 'antd'
 import type { NextPage } from 'next'
 import React, { } from 'react'
-import CreateInvoice from '../../component/Invoice/CreateInvoice'
+import CreateEstimate from '../../component/Estimate/CreateEstimate'
 
 const EstimatePage: NextPage = () => {
   return (
@@ -11,7 +11,7 @@ const EstimatePage: NextPage = () => {
         title="Estimate"
         subTitle="Add New"
       />
-      <CreateInvoice></CreateInvoice>
+      <CreateEstimate></CreateEstimate>
     </div>
   )
 }

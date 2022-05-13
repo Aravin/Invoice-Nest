@@ -8,7 +8,7 @@ const CustomerPage: NextPage = () => {
     <div>
       <PageHeader
         className="site-page-header"
-        title="Sales Person"
+        title="Items"
         subTitle="Add New"
       />
 

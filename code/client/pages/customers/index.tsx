@@ -9,7 +9,7 @@ const CustomerPage: NextPage = () => {
       <PageHeader
         className="site-page-header"
         title="Customer"
-        subTitle="Add New Customer"
+        subTitle="Add New"
       />
 
       <CreateCustomer></CreateCustomer>
