@@ -1,7 +1,7 @@
 import { Col, PageHeader, Row } from 'antd'
 import type { NextPage } from 'next'
 import React, { } from 'react'
-import ListCustomer from '../../component/Customer/ListCustomer'
+import CreateCustomer from '../../component/Customer/CreateCustomer'
 
 const CustomerPage: NextPage = () => {
   return (
@@ -9,10 +9,10 @@ const CustomerPage: NextPage = () => {
       <PageHeader
         className="site-page-header"
         title="Customer"
-        subTitle="List"
+        subTitle="Add New"
       />
 
-      <ListCustomer></ListCustomer>
+      <CreateCustomer></CreateCustomer>
     </div>
   )
 }

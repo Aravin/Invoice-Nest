@@ -73,8 +73,8 @@ export default function AppLayout({ children }: any) {
           collapsed &&
           <div className="logo flex-1 text-center align-middle text-white text-lg font-bold pt-0.5">RN</div>
         }
-        <Menu theme="dark" defaultSelectedKeys={['1']} mode="inline" onClick={handleClick}>
-          <Menu.Item key="dashboard" icon={<PieChartOutlined />}>
+        <Menu theme="dark" defaultSelectedKeys={['1']} mode="inline" onClick={handleClick} >
+          <Menu.Item key="dashboard" icon={<PieChartOutlined />} >
             Dashboard
           </Menu.Item>
           <Menu.Item key="invoices" icon={<BookOutlined />}>
