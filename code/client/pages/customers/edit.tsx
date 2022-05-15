@@ -1,4 +1,4 @@
-import { Col, PageHeader, Row } from 'antd'
+import { PageHeader } from 'antd'
 import type { NextPage } from 'next'
 import React, { } from 'react'
 import CustomerForm from '../../component/Customer/CustomerForm'
@@ -9,7 +9,7 @@ const CustomerPage: NextPage = () => {
       <PageHeader
         className="site-page-header"
         title="Customer"
-        subTitle="Add New"
+        subTitle="Edit"
       />
 
       <CustomerForm></CustomerForm>

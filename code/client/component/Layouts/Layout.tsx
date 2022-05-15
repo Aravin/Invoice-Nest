@@ -25,15 +25,7 @@ export default function AppLayout({ children }: any) {
   const router = useRouter();
 
   const handleClick = (e: any) => {
-    switch (e.key) {
-      case 'dashboard':
-        router.push('/');
-        break;
-
-      default:
-        router.push(e.key)
-        break;
-    }
+    router.push(e.key);
   };
 
   const addNewMenu = (
@@ -74,22 +66,22 @@ export default function AppLayout({ children }: any) {
           <div className="logo flex-1 text-center align-middle text-white text-lg font-bold pt-0.5">RN</div>
         }
         <Menu theme="dark" defaultSelectedKeys={['1']} mode="inline" onClick={handleClick} >
-          <Menu.Item key="dashboard" icon={<PieChartOutlined />} >
+          <Menu.Item key="/" icon={<PieChartOutlined />} >
             Dashboard
           </Menu.Item>
-          <Menu.Item key="invoices" icon={<BookOutlined />}>
+          <Menu.Item key="/invoices" icon={<BookOutlined />}>
             Invoices
           </Menu.Item>
-          <Menu.Item key="estimates" icon={<SnippetsOutlined />}>
+          <Menu.Item key="/estimates" icon={<SnippetsOutlined />}>
             Estimates
           </Menu.Item>
-          <Menu.Item key="customers" icon={<UsergroupAddOutlined />}>
+          <Menu.Item key="/customers" icon={<UsergroupAddOutlined />}>
             Customers
           </Menu.Item>
-          <Menu.Item key="items" icon={<AppstoreOutlined />}>
+          <Menu.Item key="/items" icon={<AppstoreOutlined />}>
             Items
           </Menu.Item>
-          <Menu.Item key="salesPersons" icon={<UserOutlined />}>
+          <Menu.Item key="/salesPersons" icon={<UserOutlined />}>
             Sales Persons
           </Menu.Item>
           {/* <SubMenu key="sub1" icon={<UserOutlined />} title="Customers">

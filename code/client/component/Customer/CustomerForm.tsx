@@ -1,16 +1,38 @@
-/* eslint-disable react/jsx-no-undef */
-import { Form, Input, Button, Checkbox, Select, DatePicker, Space, Table, Col, Row, Tabs } from 'antd';
-import { MinusCircleOutlined, PlusOutlined } from '@ant-design/icons';
+import { Form, Input, Button, Row } from 'antd';
 import TextArea from 'antd/lib/input/TextArea';
 import axios from 'axios';
-const { TabPane } = Tabs;
+import NextRouter, { useRouter } from 'next/router';
+import { useEffect } from 'react';
 
-export default function CreateCustomer() {
+export default function CustomerForm(props: any) {
+
+  const router = useRouter();
+  const action = router.query?.action;
+  const customerId = router.query?.id;
+
+  const [form] = Form.useForm()
+
+  useEffect(() => {
+    (async () => {
+      if (action === 'edit') {
+        const result = await axios.get(process.env.API_PATH + '/customers/' + customerId);
+        console.log(result.data);
+        form.setFieldsValue(result.data);
+      }
+    })();
+  })
 
   const onFinish = async (values: any) => {
     console.log('Success:', values);
     try {
-      await axios.post(process.env.API_PATH + '/customers', values);
+      if (action === 'edit') {
+        await axios.patch(process.env.API_PATH + '/customers/' + customerId, values);
+      } else if (action === 'new') {
+        await axios.post(process.env.API_PATH + '/customers', values);
+      } else {
+        // show error 
+      }
+      router.push('/customers');
     } catch (err) {
       // show the error in UI
       console.log(err);
@@ -24,11 +46,12 @@ export default function CreateCustomer() {
   return (
     <div className="">
       <Form
+      form={form}
         layout='horizontal'
         name="basic"
         labelCol={{ sm: { span: 8 }, lg: { span: 4 } }}
         wrapperCol={{ sm: { span: 12 }, lg: { span: 8 } }}
-        initialValues={{ remember: true }}
+        initialValues={{}}
         onFinish={onFinish}
         onFinishFailed={onFinishFailed}
         autoComplete="off"
@@ -82,7 +105,7 @@ export default function CreateCustomer() {
 
         <Row className='p-4 m-4 gap-4 justify-center'>
           <Button type="primary" size="large" htmlType="submit">Save</Button>
-          <Button size="large">Cancel</Button>
+          <Button size="large" onClick={NextRouter.back}>Cancel</Button>
         </Row>
       </Form>
     </div>
