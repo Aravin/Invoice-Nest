@@ -146,7 +146,14 @@ export default function CustomerPage(props: any) {
         isError && <Alert message="Unable to delete the new customer, please try again!" type="error" closable showIcon className='p-4' />
       }
 
-      <Table columns={columns} dataSource={props?.customers} scroll={{ x: 3000 }} className='m-2' />
+      <Table
+        columns={columns}
+        dataSource={props?.customers}
+        scroll={{ x: 3000 }}
+        className='m-2'
+        tableLayout='fixed'
+        size='small'
+        />
     </div>
   )
 }

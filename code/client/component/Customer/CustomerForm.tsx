@@ -92,7 +92,7 @@ export default function CustomerForm(props: any) {
           <Form.Item label="Last Name"
             name='lastName'
             required={true}
-            rules={[{ required: true, min: 2, max: 50, message: 'Last name is required, min 2 and max 50 characters!' }]}>
+            rules={[{ required: true, min: 1, max: 50, message: 'Last name is required, min 1 and max 50 characters!' }]}>
             <Input />
           </Form.Item>
 
@@ -120,8 +120,28 @@ export default function CustomerForm(props: any) {
             <Input />
           </Form.Item>
 
-          <Form.Item label="Address" name='address'>
-            <TextArea rows={2} />
+          <Form.Item label="Address Line 1" name='addressLine1'>
+            <TextArea rows={1} />
+          </Form.Item>
+
+          <Form.Item label="Address Line 2" name='addressLine2'>
+            <TextArea rows={1} />
+          </Form.Item>
+
+          <Form.Item label="City" name='city'>
+            <Input />
+          </Form.Item>
+
+          <Form.Item label="State" name='state'>
+            <Input />
+          </Form.Item>
+
+          <Form.Item label="Country" name='country'>
+            <Input />
+          </Form.Item>
+
+          <Form.Item label="Zip" name='zip'>
+            <Input />
           </Form.Item>
 
           <Form.Item label="Remarks" name='remarks'>
