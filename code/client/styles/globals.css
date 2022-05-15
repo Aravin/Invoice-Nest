@@ -1,6 +1,8 @@
 @tailwind base;
 @tailwind utilities;
 
+svg { vertical-align: baseline; }
+
 html,
 body {
   padding: 0;
@@ -30,4 +32,8 @@ a {
 
 [data-theme="dark"] .site-layout .site-layout-background {
   background: #141414;
+}
+
+#invoice_list:first-of-type .remove_invoice  {
+  visibility: hidden;
 }
