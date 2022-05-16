@@ -46,10 +46,8 @@ export default function ItemForm() {
     try {
       if (action === 'edit') {
         await axios.patch(process.env.API_PATH + '/items/' + itemId, values);
-      } else if (action === 'new') {
-        await axios.post(process.env.API_PATH + '/items', values);
       } else {
-        // show error 
+        await axios.post(process.env.API_PATH + '/items', values);
       }
       router.push('/items');
       setSuccess(true);

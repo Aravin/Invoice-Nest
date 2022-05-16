@@ -30,12 +30,13 @@ export default function AppLayout({ children }: any) {
   };
 
   const addNewMenu = (
-    <Menu>
-      <Menu.Item>Add Estimate</Menu.Item>
-      <Menu.Item>Add Invoice</Menu.Item>
-      <Menu.Item>Add Customer</Menu.Item>
-      <Menu.Item>Add Item</Menu.Item>
-      <Menu.Item>Add Sales Person</Menu.Item>
+    <Menu onClick={handleClick}>
+      <Menu.Item key="/estimates/create">Add Estimate</Menu.Item>
+      <Menu.Item key="/invoices/create">Add Invoice</Menu.Item>
+      <Menu.Item key="/customers/create">Add Customer</Menu.Item>
+      <Menu.Item key="/items/create">Add Item</Menu.Item>
+      <Menu.Item key="/salesPersons/create">Add Sales Person</Menu.Item>
+      <Menu.Item key="/taxes/create">Add Tax</Menu.Item>
     </Menu>
   );
 

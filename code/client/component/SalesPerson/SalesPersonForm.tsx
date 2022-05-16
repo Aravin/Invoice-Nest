@@ -46,10 +46,8 @@ export default function SalesPersonForm() {
     try {
       if (action === 'edit') {
         await axios.patch(process.env.API_PATH + '/sales-persons/' + salesPersonId, values);
-      } else if (action === 'new') {
-        await axios.post(process.env.API_PATH + '/sales-persons', values);
       } else {
-        // show error 
+        await axios.post(process.env.API_PATH + '/sales-persons', values);
       }
       router.push('/salesPersons');
       setSuccess(true);

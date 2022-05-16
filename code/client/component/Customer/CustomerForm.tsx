@@ -38,10 +38,8 @@ export default function CustomerForm(props: any) {
     try {
       if (action === 'edit') {
         await axios.patch(process.env.API_PATH + '/customers/' + customerId, values);
-      } else if (action === 'new') {
-        await axios.post(process.env.API_PATH + '/customers', values);
       } else {
-        // show error 
+        await axios.post(process.env.API_PATH + '/customers', values);
       }
       router.push('/customers');
       setSuccess(true);

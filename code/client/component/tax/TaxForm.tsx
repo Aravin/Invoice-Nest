@@ -46,10 +46,8 @@ export default function TaxForm() {
     try {
       if (action === 'edit') {
         await axios.patch(process.env.API_PATH + '/taxes/' + taxId, values);
-      } else if (action === 'new') {
-        await axios.post(process.env.API_PATH + '/taxes', values);
       } else {
-        // show error 
+        await axios.post(process.env.API_PATH + '/taxes', values);
       }
       router.push('/taxes');
       setSuccess(true);
