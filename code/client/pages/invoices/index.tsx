@@ -9,7 +9,7 @@ const InvoicePage: NextPage = () => {
       <PageHeader
         className="site-page-header"
         title="Invoice"
-        subTitle="Add New Invoice"
+        subTitle="Add New"
       />
       <CreateInvoice></CreateInvoice>
     </div>
