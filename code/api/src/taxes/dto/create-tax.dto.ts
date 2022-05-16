@@ -1,5 +1,5 @@
 export class CreateTaxDto {
   name: string;
-  description: string;
+  description?: string;
   rate: string;
 }

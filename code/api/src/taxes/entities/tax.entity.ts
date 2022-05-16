@@ -8,9 +8,9 @@ export class Tax {
   @Column({ type: 'varchar', length: 48 })
   name: string;
 
-  @Column({ type: 'varchar', length: 128 })
+  @Column({ type: 'varchar', length: 128, nullable: true })
   description: string;
 
-  @Column({ type: 'smallint' })
+  @Column({ type: 'numeric' })
   rate: string;
 }

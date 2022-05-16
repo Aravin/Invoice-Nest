@@ -44,7 +44,6 @@ export default function AppLayout({ children }: any) {
       <Menu.Item>Organization</Menu.Item>
       <Menu.Item>Users</Menu.Item>
       <Menu.Item>Settings</Menu.Item>
-      <Menu.Item>Taxes</Menu.Item>
     </Menu>
   );
 
