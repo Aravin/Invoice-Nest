@@ -7,4 +7,5 @@ export class CreateOrganizationDto {
   addressLine2?: string;
   pan?: string;
   gst?: string;
+  currency?: string;
 }

@@ -11,21 +11,24 @@ export class Organization {
   @Column({ type: 'varchar', length: 96 })
   country: string;
 
-  @Column({ type: 'varchar', length: 96 })
+  @Column({ type: 'varchar', length: 96, nullable: true })
   state: string;
 
-  @Column({ type: 'varchar', length: 96 })
+  @Column({ type: 'varchar', length: 96, nullable: true })
   city: string;
 
-  @Column({ type: 'varchar', length: 128 })
+  @Column({ type: 'varchar', length: 128, nullable: true })
   addressLine1: string;
 
-  @Column({ type: 'varchar', length: 128 })
+  @Column({ type: 'varchar', length: 128, nullable: true })
   addressLine2: string;
 
-  @Column({ type: 'varchar', length: 10 })
+  @Column({ type: 'varchar', length: 10, nullable: true })
   pan: string;
 
-  @Column({ type: 'varchar', length: 15 })
+  @Column({ type: 'varchar', length: 15, nullable: true })
   gst: string;
+
+  @Column({ type: 'varchar', length: 5 })
+  currency: string;
 }

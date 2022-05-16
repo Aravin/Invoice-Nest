@@ -10,4 +10,5 @@ export class UpdateOrganizationDto extends PartialType(CreateOrganizationDto) {
   addressLine2?: string;
   pan?: string;
   gst?: string;
+  currency?: string;
 }
