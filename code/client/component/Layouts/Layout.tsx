@@ -13,6 +13,7 @@ import {
   SettingOutlined,
   PlusOutlined,
   LogoutOutlined,
+  MoneyCollectOutlined,
 } from '@ant-design/icons';
 import { useRouter } from 'next/router'
 
@@ -69,20 +70,26 @@ export default function AppLayout({ children }: any) {
           <Menu.Item key="/" icon={<PieChartOutlined />} >
             Dashboard
           </Menu.Item>
+          <Menu.Divider dashed={true}></Menu.Divider>
           <Menu.Item key="/invoices" icon={<BookOutlined />}>
             Invoices
           </Menu.Item>
           <Menu.Item key="/estimates" icon={<SnippetsOutlined />}>
             Estimates
           </Menu.Item>
+          <Menu.Divider dashed={true}></Menu.Divider>
           <Menu.Item key="/customers" icon={<UsergroupAddOutlined />}>
             Customers
           </Menu.Item>
           <Menu.Item key="/items" icon={<AppstoreOutlined />}>
             Items
           </Menu.Item>
+          <Menu.Divider dashed={true}></Menu.Divider>
           <Menu.Item key="/salesPersons" icon={<UserOutlined />}>
             Sales Persons
+          </Menu.Item>
+          <Menu.Item key="/taxes" icon={<MoneyCollectOutlined />}>
+            Taxes
           </Menu.Item>
           {/* <SubMenu key="sub1" icon={<UserOutlined />} title="Customers">
             <Menu.Item key="3">Tom</Menu.Item>
