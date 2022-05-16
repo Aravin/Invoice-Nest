@@ -45,8 +45,8 @@ export default function CreateInvoice() {
   ];
 
   const data = [{
-    name: <Form.Item className='w-full h-full'> <Input /> </Form.Item>,
-    description: <Form.Item> <Input /> </Form.Item>,
+    name: <Form.Item> <Input /> </Form.Item>,
+    description: <Form.Item> <TextArea autoSize /> </Form.Item>,
     quantity: <Form.Item> <Input /> </Form.Item>,
     price: <Form.Item> <Input /> </Form.Item>,
     amount: <Form.Item> <Input /> </Form.Item>,
@@ -115,12 +115,64 @@ export default function CreateInvoice() {
 
         <Row className='p-4 m-4'>
           <Col xs={24} xl={18}>
-            <Table
-              columns={columns}
-              dataSource={data}
-              bordered
-              pagination={false}
-            />
+            <Form name="dynamic_form_nest_item" onFinish={onFinish} autoComplete="off" initialValues={{ invoices: [""] }} labelCol={{ span: 2, offset: 2 }} >
+              <Form.List name="invoices">
+                {(fields, { add, remove }) => (
+                  <>
+                    {fields.map(({ key, name, ...restField }) => (
+                      <Space key={key} style={{ display: 'flex', marginBottom: 8 }} align="start" id="invoice_list">
+                        <Form.Item
+                          {...restField}
+                          name={[name, 'name']}
+                          rules={[{ required: true, message: 'Missing name' }]}
+                        >
+                          <Input placeholder="item name" />
+                        </Form.Item>
+                        <Form.Item
+                          {...restField}
+                          name={[name, 'description']}
+                          rules={[{ required: true, message: 'Missing description' }]}
+                        >
+                          <TextArea placeholder="description" />
+                        </Form.Item>
+                        <Form.Item
+                          {...restField}
+                          name={[name, 'quantity']}
+                          rules={[{ required: true, message: 'Missing quantity' }]}
+                        >
+                          <Input placeholder="quantity" />
+                        </Form.Item>
+                        <Form.Item
+                          {...restField}
+                          name={[name, 'price']}
+                          rules={[{ required: true, message: 'Missing price' }]}
+                        >
+                          <Input placeholder="price" />
+                        </Form.Item>
+                        <Form.Item
+                          {...restField}
+                          name={[name, 'total']}
+                          rules={[{ required: true, message: 'Missing total' }]}
+                        >
+                          <Input placeholder="total" />
+                        </Form.Item>
+                        <MinusCircleOutlined onClick={() => remove(name)} className='remove_invoice' />
+                      </Space>
+                    ))}
+                    <Form.Item>
+                      <Button type="dashed" onClick={() => add()} block icon={<PlusOutlined />}>
+                        Add field
+                      </Button>
+                    </Form.Item>
+                  </>
+                )}
+              </Form.List>
+              <Form.Item>
+                <Button type="primary" htmlType="submit">
+                  Submit
+                </Button>
+              </Form.Item>
+            </Form>
           </Col>
         </Row>
 
