@@ -61,11 +61,11 @@ export default function AppLayout({ children }: any) {
       <Sider collapsible collapsed={collapsed} onCollapse={() => seCollapse(!collapsed)} >
         {
           !collapsed &&
-          <div className="logo flex-1 text-center align-middle text-white text-lg font-bold pt-0.5">ResumeNest.com</div>
+          <div className="logo flex-1 text-center align-middle text-white text-lg font-bold pt-0.5">InvoiceNest.com</div>
         }
         {
           collapsed &&
-          <div className="logo flex-1 text-center align-middle text-white text-lg font-bold pt-0.5">RN</div>
+          <div className="logo flex-1 text-center align-middle text-white text-lg font-bold pt-0.5">IN</div>
         }
         <Menu theme="dark" defaultSelectedKeys={['1']} mode="inline" onClick={handleClick} >
           <Menu.Item key="/" icon={<PieChartOutlined />} >
