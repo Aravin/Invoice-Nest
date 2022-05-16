@@ -8,12 +8,12 @@ export class SalesPerson {
   @Column({ type: 'varchar', length: 72 })
   name: string;
 
-  @Column({ type: 'varchar', length: 24 })
+  @Column({ type: 'varchar', length: 24, nullable: true })
   role: string;
 
-  @Column({ type: 'varchar', length: 16 })
+  @Column({ type: 'varchar', length: 16, nullable: true })
   phone: string;
 
-  @Column({ type: 'varchar', length: 96 })
+  @Column({ type: 'varchar', length: 96, nullable: true })
   email: string;
 }
