@@ -121,8 +121,8 @@ export default function CustomerPage(props: any) {
       width: 100,
       render: (text: any, record: any) => (
         <Space size="middle">
-          <a><Button icon={<EditFilled />} type='ghost' onClick={() => goToEditCustomer(record.customerId)} /></a>
-          <a><Button icon={<DeleteFilled />} type='ghost' onClick={() => deleteCustomer(record.customerId)} /></a>
+          <a><Button icon={<EditFilled />} type='ghost' onClick={() => goToEditCustomer(record.itemId)} /></a>
+          <a><Button icon={<DeleteFilled />} type='ghost' onClick={() => deleteCustomer(record.itemId)} /></a>
         </Space>
       ),
     },
@@ -153,7 +153,7 @@ export default function CustomerPage(props: any) {
         className='m-2'
         tableLayout='fixed'
         size='small'
-        />
+      />
     </div>
   )
 }

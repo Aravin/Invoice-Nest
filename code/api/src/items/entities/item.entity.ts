@@ -8,12 +8,12 @@ export class Item {
   @Column({ type: 'varchar', length: 48 })
   name: string;
 
-  @Column({ type: 'varchar', length: 128 })
+  @Column({ type: 'varchar', length: 128, nullable: true })
   description: string;
 
-  @Column({ type: 'money' })
+  @Column({ type: 'numeric' })
   price: number;
 
-  @Column({ type: 'varchar', length: 24 })
-  itemType: string;
+  @Column({ type: 'smallint' })
+  itemType: number;
 }

@@ -1,7 +1,7 @@
 import { Form, Input, Button, Row, Alert } from 'antd';
 import TextArea from 'antd/lib/input/TextArea';
 import axios from 'axios';
-import NextRouter, { useRouter } from 'next/router';
+import { useRouter } from 'next/router';
 import { useEffect, useState } from 'react';
 import Loader from '../Loader/Loader';
 
@@ -150,7 +150,7 @@ export default function CustomerForm(props: any) {
 
           <Row className='p-4 m-4 gap-4 justify-center'>
             <Button type="primary" size="large" htmlType="submit">Save</Button>
-            <Button size="large" onClick={NextRouter.back}>Cancel</Button>
+            <Button size="large" onClick={router.back}>Cancel</Button>
           </Row>
         </Form>
       }
