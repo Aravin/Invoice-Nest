@@ -14,6 +14,7 @@ import {
   PlusOutlined,
   LogoutOutlined,
   MoneyCollectOutlined,
+  ApartmentOutlined,
 } from '@ant-design/icons';
 import { useRouter } from 'next/router'
 
@@ -43,7 +44,6 @@ export default function AppLayout({ children }: any) {
 
   const settingsMenu = (
     <Menu onClick={handleClick}>
-      <Menu.Item key='/organizations/create'>Organization</Menu.Item>
       <Menu.Item key='/settings/create'>Settings</Menu.Item>
       <Menu.Item key='/users/create'>Users</Menu.Item>
       <Menu.Item key='/salesPersons/create'>Sales Person</Menu.Item>
@@ -52,8 +52,10 @@ export default function AppLayout({ children }: any) {
   );
 
   const accountMenu = (
-    <Menu>
+    <Menu onClick={handleClick}>
       <Menu.Item icon={<UserOutlined />}>My Account</Menu.Item>
+      <Menu.Item icon={<ApartmentOutlined />} key='/organizations'>Organization</Menu.Item>
+      <Menu.Divider dashed={true}></Menu.Divider>
       <Menu.Item icon={<LogoutOutlined />}>Logout</Menu.Item>
     </Menu>
   );
