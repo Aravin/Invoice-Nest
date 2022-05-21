@@ -4,6 +4,8 @@ import axios from 'axios';
 import { useRouter } from 'next/router';
 import React from 'react';
 import { useEffect, useState } from 'react';
+import CountrySelectField from '../Common/FormFields/CountryDropdown';
+import CurrencySelectField from '../Common/FormFields/CurrencyDropdown';
 import Loader from '../Loader/Loader';
 
 export default function OrganizationForm() {
@@ -93,11 +95,11 @@ export default function OrganizationForm() {
           </Form.Item>
 
           <Form.Item label="Country" name='country' required={true}>
-            <Input />
+            <CountrySelectField />
           </Form.Item>
 
           <Form.Item label="Currency" name='currency' required={true}>
-            <Input />
+            <CurrencySelectField />
           </Form.Item>
 
           <Form.Item label="Address Line1" name='addressLine1'>

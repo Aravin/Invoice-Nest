@@ -3,6 +3,7 @@ import TextArea from 'antd/lib/input/TextArea';
 import axios from 'axios';
 import { useRouter } from 'next/router';
 import { useEffect, useState } from 'react';
+import CountrySelectField from '../Common/FormFields/CountryDropdown';
 import Loader from '../Loader/Loader';
 
 export default function CustomerForm(props: any) {
@@ -135,7 +136,7 @@ export default function CustomerForm(props: any) {
           </Form.Item>
 
           <Form.Item label="Country" name='country'>
-            <Input />
+            <CountrySelectField />
           </Form.Item>
 
           <Form.Item label="Zip" name='zip'>
