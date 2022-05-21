@@ -1,20 +1,20 @@
 import { PageHeader } from 'antd'
 import type { NextPage } from 'next'
 import React, { } from 'react'
-import TaxForm from '../../component/Tax/TaxForm'
+import UserForm from '../../component/User/UserForm'
 
-const CreateTaxPage: NextPage = () => {
+const CreateUserPage: NextPage = () => {
   return (
     <div>
       <PageHeader
         className="site-page-header"
-        title="Items"
+        title="User"
         subTitle="Add New"
       />
 
-      <TaxForm></TaxForm>
+      <UserForm></UserForm>
     </div>
   )
 }
 
-export default CreateTaxPage
+export default CreateUserPage
