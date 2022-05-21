@@ -42,7 +42,7 @@ export default function AppLayout({ children }: any) {
   );
 
   const settingsMenu = (
-    <Menu>
+    <Menu onClick={handleClick}>
       <Menu.Item key='/organizations/create'>Organization</Menu.Item>
       <Menu.Item key='/users/create'>Users</Menu.Item>
       <Menu.Item key='/settings/create'>Settings</Menu.Item>
