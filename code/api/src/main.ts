@@ -3,11 +3,30 @@ import { NestFactory } from '@nestjs/core';
 import { SwaggerModule, DocumentBuilder } from '@nestjs/swagger';
 import { AppModule } from './app.module';
 import helmet from 'helmet';
+import { tenancyMiddleware } from './tenants/tenant.middleware';
+import { getConnection, getManager } from 'typeorm';
+import { getTenantConnection } from './tenants/tenant.utils';
 
 declare const module: any;
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
+  app.use(tenancyMiddleware);
+  await getConnection().runMigrations();
+  const schemas = await getManager().query(
+    'select schema_name as name from information_schema.schemata;',
+  );
+
+  for (let i = 0; i < schemas.length; i += 1) {
+    const { name: schema } = schemas[i];
+
+    if (schema.startsWith('tenant_')) {
+      const tenantId = schema.replace('tenant_', '');
+      const connection = await getTenantConnection(tenantId);
+      await connection.runMigrations();
+      await connection.close();
+    }
+  }
 
   app.enableVersioning({
     type: VersioningType.URI,

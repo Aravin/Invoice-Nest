@@ -9,12 +9,12 @@ import { InvoicesModule } from './invoices/invoices.module';
 import { EstimatesModule } from './estimates/estimates.module';
 import { UsersModule } from './users/users.module';
 import { OrganizationsModule } from './organizations/organizations.module';
-import { TypeOrmModule } from '@nestjs/typeorm';
+import { TypeOrmModule, TypeOrmModuleOptions } from '@nestjs/typeorm';
 import { ConfigModule } from '@nestjs/config';
-import { getConnectionOptions } from 'typeorm';
 import { ThrottlerGuard, ThrottlerModule } from '@nestjs/throttler';
 import { APP_GUARD } from '@nestjs/core';
 import { TenantsModule } from './tenants/tenants.module';
+import { ormConfig } from 'orm.config';
 
 @Module({
   imports: [
@@ -23,12 +23,13 @@ import { TenantsModule } from './tenants/tenants.module';
       limit: 10,
     }),
     ConfigModule.forRoot(),
-    TypeOrmModule.forRootAsync({
-      useFactory: async () =>
-        Object.assign(await getConnectionOptions(), {
-          autoLoadEntities: true,
-        }),
-    }),
+    TypeOrmModule.forRoot(ormConfig as TypeOrmModuleOptions),
+    // TypeOrmModule.forRootAsync({
+    //   useFactory: async () =>
+    //     Object.assign(await getConnectionOptions(), {
+    //       autoLoadEntities: true,
+    //     }),
+    // }),
     TaxesModule,
     SalesPersonsModule,
     ItemsModule,

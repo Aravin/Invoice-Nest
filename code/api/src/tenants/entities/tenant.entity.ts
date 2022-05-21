@@ -5,6 +5,6 @@ export class Tenant {
   @PrimaryGeneratedColumn()
   tenantId: number;
 
-  @Column({ type: 'varchar', length: 48 })
+  @Column({ type: 'varchar', length: 128, nullable: true, unique: true })
   email: string;
 }
