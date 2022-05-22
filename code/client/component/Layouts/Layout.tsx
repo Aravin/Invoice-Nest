@@ -37,7 +37,7 @@ export default function AppLayout({ children }: any) {
       <Menu.Item key="/invoices/create">Add Invoice</Menu.Item>
       <Menu.Item key="/customers/create">Add Customer</Menu.Item>
       <Menu.Item key="/items/create">Add Item</Menu.Item>
-      <Menu.Item key="/salesPersons/create">Add Sales Person</Menu.Item>
+      {/* <Menu.Item key="/salesPersons/create">Add Sales Person</Menu.Item> */}
       <Menu.Item key="/taxes/create">Add Tax</Menu.Item>
     </Menu>
   );
@@ -46,7 +46,7 @@ export default function AppLayout({ children }: any) {
     <Menu onClick={handleClick}>
       <Menu.Item key='/settings/create'>Settings</Menu.Item>
       <Menu.Item key='/users/create'>Users</Menu.Item>
-      <Menu.Item key='/salesPersons/create'>Sales Person</Menu.Item>
+      {/* <Menu.Item key='/salesPersons/create'>Sales Person</Menu.Item> */}
       <Menu.Item key='/taxes/create'>Taxes</Menu.Item>
     </Menu>
   );
@@ -89,13 +89,10 @@ export default function AppLayout({ children }: any) {
           <Menu.Item key="/items" icon={<AppstoreOutlined />}>
             Items
           </Menu.Item>
-          <Menu.Divider dashed={true}></Menu.Divider>
-          <Menu.Item key="/salesPersons" icon={<UserOutlined />}>
+          {/* <Menu.Item key="/salesPersons" icon={<UserOutlined />}>
             Sales Persons
-          </Menu.Item>
-          <Menu.Item key="/taxes" icon={<MoneyCollectOutlined />}>
-            Taxes
-          </Menu.Item>
+          </Menu.Item> */}
+
           {/* <SubMenu key="sub1" icon={<UserOutlined />} title="Customers">
             <Menu.Item key="3">Tom</Menu.Item>
             <Menu.Item key="4">Bill</Menu.Item>
