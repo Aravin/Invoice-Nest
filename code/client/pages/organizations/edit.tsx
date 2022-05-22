@@ -1,3 +1,4 @@
+import { withPageAuthRequired } from '@auth0/nextjs-auth0'
 import { PageHeader } from 'antd'
 import type { NextPage } from 'next'
 import React, { } from 'react'
@@ -18,3 +19,5 @@ const EditOrganizationPage: NextPage = () => {
 }
 
 export default EditOrganizationPage
+
+export const getServerSideProps = withPageAuthRequired();
