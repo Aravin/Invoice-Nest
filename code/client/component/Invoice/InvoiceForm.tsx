@@ -1,9 +1,28 @@
-/* eslint-disable react/jsx-no-undef */
-import { Form, Input, Button, Checkbox, Select, DatePicker, Space, Table, Col, Row } from 'antd';
+import { Form, Input, Button, Checkbox, Select, DatePicker, Space, Table, Col, Row, Divider, InputNumber } from 'antd';
 import { MinusCircleOutlined, PlusOutlined } from '@ant-design/icons';
 import TextArea from 'antd/lib/input/TextArea';
+import { useState } from 'react';
+const { Option } = Select;
 
-export default function CreateInvoice() {
+export default function InvoiceForm(props: any) {
+
+  const [isCustomerModalVisible, setCustomerModalVisible] = useState(false);
+
+  const existingCustomers = [];
+  const existingItems = [];
+  const existingTaxes = [];
+
+  for (let customer of props?.props?.customers) {
+    existingCustomers.push(<Option key={customer.customerId}>{customer.firstName + ' ' + customer.lastName}</Option>);
+  }
+
+  for (let item of props?.props?.items) {
+    existingItems.push(<Option key={item.itemId}>{item.name}</Option>);
+  }
+
+  for (let tax of props?.props?.taxes) {
+    existingTaxes.push(<Option key={tax.taxId}>{tax.name}</Option>);
+  }
 
   const onFinish = (values: any) => {
     console.log('Success:', values);
@@ -76,9 +95,7 @@ export default function CreateInvoice() {
               (option?.children + '').toLowerCase().indexOf(input.toLowerCase()) >= 0
             }
           >
-            <Select.Option value="Aravind A">Aravind A</Select.Option>
-            <Select.Option value="Varun A">Varun Frontline</Select.Option>
-            <Select.Option value="Nisha C">Nisha C</Select.Option>
+            {existingCustomers}
           </Select>
         </Form.Item>
 
@@ -98,7 +115,7 @@ export default function CreateInvoice() {
           <DatePicker />
         </Form.Item>
 
-        <Form.Item label="Sales Person Name" name="layout">
+        {/* <Form.Item label="Sales Person Name" name="layout">
           <Select
             showSearch
             placeholder="Select a Sales Person"
@@ -111,10 +128,12 @@ export default function CreateInvoice() {
             <Select.Option value="Varun A">Varun Frontline</Select.Option>
             <Select.Option value="Nisha C">Nisha C</Select.Option>
           </Select>
-        </Form.Item>
+        </Form.Item> */}
 
         <Row className='p-4 m-4'>
           <Col xs={24} xl={18}>
+            <strong>Invoice Items</strong>
+            <Divider></Divider>
             <Form name="dynamic_form_nest_item" onFinish={onFinish} autoComplete="off" initialValues={{ invoices: [""] }} labelCol={{ span: 2, offset: 2 }} >
               <Form.List name="invoices">
                 {(fields, { add, remove }) => (
@@ -140,21 +159,21 @@ export default function CreateInvoice() {
                           name={[name, 'quantity']}
                           rules={[{ required: true, message: 'Missing quantity' }]}
                         >
-                          <Input placeholder="quantity" />
+                          <InputNumber min={1} max={999999999} step={1} placeholder="quantity" />
                         </Form.Item>
                         <Form.Item
                           {...restField}
                           name={[name, 'price']}
                           rules={[{ required: true, message: 'Missing price' }]}
                         >
-                          <Input placeholder="price" />
+                          <InputNumber min={1} max={999999999} step={0.25} placeholder="price" />
                         </Form.Item>
                         <Form.Item
                           {...restField}
                           name={[name, 'total']}
                           rules={[{ required: true, message: 'Missing total' }]}
                         >
-                          <Input placeholder="total" />
+                          <InputNumber min={1} max={999999999} step={0.25} placeholder="total" readOnly />
                         </Form.Item>
                         <MinusCircleOutlined onClick={() => remove(name)} className='remove_invoice' />
                       </Space>
@@ -179,64 +198,25 @@ export default function CreateInvoice() {
         <Row className='p-4 m-4'>
           <Col sm={{ span: 24 }} lg={{ push: 12, span: 12 }} >
             <Form.Item label="Sub Total">
-              <Input />
+              <InputNumber min={1} max={999999999} step={0.25} placeholder="sub total" />
             </Form.Item>
             <Form.Item label="Tax">
-              <Input />
+              <InputNumber min={1} max={999999999} step={0.25} placeholder="tax" />
             </Form.Item>
             <Form.Item label="Shipping">
-              <Input />
+              <InputNumber min={1} max={999999999} step={0.25} placeholder="shipping" />
             </Form.Item>
             <Form.Item label="Discount">
-              <Input />
+              <InputNumber min={1} max={999999999} step={0.25} placeholder="discount" />
             </Form.Item>
             <Form.Item label="Adjustment">
-              <Input />
+              <InputNumber min={1} max={999999999} step={0.25} placeholder="adjustment +/-" />
             </Form.Item>
             <Form.Item label="Total">
-              <Input />
+              <InputNumber min={1} max={999999999} step={0.25} placeholder="total" readOnly />
             </Form.Item>
           </Col>
         </Row>
-        {/* <Form.List name="users">
-          {(fields, { add, remove }) => (
-            <>
-              {fields.map(({ key, name, fieldKey, ...restField }) => (
-                <Space key={key} style={{ display: 'flex', marginBottom: 8 }} align="baseline">
-                  <Form.Item
-                    {...restField}
-                    name={[name, 'first']}
-                    fieldKey={[fieldKey, 'first']}
-                    rules={[{ required: true, message: 'Missing first name' }]}
-                  >
-                    <Input placeholder="First Name" />
-                  </Form.Item>
-                  <Form.Item
-                    {...restField}
-                    name={[name, 'last']}
-                    fieldKey={[fieldKey, 'last']}
-                    rules={[{ required: true, message: 'Missing last name' }]}
-                  >
-                    <Input placeholder="Last Name" />
-                  </Form.Item>
-                  <MinusCircleOutlined onClick={() => remove(name)} />
-                </Space>
-              ))}
-              <Form.Item>
-                <Button type="dashed" onClick={() => add()} block icon={<PlusOutlined />}>
-                  Add field
-                </Button>
-              </Form.Item>
-
-              <Form.Item>
-                <Button type="primary" htmlType="submit">
-                  Submit
-                </Button>
-              </Form.Item>
-            </>
-          )}
-        </Form.List> */}
-
 
         <Form.Item label="Terms & Conditions">
           <TextArea rows={2} />

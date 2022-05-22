@@ -1,9 +1,10 @@
-import { Col, PageHeader, Row } from 'antd'
-import type { NextPage } from 'next'
+import { PageHeader } from 'antd'
+import axios from 'axios'
+import type { GetServerSideProps } from 'next'
 import React, { } from 'react'
-import CreateInvoice from '../../component/Invoice/CreateInvoice'
+import InvoiceForm from '../../component/Invoice/InvoiceForm'
 
-const InvoicePage: NextPage = () => {
+export default function CreateInvoicePage(props: any) {
   return (
     <div>
       <PageHeader
@@ -11,9 +12,22 @@ const InvoicePage: NextPage = () => {
         title="Invoice"
         subTitle="Add New"
       />
-      <CreateInvoice></CreateInvoice>
+      <InvoiceForm props={props}></InvoiceForm>
     </div>
   )
 }
 
-export default InvoicePage
+export const getServerSideProps: GetServerSideProps = async (context: any) => {
+  const items = await axios.get(process.env.API_PATH + '/items');
+  const customers = await axios.get(process.env.API_PATH + '/customers');
+  const taxes = await axios.get(process.env.API_PATH + '/taxes');
+  // const items = await axios.get(process.env.API_PATH + '/salesPersons');
+
+  return {
+    props: {
+      items: items.data,
+      customers: customers.data,
+      taxes: taxes.data,
+    },
+  }
+}
