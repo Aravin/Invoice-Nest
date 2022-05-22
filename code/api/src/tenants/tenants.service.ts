@@ -1,6 +1,6 @@
 import { Injectable } from '@nestjs/common';
-import { InjectConnection, InjectRepository } from '@nestjs/typeorm';
-import { Connection, Repository } from 'typeorm';
+import { InjectRepository } from '@nestjs/typeorm';
+import { getManager, Repository } from 'typeorm';
 import { CreateTenantDto } from './dto/create-tenant.dto';
 import { UpdateTenantDto } from './dto/update-tenant.dto';
 import { Tenant } from './entities/tenant.entity';
@@ -11,8 +11,6 @@ export class TenantsService {
   constructor(
     @InjectRepository(Tenant)
     private tenantRepository: Repository<Tenant>,
-    @InjectConnection()
-    private readonly connection: Connection,
   ) {}
 
   async create(createTenantDto: CreateTenantDto) {
@@ -21,9 +19,12 @@ export class TenantsService {
 
     tenant = await this.tenantRepository.save(tenant);
     const tenantId = tenant.tenantId;
-    this.connection.query(`CREATE SCHEMA tenant_${tenantId}`);
+
+    await getManager().query(`CREATE SCHEMA IF NOT EXISTS tenant_${tenantId}`);
     const tenantConnection = await getTenantConnection(tenantId + '');
     tenantConnection.runMigrations();
+    tenantConnection.close();
+
     return { tenantId };
   }
 

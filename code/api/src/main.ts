@@ -12,7 +12,9 @@ declare const module: any;
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
   app.use(tenancyMiddleware);
+
   await getConnection().runMigrations();
+
   const schemas = await getManager().query(
     'select schema_name as name from information_schema.schemata;',
   );
