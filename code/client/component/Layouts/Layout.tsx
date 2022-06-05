@@ -53,10 +53,10 @@ export default function AppLayout({ children }: any) {
 
   const accountMenu = (
     <Menu onClick={handleClick}>
-      <Menu.Item icon={<UserOutlined />}>My Account</Menu.Item>
+      <Menu.Item icon={<UserOutlined />} key='/account'>My Account</Menu.Item>
       <Menu.Item icon={<ApartmentOutlined />} key='/organizations'>Organization</Menu.Item>
       <Menu.Divider dashed={true}></Menu.Divider>
-      <Menu.Item icon={<LogoutOutlined />}>Logout</Menu.Item>
+      <Menu.Item icon={<LogoutOutlined />} key='api/auth/logout'>Logout</Menu.Item>
     </Menu>
   );
 

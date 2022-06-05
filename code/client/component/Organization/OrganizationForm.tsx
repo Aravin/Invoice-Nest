@@ -47,9 +47,10 @@ export default function OrganizationForm() {
 
     try {
       if (action === 'edit') {
-        await axios.patch(process.env.API_PATH + '/organizations/' + organizationId, values);
+        await axios.patch(process.env.API_PATH + '/organizations/' + organizationId, {...values, userId: 6});
       } else {
-        await axios.post(process.env.API_PATH + '/organizations', values);
+        console.log(values);
+        await axios.post(process.env.API_PATH + '/organizations', {...values, userId: 6});
       }
       router.push('/organizations');
       setSuccess(true);
@@ -94,13 +95,9 @@ export default function OrganizationForm() {
             <Input />
           </Form.Item>
 
-          <Form.Item label="Country" name='country' required={true}>
-            <CountrySelectField />
-          </Form.Item>
+          <CountrySelectField />
 
-          <Form.Item label="Currency" name='currency' required={true}>
-            <CurrencySelectField />
-          </Form.Item>
+          <CurrencySelectField />
 
           <Form.Item label="Address Line1" name='addressLine1'>
             <Input />

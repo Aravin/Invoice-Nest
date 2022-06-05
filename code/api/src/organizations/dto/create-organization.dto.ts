@@ -8,4 +8,5 @@ export class CreateOrganizationDto {
   pan?: string;
   gst?: string;
   currency?: string;
+  userId: number;
 }

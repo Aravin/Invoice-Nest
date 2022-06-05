@@ -1,14 +1,15 @@
-import { Select } from "antd";
+import { Form, Select } from "antd";
 import { currencies } from "../../../constants/currencies";
 const { Option } = Select;
 
 export default function CurrencySelectField(props: any) {
   const children = [];
   for (let currency of currencies) {
-    children.push(<Option key={currency.code}>{currency.currencyDisplay}</Option>);
+    children.push(<Option key={currency.code} value={currency.code}>{currency.currencyDisplay}</Option>);
   }
 
   return (
+    <Form.Item label="Currency" name='currency' required={true}>
     <Select
       showSearch
       placeholder="Select the Currency"
@@ -19,5 +20,6 @@ export default function CurrencySelectField(props: any) {
     >
       {children}
     </Select>
+    </Form.Item>
   )
 }

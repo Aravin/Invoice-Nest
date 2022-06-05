@@ -1,12 +1,26 @@
-import { Form, Input, Button, Checkbox, Select, DatePicker, Space, Table, Col, Row, Divider, InputNumber } from 'antd';
+import { Form, Input, Button, Checkbox, Select, DatePicker, Space, Table, Col, Row, Divider, InputNumber, Typography, Modal } from 'antd';
 import { MinusCircleOutlined, PlusOutlined } from '@ant-design/icons';
 import TextArea from 'antd/lib/input/TextArea';
 import { useState } from 'react';
+import CustomerForm from '../Customer/CustomerForm';
 const { Option } = Select;
 
 export default function InvoiceForm(props: any) {
 
   const [isCustomerModalVisible, setCustomerModalVisible] = useState(false);
+
+  const handleOk = () => {
+    setCustomerModalVisible(false);
+  };
+
+  const handleCancel = () => {
+    setCustomerModalVisible(false);
+  };
+
+  const showModal = (e: React.MouseEvent<HTMLAnchorElement>) => {
+    e.preventDefault();
+    setCustomerModalVisible(true);
+  };
 
   const existingCustomers = [];
   const existingItems = [];
@@ -73,6 +87,9 @@ export default function InvoiceForm(props: any) {
 
   return (
     <>
+      <Modal title="Add Customer" visible={isCustomerModalVisible} onOk={handleOk} onCancel={handleCancel}>
+        <CustomerForm />
+      </Modal>
       <Form
         layout='horizontal'
         name="basic"
@@ -94,9 +111,21 @@ export default function InvoiceForm(props: any) {
             filterOption={(input, option) =>
               (option?.children + '').toLowerCase().indexOf(input.toLowerCase()) >= 0
             }
+            dropdownRender={(menu: any) => (
+              <>
+                {menu}
+                <Divider style={{ margin: '8px 0' }} />
+                <Space align="center" style={{ padding: '0 8px 4px' }}>
+                  <Typography.Link onMouseDown={e => e.preventDefault()} onClick={showModal}>
+                    <PlusOutlined /> Add item
+                  </Typography.Link>
+                </Space>
+              </>
+            )}
           >
             {existingCustomers}
           </Select>
+
         </Form.Item>
 
         <Form.Item label="Invoice Number">

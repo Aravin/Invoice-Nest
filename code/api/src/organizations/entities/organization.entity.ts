@@ -1,4 +1,11 @@
-import { Column, Entity, PrimaryGeneratedColumn } from 'typeorm';
+import { User } from 'src/users/entities/user.entity';
+import {
+  Column,
+  Entity,
+  JoinTable,
+  ManyToMany,
+  PrimaryGeneratedColumn,
+} from 'typeorm';
 
 @Entity()
 export class Organization {
@@ -31,4 +38,12 @@ export class Organization {
 
   @Column({ type: 'varchar', length: 5 })
   currency: string;
+
+  @ManyToMany(() => User, (user) => user.organizations, { cascade: ['insert'] })
+  @JoinTable({
+    name: 'organization_users',
+    joinColumns: [{ name: 'organizationId' }],
+    inverseJoinColumns: [{ name: 'userId' }],
+  })
+  users: User[];
 }

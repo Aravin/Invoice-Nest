@@ -13,7 +13,7 @@ export class UsersService {
   ) {}
 
   create(createUserDto: CreateUserDto) {
-    return this.usersRepository.insert(createUserDto);
+    return this.usersRepository.insert(createUserDto as any);
   }
 
   findAll() {
@@ -21,11 +21,18 @@ export class UsersService {
   }
 
   findOne(id: number) {
-    return this.usersRepository.findOne(+id);
+    return this.usersRepository.findOne(+id, { relations: ['organizations'] });
+  }
+
+  findByEmail(email: string) {
+    return this.usersRepository.findOne({
+      where: { email: email },
+      relations: ['organizations'],
+    });
   }
 
   update(id: number, updateUserDto: UpdateUserDto) {
-    return this.usersRepository.update(id, updateUserDto);
+    return this.usersRepository.update(id, updateUserDto as any);
   }
 
   remove(id: number) {
