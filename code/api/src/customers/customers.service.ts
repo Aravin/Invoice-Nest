@@ -13,7 +13,7 @@ export class CustomersService {
   ) {}
 
   create(createCustomerDto: CreateCustomerDto) {
-    return this.customerRepository.insert(createCustomerDto);
+    return this.customerRepository.save(createCustomerDto);
   }
 
   findAll() {

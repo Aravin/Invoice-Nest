@@ -13,7 +13,7 @@ export class TaxesService {
   ) {}
 
   create(createTaxDto: CreateTaxDto) {
-    return this.taxRepository.insert(createTaxDto);
+    return this.taxRepository.save(createTaxDto);
   }
 
   findAll() {

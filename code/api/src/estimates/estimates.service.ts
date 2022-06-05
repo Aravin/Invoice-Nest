@@ -13,7 +13,7 @@ export class EstimatesService {
   ) {}
 
   create(createEstimateDto: CreateEstimateDto) {
-    return this.estimateRepository.insert(createEstimateDto as any);
+    return this.estimateRepository.save(createEstimateDto as any);
   }
 
   findAll() {

@@ -13,7 +13,7 @@ export class InvoicesService {
   ) {}
 
   create(createInvoiceDto: CreateInvoiceDto) {
-    return this.invoiceRepository.insert(createInvoiceDto as any);
+    return this.invoiceRepository.save(createInvoiceDto as any);
   }
 
   findAll() {

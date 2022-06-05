@@ -13,7 +13,7 @@ export class ItemsService {
   ) {}
 
   create(createItemDto: CreateItemDto) {
-    return this.itemRepository.insert(createItemDto as any);
+    return this.itemRepository.save(createItemDto as any);
   }
 
   findAll() {
