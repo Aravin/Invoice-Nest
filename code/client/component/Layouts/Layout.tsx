@@ -1,6 +1,6 @@
 // import Navbar from './navbar'
 // import Footer from './footer'
-import React, { useState } from 'react'
+import React, { useContext, useState } from 'react'
 import 'antd/dist/antd.css';
 import { Layout, Menu, Button, Dropdown, Select } from 'antd';
 import {
@@ -13,10 +13,10 @@ import {
   SettingOutlined,
   PlusOutlined,
   LogoutOutlined,
-  MoneyCollectOutlined,
   ApartmentOutlined,
 } from '@ant-design/icons';
 import { useRouter } from 'next/router'
+import { AccountContext } from '../../contexts/accountContext';
 
 const { Header, Content, Footer, Sider } = Layout;
 const { SubMenu } = Menu;
@@ -26,6 +26,7 @@ export default function AppLayout({ children }: any) {
 
   const [collapsed, seCollapse] = useState(false);
   const router = useRouter();
+  const { accountInfo, setAccountInfo } = useContext(AccountContext);
 
   const handleClick = (e: any) => {
     router.push(e.key);
@@ -114,13 +115,19 @@ export default function AppLayout({ children }: any) {
               </Dropdown>
             </div>
             <div className="flex gap-2">
-              <div>
-                <Select defaultValue="organization1" style={{ width: 150 }} onChange={console.log}>
-                  <Option value="organization1">Organization 1</Option>
-                  <Option value="organization2">Organization 2</Option>
-                  <Option value="organization3">Organization 3</Option>
-                </Select>
-              </div>
+              {
+                accountInfo?.organizations &&
+                <div>
+                  <Select defaultValue={accountInfo?.organizations[0].organizationId} style={{ width: 150 }} onChange={console.log}>
+                    {
+                      accountInfo?.organizations?.map((org: any) => {
+                        return <Option value={org.organizationId} key={org.organizationId}>{org.name}</Option>
+                      })
+                    }
+                  </Select>
+                </div>
+              }
+
               <div>
                 <Dropdown overlay={settingsMenu} placement="bottomRight">
                   <Button type="primary" shape="circle" size="middle" icon={<SettingOutlined />} />

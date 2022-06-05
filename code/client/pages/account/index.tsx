@@ -1,30 +1,29 @@
-import React, { useEffect } from 'react';
+import React, { useContext, useEffect } from 'react';
 import { useUser } from '@auth0/nextjs-auth0';
 import axios from 'axios';
 import { useRouter } from 'next/router';
+import { AccountContext } from '../../contexts/accountContext';
 
 export default function Profile() {
   const { user, error, isLoading } = useUser();
   const router = useRouter();
+  const { accountInfo, setAccountInfo } = useContext(AccountContext);
 
   useEffect(() => {
     const fetchData = async () => {
       const userResponse = await axios.get(process.env.API_PATH + '/users/email/' + user?.email);
-      const userInfo = userResponse.data;
-      console.log(userInfo)
+      let userInfo = userResponse.data;
 
-      if(!userInfo) {
+      if (!userInfo) {
         const createUserResponse = await axios.post(process.env.API_PATH + '/users', { firstName: user?.name, email: user?.email });
-        const newUser = createUserResponse.data;
-
-
+        userInfo = createUserResponse.data;
       }
+
+      setAccountInfo(userInfo);
 
       if (!userInfo?.organizations.length) {
         router.push('/organizations/create');
       }
-
-      // setData(result.data);
     };
 
     fetchData();
@@ -36,7 +35,7 @@ export default function Profile() {
   return (
     user && (
       <div>
-        <img src={user?.picture} alt={user?.name + ' profile'} />
+        <img src={user?.picture || ''} alt={user?.name + ' profile'} />
         <h2>{user.name}</h2>
         <p>{user.email}</p>
       </div>
