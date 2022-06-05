@@ -3,11 +3,13 @@ import { useUser } from '@auth0/nextjs-auth0';
 import axios from 'axios';
 import { useRouter } from 'next/router';
 import { AccountContext } from '../../contexts/accountContext';
+import { TenantContext } from '../../contexts/tenantContext';
 
 export default function Profile() {
   const { user, error, isLoading } = useUser();
   const router = useRouter();
   const { accountInfo, setAccountInfo } = useContext(AccountContext);
+  const { tenantId, setTenantId } = useContext(TenantContext);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -24,6 +26,8 @@ export default function Profile() {
       if (!userInfo?.organizations.length) {
         router.push('/organizations/create');
       }
+
+      setTenantId(userInfo.organizations[0].organizationId);
     };
 
     fetchData();

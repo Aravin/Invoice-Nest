@@ -17,6 +17,7 @@ import {
 } from '@ant-design/icons';
 import { useRouter } from 'next/router'
 import { AccountContext } from '../../contexts/accountContext';
+import { TenantContext } from '../../contexts/tenantContext';
 
 const { Header, Content, Footer, Sider } = Layout;
 const { SubMenu } = Menu;
@@ -27,6 +28,7 @@ export default function AppLayout({ children }: any) {
   const [collapsed, seCollapse] = useState(false);
   const router = useRouter();
   const { accountInfo, setAccountInfo } = useContext(AccountContext);
+  const { tenantId, setTenantId } = useContext(TenantContext);
 
   const handleClick = (e: any) => {
     router.push(e.key);
@@ -118,7 +120,7 @@ export default function AppLayout({ children }: any) {
               {
                 accountInfo?.organizations &&
                 <div>
-                  <Select defaultValue={accountInfo?.organizations[0].organizationId} style={{ width: 150 }} onChange={console.log}>
+                  <Select defaultValue={accountInfo?.organizations[0].organizationId} style={{ width: 150 }} onChange={(event) => setTenantId(event) }>
                     {
                       accountInfo?.organizations?.map((org: any) => {
                         return <Option value={org.organizationId} key={org.organizationId}>{org.name}</Option>
