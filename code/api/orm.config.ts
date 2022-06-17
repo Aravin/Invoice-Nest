@@ -14,4 +14,5 @@ export const ormConfig: TypeOrmModuleOptions = {
   autoLoadEntities: true,
   synchronize: true,
   entities: ['dist/**/*.entity{.ts,.js}'],
+  migrations: ['dist/**/*.migration{.ts,.js}'],
 };
