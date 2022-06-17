@@ -31,4 +31,8 @@ export class InvoicesService {
   remove(id: number) {
     return this.invoiceRepository.delete(id);
   }
+
+  nextSequenceNumber() {
+    return this.invoiceRepository.query(`SELECT nextval('invoice_number_seq')`);
+  }
 }

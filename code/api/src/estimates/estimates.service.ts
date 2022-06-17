@@ -31,4 +31,10 @@ export class EstimatesService {
   remove(id: number) {
     return this.estimateRepository.delete(id);
   }
+
+  nextSequenceNumber() {
+    return this.estimateRepository.query(
+      `SELECT nextval('estimate_number_seq')`,
+    );
+  }
 }

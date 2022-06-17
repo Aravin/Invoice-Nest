@@ -44,4 +44,9 @@ export class EstimatesController {
   remove(@Param('id') id: string) {
     return this.estimatesService.remove(+id);
   }
+
+  @Get('sequence/next')
+  sequenceNumber() {
+    return this.estimatesService.nextSequenceNumber();
+  }
 }

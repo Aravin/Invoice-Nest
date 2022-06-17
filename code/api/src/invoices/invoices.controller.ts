@@ -41,4 +41,9 @@ export class InvoicesController {
   remove(@Param('id') id: string) {
     return this.invoicesService.remove(+id);
   }
+
+  @Get('sequence/next')
+  sequenceNumber() {
+    return this.invoicesService.nextSequenceNumber();
+  }
 }
