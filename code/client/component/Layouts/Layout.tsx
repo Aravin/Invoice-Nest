@@ -1,6 +1,6 @@
 // import Navbar from './navbar'
 // import Footer from './footer'
-import React, { useContext, useState } from 'react'
+import React, { useContext, useEffect, useState } from 'react'
 import 'antd/dist/antd.css';
 import { Layout, Menu, Button, Dropdown, Select } from 'antd';
 import {
@@ -120,7 +120,7 @@ export default function AppLayout({ children }: any) {
               {
                 accountInfo?.organizations &&
                 <div>
-                  <Select defaultValue={accountInfo?.organizations[0].organizationId} style={{ width: 150 }} onChange={(event) => setTenantId(event) }>
+                  <Select defaultValue={accountInfo?.organizations[0]?.organizationId} style={{ width: 150 }} onChange={(event) => setTenantId(event) }>
                     {
                       accountInfo?.organizations?.map((org: any) => {
                         return <Option value={org.organizationId} key={org.organizationId}>{org.name}</Option>

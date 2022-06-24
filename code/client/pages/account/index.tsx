@@ -12,6 +12,8 @@ export default function Profile() {
   const { tenantId, setTenantId } = useContext(TenantContext);
 
   useEffect(() => {
+    if (!user) return;
+ 
     const fetchData = async () => {
       const userResponse = await axios.get(process.env.API_PATH + '/users/email/' + user?.email);
       let userInfo = userResponse.data;
@@ -23,15 +25,17 @@ export default function Profile() {
 
       setAccountInfo(userInfo);
 
-      if (!userInfo?.organizations.length) {
+      if (userInfo?.organizations?.length) {
+        setTenantId(userInfo.organizations[0].organizationId);
+        router.push('/');
+      }
+      else {
         router.push('/organizations/create');
       }
-
-      setTenantId(userInfo.organizations[0].organizationId);
     };
 
     fetchData();
-  }, []);
+  }, [user]);
 
   if (isLoading) return <div>Loading...</div>;
   if (error) return <div>{error.message}</div>;
