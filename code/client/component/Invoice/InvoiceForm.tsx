@@ -7,12 +7,12 @@ import { useRouter } from 'next/router';
 import axios from 'axios';
 import Loader from '../Loader/Loader';
 import moment from 'moment';
-import TaxForm from '../Tax/TaxForm';
 const { Option } = Select;
 import customerReducer from './customerReducer';
 import taxReducer from './taxReducer';
 import itemReducer from './itemReducer';
 import ItemForm from '../Item/ItemForm';
+import TaxForm from '../tax/TaxForm';
 
 const invoiceItemRowDefault = { itemId: null, description: null, quantity: 1, price: 0, total: 0, };
 
@@ -28,13 +28,15 @@ export default function InvoiceForm() {
   const [isSuccess, setSuccess] = useState(false);
   const [isError, setError] = useState(false);
   const [form] = Form.useForm();
+  const formTax = Form.useWatch('tax', form);
+  const formDiscount = Form.useWatch('computedDiscount', form);
 
   const [customers, dispatchCustomers] = useReducer(customerReducer, [] as any);
   const [taxes, dispatchTaxes] = useReducer(taxReducer, [] as any);
   const [items, dispatchItems] = useReducer(itemReducer, [] as any);
 
-  form?.setFieldValue('customerId', customers.find((c: any) => c.selected)?.customerId);
-  form?.setFieldValue('taxId', taxes.find((c: any) => c.selected)?.taxId);
+  // form?.setFieldValue('customerId', customers.find((c: any) => c.selected)?.customerId);
+  // form?.setFieldValue('taxId', taxes.find((c: any) => c.selected)?.taxId);
 
   // customer modal starts
   const handleCustomerModelOk = useCallback(async () => {
@@ -112,22 +114,48 @@ export default function InvoiceForm() {
 
     formValues.subTotal = 0;
     formValues.total = 0;
-    // console.log(formValues);
+    console.log(formValues);
 
     formValues?.invoices?.forEach((v: any, i: number) => {
-      formValues.invoices[i].total = (v?.quantity * v?.price) || 0;
-      formValues.subTotal += formValues.invoices[i].total;
+      // console.log({formValues: formValues.invoices[i], changedValues: changedValues?.invoices[i]});
+      console.log(v?.itemId);
 
-      // console.log({formValues: formValues.invoices[i], changedValues: changedValues.invoices[i]});
+      const { name, price } = items.find((item: any) => item.itemId === v?.itemId) || {};
+      const row = formValues!.invoices[i];
 
+      row.description = name;
+      row.price = price;
+      row.total = (v?.quantity * parseInt(price, 10)) || 0;
+      formValues.subTotal += row.total;
 
-      formValues.total = formValues.subTotal + formValues.tax + formValues.shipping + formValues.adjustment - formValues.discount;
-      form.setFieldsValue(formValues)
+      console.log(formValues);
 
-    })
+    });
+
+    // set customer id again // maybe bug // todo
+    if (formValues.customerId) {
+      customers.find((c: any) => c.selected)?.customerId
+    }
+
+    // tax calculation
+    if (formValues.taxId) {
+      formValues.tax = ((formValues.subTotal || 0) * (parseInt(taxes.find((tax: any) => tax.taxId === formValues.taxId).rate, 10) || 0)) / 100;
+    }
+
+    // formValues.subTotal += ((formValues.subTotal || 0) * (formValues.tax || 0)) / 100;
+
+    // discount calculation
+    if (formValues.discount) {
+      formValues.computedDiscount = formValues.discountSuffix === 'abs' ? formValues.discount : (formValues.discount * formValues.subTotal) / 100;
+    }
+
+    formValues.total = formValues.subTotal + (formValues.tax || 0) + (formValues.shipping || 0) + (formValues.adjustment || 0) - (formValues.computedDiscount || 0);
+
+    form.setFieldsValue(formValues);
   }
 
   const onFinish = async (values: any) => {
+    setLoader(true);
 
     try {
       if (action === 'edit') {
@@ -189,7 +217,7 @@ export default function InvoiceForm() {
   }];
 
   const discountSuffixSelector = (
-    <Form.Item name="suffix" noStyle>
+    <Form.Item name="discountSuffix" noStyle>
       <Select style={{ width: 70 }} defaultValue="percent">
         <Option value="percent">%</Option>
         <Option value="abs">₹</Option>
@@ -351,10 +379,11 @@ export default function InvoiceForm() {
           </Row>
 
           <Row className='p-4 m-4'>
-            <Col sm={{ span: 24 }} lg={{ push: 12, span: 12 }} >
+            <Col sm={{ span: 24 }} lg={{ push: 6, span: 15 }} >
               <Form.Item label="Sub Total" name='subTotal'>
-                <InputNumber min={1} max={999999999} step={0.25} placeholder="sub total" />
+                <InputNumber min={1} max={999999999} step={0.25} defaultValue={0} placeholder="sub total" readOnly />
               </Form.Item>
+              <Form.Item name='tax' hidden /> 
               <Form.Item label="Tax:" name="taxId">
                 <Select
                   showSearch
@@ -382,17 +411,25 @@ export default function InvoiceForm() {
                 </Select>
               </Form.Item>
               <Form.Item label="Shipping" name='shipping'>
-                <InputNumber min={0} max={999999999} step={0.25} placeholder="shipping" />
+                <InputNumber min={0} max={999999999} step={0.25} placeholder="shipping" defaultValue={0} />
               </Form.Item>
+              <Form.Item name='computedDiscount' hidden /> 
               <Form.Item label="Discount" name='discount'>
-                <InputNumber min={0} max={999999999} step={0.25} placeholder="discount" addonAfter={discountSuffixSelector} />
+                <InputNumber min={0} max={999999999} step={0.25} placeholder="discount" addonAfter={discountSuffixSelector} defaultValue={0} />
               </Form.Item>
               <Form.Item label="Adjustment" name='adjustment'>
-                <InputNumber min={-999999999} max={999999999} step={0.25} placeholder="adjustment +/-" />
+                <InputNumber min={-999999999} max={999999999} step={0.25} placeholder="adjustment +/-" defaultValue={0} />
               </Form.Item>
               <Form.Item label="Total" name='total'>
-                <InputNumber min={1} max={999999999} step={0.25} placeholder="total" readOnly />
+                <InputNumber min={1} max={999999999} step={0.25} placeholder="total" defaultValue={0} readOnly />
               </Form.Item>
+            </Col>
+
+            <Col>
+              <Form.Item><div></div></Form.Item>
+              <Form.Item><div>{(formTax || 0).toFixed(2)}</div></Form.Item>
+              <Form.Item><div></div></Form.Item>
+              <Form.Item><div>{(formDiscount || 0).toFixed(2)}</div></Form.Item>
             </Col>
           </Row>
 
@@ -405,8 +442,8 @@ export default function InvoiceForm() {
           </Form.Item>
 
           <Row className='p-4 m-4 gap-4 justify-center'>
-            <Button type="primary" size="large">Save</Button>
-            <Button size="large">Cancel</Button>
+            <Button type="primary" size="large" htmlType="submit">Save</Button>
+            <Button size="large" onClick={router.back}>Cancel</Button>
           </Row>
         </Form>
       }
