@@ -28,6 +28,7 @@ export default function InvoiceForm() {
   const [isSuccess, setSuccess] = useState(false);
   const [isError, setError] = useState(false);
   const [form] = Form.useForm();
+  const [formError, setFormError] = useState(false);
   const formTax = Form.useWatch('tax', form);
   const formDiscount = Form.useWatch('discount', form);
 
@@ -104,6 +105,7 @@ export default function InvoiceForm() {
         form.setFieldsValue({
           invoiceNumber: 'INV' + invoiceNumber.padStart(8, '0'),
           invoiceDate: moment(),
+          dueDate: moment(),
           items: [invoiceItemRowDefault],
         });
       }
@@ -111,6 +113,8 @@ export default function InvoiceForm() {
   }, []);
 
   const onValuesChange = async (changedValues: any, formValues: any) => {
+
+    console.log(form.getFieldsError());
 
     formValues.subTotal = 0;
     formValues.total = 0;
@@ -144,7 +148,7 @@ export default function InvoiceForm() {
 
     // formValues.subTotal += ((formValues.subTotal || 0) * (formValues.tax || 0)) / 100;
 
-    formValues.discountType  = formValues.discountType === 'abs' ? 'abs' : 'percent';
+    formValues.discountType = formValues.discountType === 'abs' ? 'abs' : 'percent';
 
     // discount calculation
     if (formValues.discountValue) {
@@ -155,6 +159,13 @@ export default function InvoiceForm() {
     formValues.total = formValues.subTotal + (formValues.tax || 0) + (formValues.shipping || 0) + (formValues.adjustment || 0) - (formValues.discount || 0);
 
     form.setFieldsValue(formValues);
+
+    try {
+      await form.validateFields();
+      setFormError(false);
+    } catch (err) {
+      setFormError(true);
+    }
   }
 
   const onFinish = async (values: any) => {
@@ -293,7 +304,7 @@ export default function InvoiceForm() {
           </Form.Item>
 
           <Form.Item label="Invoice Number" name="invoiceNumber">
-            <Input />
+            <Input readOnly />
           </Form.Item>
 
           <Form.Item label="Order Number" name="orderNumber">
@@ -304,7 +315,7 @@ export default function InvoiceForm() {
             <DatePicker />
           </Form.Item>
 
-          <Form.Item label="Due Date" name="dueDate">
+          <Form.Item label="Due Date" name="dueDate" rules={[{ required: true, message: 'Due Date is Required' }]}>
             <DatePicker />
           </Form.Item>
 
@@ -386,7 +397,7 @@ export default function InvoiceForm() {
               <Form.Item label="Sub Total" name='subTotal'>
                 <InputNumber min={1} max={999999999} step={0.25} defaultValue={0} placeholder="sub total" readOnly />
               </Form.Item>
-              <Form.Item name='tax' hidden /> 
+              <Form.Item name='tax' hidden />
               <Form.Item label="Tax:" name="taxId">
                 <Select
                   showSearch
@@ -445,7 +456,7 @@ export default function InvoiceForm() {
           </Form.Item>
 
           <Row className='p-4 m-4 gap-4 justify-center'>
-            <Button type="primary" size="large" htmlType="submit">Save</Button>
+            <Button type="primary" size="large" htmlType="submit" disabled={!form.isFieldsTouched() || formError}>Save</Button>
             <Button size="large" onClick={router.back}>Cancel</Button>
           </Row>
         </Form>
