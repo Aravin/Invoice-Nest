@@ -8,6 +8,7 @@ import {
   ManyToMany,
   JoinTable,
   Entity,
+  JoinColumn,
 } from 'typeorm';
 import { Customer } from '../../customers/entities/customer.entity';
 
@@ -17,10 +18,12 @@ export class Invoice {
   invoiceId: number;
 
   @ManyToOne(() => Customer, (customer) => customer.customerId)
-  customer: Customer;
+  @JoinColumn({ name: 'customerId' })
+  customerId: Customer;
 
   @ManyToOne(() => Organization, (organization) => organization.organizationId)
-  organization: Organization;
+  @JoinColumn({ name: 'organizationId' })
+  organizationId: Organization;
 
   @ManyToMany(() => Item)
   @JoinTable()
@@ -33,7 +36,7 @@ export class Invoice {
   @Column({ type: 'varchar', length: 36 })
   invoiceNumber: string;
 
-  @Column({ type: 'varchar', length: 36 })
+  @Column({ type: 'varchar', length: 36, nullable: true })
   orderNumber: string;
 
   @Column({ type: 'timestamptz' })
@@ -42,36 +45,39 @@ export class Invoice {
   @Column({ type: 'timestamptz' })
   dueDate: string;
 
-  @Column({ type: 'varchar', length: 75 })
+  @Column({ type: 'varchar', length: 75, nullable: true })
   salesPersonName: string;
 
-  @Column({ type: 'money' })
+  @Column({ type: 'numeric', precision: 12, scale: 2 })
   subTotal: number;
 
-  @Column({ type: 'varchar', length: 12 })
+  @Column({ type: 'varchar', length: 12, nullable: true })
   discountType: string;
 
-  @Column({ type: 'smallint' })
+  @Column({ type: 'numeric', precision: 12, scale: 2, nullable: true })
   discountValue: number;
 
-  @Column({ type: 'money' })
-  discountAmount: number;
+  @Column({ type: 'numeric', precision: 12, scale: 2, nullable: true })
+  discount: number;
 
-  @Column({ type: 'money' })
-  taxTotal: number;
+  @Column({ type: 'numeric', precision: 12, scale: 2, nullable: true })
+  tax: number;
 
-  @Column({ type: 'money' })
+  @Column({ type: 'numeric', precision: 12, scale: 2 })
   total: number;
 
-  @Column({ type: 'money' })
+  @Column({ type: 'numeric', precision: 12, scale: 2, nullable: true })
   adjustment: number;
 
-  @Column({ type: 'varchar', length: 256 })
+  @Column({ type: 'numeric', precision: 12, scale: 2, nullable: true })
+  shipping: number;
+
+  @Column({ type: 'varchar', length: 256, nullable: true })
   notes: string;
 
-  @Column({ type: 'varchar', length: 256 })
+  @Column({ type: 'varchar', length: 256, nullable: true })
   tnc: string;
 
-  @Column({ type: 'varchar', length: 256 })
+  @Column({ type: 'varchar', length: 256, nullable: true })
   footer: string;
 }

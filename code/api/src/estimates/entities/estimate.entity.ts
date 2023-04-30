@@ -45,7 +45,7 @@ export class Estimate {
   @Column({ type: 'varchar', length: 75 })
   salesPersonName: string;
 
-  @Column({ type: 'money' })
+  @Column({ type: 'numeric', precision: 12, scale: 2 })
   subTotal: number;
 
   @Column({ type: 'varchar', length: 12 })
@@ -54,16 +54,16 @@ export class Estimate {
   @Column({ type: 'smallint' })
   discountValue: number;
 
-  @Column({ type: 'money' })
+  @Column({ type: 'numeric', precision: 12, scale: 2 })
   discountAmount: number;
 
-  @Column({ type: 'money' })
+  @Column({ type: 'numeric', precision: 12, scale: 2 })
   taxTotal: number;
 
-  @Column({ type: 'money' })
+  @Column({ type: 'numeric', precision: 12, scale: 2 })
   total: number;
 
-  @Column({ type: 'money' })
+  @Column({ type: 'numeric', precision: 12, scale: 2 })
   adjustment: number;
 
   @Column({ type: 'varchar', length: 256 })

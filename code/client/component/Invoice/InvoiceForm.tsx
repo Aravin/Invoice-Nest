@@ -29,7 +29,7 @@ export default function InvoiceForm() {
   const [isError, setError] = useState(false);
   const [form] = Form.useForm();
   const formTax = Form.useWatch('tax', form);
-  const formDiscount = Form.useWatch('computedDiscount', form);
+  const formDiscount = Form.useWatch('discount', form);
 
   const [customers, dispatchCustomers] = useReducer(customerReducer, [] as any);
   const [taxes, dispatchTaxes] = useReducer(taxReducer, [] as any);
@@ -104,7 +104,7 @@ export default function InvoiceForm() {
         form.setFieldsValue({
           invoiceNumber: 'INV' + invoiceNumber.padStart(8, '0'),
           invoiceDate: moment(),
-          invoices: [invoiceItemRowDefault],
+          items: [invoiceItemRowDefault],
         });
       }
     })();
@@ -116,12 +116,12 @@ export default function InvoiceForm() {
     formValues.total = 0;
     console.log(formValues);
 
-    formValues?.invoices?.forEach((v: any, i: number) => {
+    formValues?.items?.forEach((v: any, i: number) => {
       // console.log({formValues: formValues.invoices[i], changedValues: changedValues?.invoices[i]});
       console.log(v?.itemId);
 
       const { name, price } = items.find((item: any) => item.itemId === v?.itemId) || {};
-      const row = formValues!.invoices[i];
+      const row = v;
 
       row.description = name;
       row.price = price;
@@ -144,12 +144,15 @@ export default function InvoiceForm() {
 
     // formValues.subTotal += ((formValues.subTotal || 0) * (formValues.tax || 0)) / 100;
 
+    formValues.discountType  = formValues.discountType === 'abs' ? 'abs' : 'percent';
+
     // discount calculation
-    if (formValues.discount) {
-      formValues.computedDiscount = formValues.discountSuffix === 'abs' ? formValues.discount : (formValues.discount * formValues.subTotal) / 100;
+    if (formValues.discountValue) {
+      formValues.discount = formValues.discountType === 'abs' ? formValues.discountValue : (formValues.discountValue * formValues.subTotal) / 100;
+      // formValues.discountValue = formValues.discount;
     }
 
-    formValues.total = formValues.subTotal + (formValues.tax || 0) + (formValues.shipping || 0) + (formValues.adjustment || 0) - (formValues.computedDiscount || 0);
+    formValues.total = formValues.subTotal + (formValues.tax || 0) + (formValues.shipping || 0) + (formValues.adjustment || 0) - (formValues.discount || 0);
 
     form.setFieldsValue(formValues);
   }
@@ -161,7 +164,7 @@ export default function InvoiceForm() {
       if (action === 'edit') {
         await axios.patch(process.env.API_PATH + '/invoices/' + invoiceId, { ...values, userId: 6 });
       } else {
-        await axios.post(process.env.API_PATH + '/invoices', { ...values, userId: 6 });
+        await axios.post(process.env.API_PATH + '/invoices', { ...values, organizationId: 1 });
       }
       router.push('/invoices');
       setSuccess(true);
@@ -217,7 +220,7 @@ export default function InvoiceForm() {
   }];
 
   const discountSuffixSelector = (
-    <Form.Item name="discountSuffix" noStyle>
+    <Form.Item name="discountType" noStyle>
       <Select style={{ width: 70 }} defaultValue="percent">
         <Option value="percent">%</Option>
         <Option value="abs">₹</Option>
@@ -309,7 +312,7 @@ export default function InvoiceForm() {
             <Col>
               <strong>Invoice Items</strong>
               <Divider></Divider>
-              <Form.List name="invoices">
+              <Form.List name="items">
                 {(fields, { add, remove }) => (
                   <>
                     {fields.map(({ key, name, ...restField }) => (
@@ -413,8 +416,8 @@ export default function InvoiceForm() {
               <Form.Item label="Shipping" name='shipping'>
                 <InputNumber min={0} max={999999999} step={0.25} placeholder="shipping" defaultValue={0} />
               </Form.Item>
-              <Form.Item name='computedDiscount' hidden /> 
-              <Form.Item label="Discount" name='discount'>
+              <Form.Item name='discount' hidden></Form.Item>
+              <Form.Item label="Discount" name='discountValue'>
                 <InputNumber min={0} max={999999999} step={0.25} placeholder="discount" addonAfter={discountSuffixSelector} defaultValue={0} />
               </Form.Item>
               <Form.Item label="Adjustment" name='adjustment'>
@@ -437,7 +440,7 @@ export default function InvoiceForm() {
             <TextArea rows={2} />
           </Form.Item>
 
-          <Form.Item label="Footer Note" name="footerNote">
+          <Form.Item label="Footer Note" name="footer">
             <TextArea rows={2} />
           </Form.Item>
 

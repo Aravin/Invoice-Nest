@@ -1,6 +1,6 @@
 export class CreateInvoiceDto {
-  customer: number;
-  organization: number;
+  customerId: number;
+  organizationId: number;
   items: number[];
   taxes?: number[];
   invoiceNumber: string;
@@ -11,10 +11,11 @@ export class CreateInvoiceDto {
   subTotal: number;
   discountType?: string;
   discountValue?: number;
-  discountAmount?: number;
-  taxTotal?: number;
+  discount?: number;
+  tax?: number;
   total: number;
   adjustment?: number;
+  shipping?: number;
   notes?: string;
   tnc?: string;
   footer?: string;
