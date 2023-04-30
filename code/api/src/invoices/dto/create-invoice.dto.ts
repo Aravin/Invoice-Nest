@@ -19,4 +19,5 @@ export class CreateInvoiceDto {
   notes?: string;
   tnc?: string;
   footer?: string;
+  status: string;
 }

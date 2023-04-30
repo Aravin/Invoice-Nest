@@ -17,7 +17,7 @@ export class InvoicesService {
   }
 
   findAll() {
-    return this.invoiceRepository.find();
+    return this.invoiceRepository.find({ relations: ['customerId'] });
   }
 
   findOne(id: number) {

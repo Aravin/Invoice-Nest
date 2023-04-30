@@ -175,7 +175,7 @@ export default function InvoiceForm() {
       if (action === 'edit') {
         await axios.patch(process.env.API_PATH + '/invoices/' + invoiceId, { ...values, userId: 6 });
       } else {
-        await axios.post(process.env.API_PATH + '/invoices', { ...values, organizationId: 1 });
+        await axios.post(process.env.API_PATH + '/invoices', { ...values, invoiceStatus: 'Created' });
       }
       router.push('/invoices');
       setSuccess(true);

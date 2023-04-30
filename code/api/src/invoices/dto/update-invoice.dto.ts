@@ -22,4 +22,5 @@ export class UpdateInvoiceDto extends PartialType(CreateInvoiceDto) {
   notes?: string;
   tnc?: string;
   footer?: string;
+  status?: string;
 }

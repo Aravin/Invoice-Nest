@@ -39,10 +39,10 @@ export class Invoice {
   @Column({ type: 'varchar', length: 36, nullable: true })
   orderNumber: string;
 
-  @Column({ type: 'timestamptz' })
+  @Column({ type: 'date' })
   invoiceDate: string;
 
-  @Column({ type: 'timestamptz' })
+  @Column({ type: 'date' })
   dueDate: string;
 
   @Column({ type: 'varchar', length: 75, nullable: true })
@@ -80,4 +80,7 @@ export class Invoice {
 
   @Column({ type: 'varchar', length: 256, nullable: true })
   footer: string;
+
+  @Column({ type: 'varchar', length: 36 })
+  invoiceStatus: string;
 }
