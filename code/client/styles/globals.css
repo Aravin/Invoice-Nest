@@ -149,3 +149,7 @@ a {
 .ant-layout-footer {
   z-index: 10;
 }
+
+input[readonly] {
+  border: 0;
+}

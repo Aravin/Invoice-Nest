@@ -13,6 +13,7 @@ import taxReducer from './taxReducer';
 import itemReducer from './itemReducer';
 import ItemForm from '../Item/ItemForm';
 import TaxForm from '../tax/TaxForm';
+import { numberToCurrency } from '../Common/currencyFormats/numberToCurrency';
 
 const invoiceItemRowDefault = { itemId: null, description: null, quantity: 1, price: 0, total: 0, };
 
@@ -31,6 +32,7 @@ export default function InvoiceForm() {
   const [formError, setFormError] = useState(false);
   const formTax = Form.useWatch('tax', form);
   const formDiscount = Form.useWatch('discount', form);
+  const formSubTotal = Form.useWatch('subTotal', form);
 
   const [customers, dispatchCustomers] = useReducer(customerReducer, [] as any);
   const [taxes, dispatchTaxes] = useReducer(taxReducer, [] as any);
@@ -80,7 +82,28 @@ export default function InvoiceForm() {
         try {
           setLoader(true);
           const result = await axios.get(process.env.API_PATH + '/invoices/' + invoiceId);
-          form.setFieldsValue(result.data);
+
+          console.log(result);
+
+          let modifiedResult = result.data;
+          modifiedResult.invoiceDate = moment(modifiedResult.invoiceDate);
+          modifiedResult.dueDate = moment(modifiedResult.dueDate);
+          modifiedResult.customerId = modifiedResult.customerId.customerId;
+          modifiedResult.items = modifiedResult.invoiceDetails.items;
+
+          dispatchItems({
+            type: 'FETCH',
+            items: (await axios.get(process.env.API_PATH + '/items')).data
+          });
+          dispatchCustomers({
+            type: 'FETCH',
+            customers: (await axios.get(process.env.API_PATH + '/customers')).data,
+          });
+          dispatchTaxes({
+            type: 'FETCH',
+            taxes: (await axios.get(process.env.API_PATH + '/taxes')).data,
+          });
+          form.setFieldsValue(modifiedResult);
         } catch (err) {
           console.error(err);
           setError(true);
@@ -107,14 +130,13 @@ export default function InvoiceForm() {
           invoiceDate: moment(),
           dueDate: moment(),
           items: [invoiceItemRowDefault],
+          subTotal: 0.00,
         });
       }
     })();
   }, []);
 
   const onValuesChange = async (changedValues: any, formValues: any) => {
-
-    console.log(form.getFieldsError());
 
     formValues.subTotal = 0;
     formValues.total = 0;
@@ -127,8 +149,8 @@ export default function InvoiceForm() {
       const { name, price } = items.find((item: any) => item.itemId === v?.itemId) || {};
       const row = v;
 
-      row.description = name;
-      row.price = price;
+      row.description = !row.description ? name : row.description;
+      row.price = !row.price ? price: row.price;
       row.total = (v?.quantity * parseInt(price, 10)) || 0;
       formValues.subTotal += row.total;
 
@@ -158,6 +180,8 @@ export default function InvoiceForm() {
 
     formValues.total = formValues.subTotal + (formValues.tax || 0) + (formValues.shipping || 0) + (formValues.adjustment || 0) - (formValues.discount || 0);
 
+    formValues.total = numberToCurrency(formValues.total);
+
     form.setFieldsValue(formValues);
 
     try {
@@ -175,7 +199,11 @@ export default function InvoiceForm() {
       if (action === 'edit') {
         await axios.patch(process.env.API_PATH + '/invoices/' + invoiceId, { ...values, userId: 6 });
       } else {
-        await axios.post(process.env.API_PATH + '/invoices', { ...values, invoiceStatus: 'Created' });
+        const data = values;
+        data.invoiceDetails = {items: values.items};
+        data.invoiceStatus = 'Created';
+        data.taxes = [{taxId: values.taxId}];
+        await axios.post(process.env.API_PATH + '/invoices', data);
       }
       router.push('/invoices');
       setSuccess(true);
@@ -190,45 +218,6 @@ export default function InvoiceForm() {
   const onFinishFailed = (errorInfo: any) => {
     console.log('Failed:', errorInfo);
   };
-
-  const columns = [
-    {
-      title: 'Item Name',
-      dataIndex: 'name',
-      render: (text: string) => <a>{text}</a>,
-      width: '22%'
-    },
-    {
-      title: 'Item Description',
-      className: 'description',
-      dataIndex: 'description',
-      // align: 'right',
-      width: '48%'
-    },
-    {
-      title: 'Quantity',
-      dataIndex: 'quantity',
-      width: '10%'
-    },
-    {
-      title: 'Price',
-      dataIndex: 'price',
-      width: '10%'
-    },
-    {
-      title: 'Amount',
-      dataIndex: 'amount',
-      width: '10%'
-    },
-  ];
-
-  const data = [{
-    name: <Form.Item> <Input /> </Form.Item>,
-    description: <Form.Item> <TextArea autoSize /> </Form.Item>,
-    quantity: <Form.Item> <Input /> </Form.Item>,
-    price: <Form.Item> <Input /> </Form.Item>,
-    amount: <Form.Item> <Input /> </Form.Item>,
-  }];
 
   const discountSuffixSelector = (
     <Form.Item name="discountType" noStyle>
@@ -394,8 +383,8 @@ export default function InvoiceForm() {
 
           <Row className='p-4 m-4'>
             <Col sm={{ span: 24 }} lg={{ push: 6, span: 15 }} >
-              <Form.Item label="Sub Total" name='subTotal'>
-                <InputNumber min={1} max={999999999} step={0.25} defaultValue={0} placeholder="sub total" readOnly />
+              <Form.Item label="Sub Total" name='subTotal' >
+                <div>{numberToCurrency(formSubTotal)}</div>
               </Form.Item>
               <Form.Item name='tax' hidden />
               <Form.Item label="Tax:" name="taxId">
@@ -441,9 +430,9 @@ export default function InvoiceForm() {
 
             <Col>
               <Form.Item><div></div></Form.Item>
-              <Form.Item><div>{(formTax || 0).toFixed(2)}</div></Form.Item>
+              <Form.Item><div>{numberToCurrency(formTax)}</div></Form.Item>
               <Form.Item><div></div></Form.Item>
-              <Form.Item><div>{(formDiscount || 0).toFixed(2)}</div></Form.Item>
+              <Form.Item><div>{numberToCurrency(formDiscount)}</div></Form.Item>
             </Col>
           </Row>
 
