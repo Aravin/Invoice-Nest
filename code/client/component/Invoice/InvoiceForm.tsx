@@ -32,7 +32,6 @@ export default function InvoiceForm() {
   const [formError, setFormError] = useState(false);
   const formTax = Form.useWatch('tax', form);
   const formDiscount = Form.useWatch('discount', form);
-  const formSubTotal = Form.useWatch('subTotal', form);
 
   const [customers, dispatchCustomers] = useReducer(customerReducer, [] as any);
   const [taxes, dispatchTaxes] = useReducer(taxReducer, [] as any);
@@ -384,7 +383,7 @@ export default function InvoiceForm() {
           <Row className='p-4 m-4'>
             <Col sm={{ span: 24 }} lg={{ push: 6, span: 15 }} >
               <Form.Item label="Sub Total" name='subTotal' >
-                <div>{numberToCurrency(formSubTotal)}</div>
+              <InputNumber min={1} max={999999999} step={0.25} defaultValue={0} readOnly />
               </Form.Item>
               <Form.Item name='tax' hidden />
               <Form.Item label="Tax:" name="taxId">
