@@ -11,6 +11,7 @@ import {
   JoinColumn,
 } from 'typeorm';
 import { Customer } from '../../customers/entities/customer.entity';
+import { InvoiceDetail } from '../dto/types/invoice-details';
 
 @Entity()
 export class Invoice {
@@ -83,4 +84,7 @@ export class Invoice {
 
   @Column({ type: 'varchar', length: 36 })
   invoiceStatus: string;
+
+  @Column({ type: 'json' })
+  invoiceDetails: InvoiceDetail[];
 }

@@ -1,11 +1,13 @@
 import { PartialType } from '@nestjs/mapped-types';
 import { CreateInvoiceDto } from './create-invoice.dto';
+import { InvoiceDetail } from './types/invoice-details';
+import { ItemId, TaxId } from './types/types';
 
 export class UpdateInvoiceDto extends PartialType(CreateInvoiceDto) {
   customerId?: number;
   organizationId?: number; // TODO: check
-  items?: number[];
-  taxes?: number[];
+  items?: ItemId[];
+  taxes?: TaxId[];
   invoiceNumber: string;
   orderNumber?: string;
   invoiceDate?: string;
@@ -23,4 +25,5 @@ export class UpdateInvoiceDto extends PartialType(CreateInvoiceDto) {
   tnc?: string;
   footer?: string;
   status?: string;
+  invoiceDetails: InvoiceDetail[];
 }

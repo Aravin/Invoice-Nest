@@ -21,7 +21,9 @@ export class InvoicesService {
   }
 
   findOne(id: number) {
-    return this.invoiceRepository.findOne(id);
+    return this.invoiceRepository.findOne(id, {
+      relations: ['customerId', 'taxes'],
+    });
   }
 
   update(id: number, updateInvoiceDto: UpdateInvoiceDto) {

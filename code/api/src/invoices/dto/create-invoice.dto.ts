@@ -1,8 +1,11 @@
+import { InvoiceDetail } from './types/invoice-details';
+import { ItemId, TaxId } from './types/types';
+
 export class CreateInvoiceDto {
   customerId: number;
   organizationId: number;
-  items: number[];
-  taxes?: number[];
+  items?: ItemId[];
+  taxes?: TaxId[];
   invoiceNumber: string;
   orderNumber?: string;
   invoiceDate: string;
@@ -20,4 +23,5 @@ export class CreateInvoiceDto {
   tnc?: string;
   footer?: string;
   status: string;
+  invoiceDetails: InvoiceDetail[];
 }
