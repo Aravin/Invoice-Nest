@@ -14,7 +14,7 @@ export default function CustomerPage(props: any) {
   const { confirm } = Modal;
 
   const goToAddCustomer = () => router.push(`/customers/create?action=new`);
-  const goToEditCustomer = (id: string) => router.push(`/customers/create?action=edit&id=${id}`);
+  const goToEditCustomer = (id: string) => router.push(`/customers/create?action=edit&customerId=${id}`);
 
   const deleteCustomer = async (id: string) => {
 

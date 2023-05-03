@@ -23,8 +23,8 @@ export default function InvoiceForm() {
   const [isTaxModalVisible, setTaxModalVisible] = useState(false);
   const [isItemModalVisible, setItemModalVisible] = useState(false);
   const router = useRouter();
-  const action = router.query?.action;
-  const invoiceId = router.query?.id;
+  // const action = router.query?.action;
+  const invoiceId = router.query?.invoiceId;
   const [isLoading, setLoader] = useState(false);
   const [isSuccess, setSuccess] = useState(false);
   const [isError, setError] = useState(false);
@@ -91,7 +91,7 @@ export default function InvoiceForm() {
         taxes: (await axios.get(process.env.API_PATH + '/taxes')).data,
       });
 
-      if (action === 'edit') {
+      if (invoiceId) {
         try {
           setLoader(true);
           const result = await axios.get(process.env.API_PATH + '/invoices/' + invoiceId);
@@ -102,7 +102,7 @@ export default function InvoiceForm() {
           modifiedResult.customerId = modifiedResult.customerId.customerId;
           modifiedResult.items = modifiedResult.invoiceDetails.items;
           modifiedResult.taxId = modifiedResult.taxes[0].taxId;
-          
+
           form.setFieldsValue(modifiedResult);
         } catch (err) {
           console.error(err);
@@ -138,7 +138,7 @@ export default function InvoiceForm() {
       const row = v;
 
       row.description = !row.description ? name : row.description;
-      row.price = !row.price ? price: row.price;
+      row.price = !row.price ? price : row.price;
       row.total = (v?.quantity * parseInt(price, 10)) || 0;
       formValues.subTotal += row.total;
 
@@ -184,13 +184,17 @@ export default function InvoiceForm() {
     setLoader(true);
 
     try {
-      if (action === 'edit') {
-        await axios.patch(process.env.API_PATH + '/invoices/' + invoiceId, { ...values, userId: 6 });
+
+      const data = values;
+      data.invoiceDetails = { items: values.items };
+      data.taxes = [{ taxId: values.taxId }];
+      console.log(values.items.map((i: { itemId: number; }) => { return {itemId: i.itemId}}));
+      data.items = values.items.map((i: { itemId: number; }) => { return {itemId: i.itemId}});
+
+      if (invoiceId) {
+        await axios.patch(process.env.API_PATH + '/invoices/' + invoiceId, data);
       } else {
-        const data = values;
-        data.invoiceDetails = {items: values.items};
         data.invoiceStatus = 'Created';
-        data.taxes = [{taxId: values.taxId}];
         await axios.post(process.env.API_PATH + '/invoices', data);
       }
       router.push('/invoices');
@@ -372,7 +376,7 @@ export default function InvoiceForm() {
           <Row className='p-4 m-4'>
             <Col sm={{ span: 24 }} lg={{ push: 6, span: 15 }} >
               <Form.Item label="Sub Total" name='subTotal' >
-              <InputNumber min={1} max={999999999} step={0.25} defaultValue={0} readOnly />
+                <InputNumber min={1} max={999999999} step={0.25} defaultValue={0} readOnly />
               </Form.Item>
               <Form.Item name='tax' hidden />
               <Form.Item label="Tax:" name="taxId">
