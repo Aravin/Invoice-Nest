@@ -77,31 +77,32 @@ export default function InvoiceForm() {
 
   useEffect(() => {
     (async () => {
+
+      dispatchItems({
+        type: 'FETCH',
+        items: (await axios.get(process.env.API_PATH + '/items')).data
+      });
+      dispatchCustomers({
+        type: 'FETCH',
+        customers: (await axios.get(process.env.API_PATH + '/customers')).data,
+      });
+      dispatchTaxes({
+        type: 'FETCH',
+        taxes: (await axios.get(process.env.API_PATH + '/taxes')).data,
+      });
+
       if (action === 'edit') {
         try {
           setLoader(true);
           const result = await axios.get(process.env.API_PATH + '/invoices/' + invoiceId);
-
-          console.log(result);
 
           let modifiedResult = result.data;
           modifiedResult.invoiceDate = moment(modifiedResult.invoiceDate);
           modifiedResult.dueDate = moment(modifiedResult.dueDate);
           modifiedResult.customerId = modifiedResult.customerId.customerId;
           modifiedResult.items = modifiedResult.invoiceDetails.items;
-
-          dispatchItems({
-            type: 'FETCH',
-            items: (await axios.get(process.env.API_PATH + '/items')).data
-          });
-          dispatchCustomers({
-            type: 'FETCH',
-            customers: (await axios.get(process.env.API_PATH + '/customers')).data,
-          });
-          dispatchTaxes({
-            type: 'FETCH',
-            taxes: (await axios.get(process.env.API_PATH + '/taxes')).data,
-          });
+          modifiedResult.taxId = modifiedResult.taxes[0].taxId;
+          
           form.setFieldsValue(modifiedResult);
         } catch (err) {
           console.error(err);
@@ -110,18 +111,6 @@ export default function InvoiceForm() {
           setLoader(false);
         }
       } else {
-        dispatchItems({
-          type: 'FETCH',
-          items: (await axios.get(process.env.API_PATH + '/items')).data
-        });
-        dispatchCustomers({
-          type: 'FETCH',
-          customers: (await axios.get(process.env.API_PATH + '/customers')).data,
-        });
-        dispatchTaxes({
-          type: 'FETCH',
-          taxes: (await axios.get(process.env.API_PATH + '/taxes')).data,
-        });
         const invoiceNumber = (await axios.get(process.env.API_PATH + '/invoices/sequence/next')).data[0].nextval;
 
         form.setFieldsValue({
