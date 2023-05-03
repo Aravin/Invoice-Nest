@@ -10,8 +10,8 @@ import Loader from '../Loader/Loader';
 export default function ItemForm({ dispatch, close }: any) {
 
   const router = useRouter();
-  const action = router.query?.action;
-  const itemId = router.query?.id;
+  // const action = router.query?.action as string;
+  const itemId = router.query?.itemId as string;
   const [isLoading, setLoader] = useState(false);
   const [isSuccess, setSuccess] = useState(false);
   const [isError, setError] = useState(false);
@@ -26,7 +26,7 @@ export default function ItemForm({ dispatch, close }: any) {
 
   useEffect(() => {
     (async () => {
-      if (action === 'edit') {
+      if (itemId) {
         try {
           setLoader(true);
           const result = await axios.get(process.env.API_PATH + '/items/' + itemId);
@@ -46,7 +46,7 @@ export default function ItemForm({ dispatch, close }: any) {
     let newItem: any;
 
     try {
-      if (action === 'edit') {
+      if (itemId) {
         await axios.patch(process.env.API_PATH + '/items/' + itemId, values);
       } else {
         newItem = await (await axios.post(process.env.API_PATH + '/items', values)).data;

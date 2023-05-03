@@ -14,7 +14,7 @@ export default function TaxListPage(props: any) {
   const { confirm } = Modal;
 
   const goToAddTax = () => router.push(`/taxes/create?action=new`);
-  const goToEditTax = (id: string) => router.push(`/taxes/create?action=edit&id=${id}`);
+  const goToEditTax = (id: string) => router.push(`/taxes/create?action=edit&taxId=${id}`);
 
   const deleteTax = async (id: string) => {
 

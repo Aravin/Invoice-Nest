@@ -14,7 +14,7 @@ export default function ItemListPage(props: any) {
   const { confirm } = Modal;
 
   const goToAddItem = () => router.push(`/items/create?action=new`);
-  const goToEditItem = (id: string) => router.push(`/items/create?action=edit&id=${id}`);
+  const goToEditItem = (id: string) => router.push(`/items/create?action=edit&itemId=${id}`);
 
   const deleteItem = async (id: string) => {
 

@@ -10,8 +10,8 @@ import Loader from '../Loader/Loader';
 export default function CustomerForm({ dispatch, close }: any) {
 
   const router = useRouter();
-  const action = router.query?.action;
-  const customerId = router.query?.id;
+  // const action = router.query?.action;
+  const customerId = router.query?.customerId as string;
   const [isLoading, setLoader] = useState(false);
   const [isSuccess, setSuccess] = useState(false);
   const [isError, setError] = useState(false);
@@ -20,7 +20,7 @@ export default function CustomerForm({ dispatch, close }: any) {
 
   useEffect(() => {
     (async () => {
-      if (action === 'edit') {
+      if (customerId) {
         try {
           setLoader(true);
           const result = await axios.get(process.env.API_PATH + '/customers/' + customerId);
@@ -40,7 +40,7 @@ export default function CustomerForm({ dispatch, close }: any) {
     let newCustomer: any;
 
     try {
-      if (action === 'edit') {
+      if (customerId) {
         await axios.patch(process.env.API_PATH + '/customers/' + customerId, values);
       } else {
         newCustomer = await (await axios.post(process.env.API_PATH + '/customers', values)).data;

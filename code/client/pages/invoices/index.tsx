@@ -14,7 +14,7 @@ export default function InvoiceListPage(props: any) {
   const { confirm } = Modal;
 
   const goToAddInvoice = () => router.push(`/invoices/create?action=new`);
-  const goToEditInvoice = (id: string) => router.push(`/invoices/create?action=edit&id=${id}`);
+  const goToEditInvoice = (id: string) => router.push(`/invoices/create?action=edit&invoiceId=${id}`);
 
   const deleteInvoice = async (id: string) => {
 

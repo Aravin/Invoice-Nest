@@ -10,8 +10,8 @@ import Loader from '../Loader/Loader';
 export default function TaxForm({ dispatch, close}: any) {
 
   const router = useRouter();
-  const action = router.query?.action;
-  const taxId = router.query?.id;
+  // const action = router.query?.action;
+  const taxId = router.query?.taxId as string;
   const [isLoading, setLoader] = useState(false);
   const [isSuccess, setSuccess] = useState(false);
   const [isError, setError] = useState(false);
@@ -27,7 +27,7 @@ export default function TaxForm({ dispatch, close}: any) {
 
   useEffect(() => {
     (async () => {
-      if (action === 'edit') {
+      if (taxId) {
         try {
           setLoader(true);
           const result = await axios.get(process.env.API_PATH + '/taxes/' + taxId);
@@ -47,7 +47,7 @@ export default function TaxForm({ dispatch, close}: any) {
     let newTax: any;
 
     try {
-      if (action === 'edit') {
+      if (taxId) {
         await axios.patch(process.env.API_PATH + '/taxes/' + taxId, values);
       } else {
         newTax = await (await axios.post(process.env.API_PATH + '/taxes', values)).data;
