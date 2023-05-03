@@ -1,5 +1,6 @@
 import { withPageAuthRequired } from '@auth0/nextjs-auth0'
-import { Col, PageHeader, Row } from 'antd'
+import { Col, Row } from 'antd'
+import { PageHeader } from '@ant-design/pro-layout'
 import type { NextPage } from 'next'
 import React, { } from 'react'
 import CustomerForm from '../../component/Customer/CustomerForm'

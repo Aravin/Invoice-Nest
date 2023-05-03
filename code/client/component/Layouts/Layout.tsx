@@ -1,7 +1,7 @@
 // import Navbar from './navbar'
 // import Footer from './footer'
 import React, { useContext, useState } from 'react'
-import 'antd/dist/antd.css';
+// import 'antd/dist/antd.css';
 import { Layout, Menu, Button, Dropdown, Select } from 'antd';
 import {
   UsergroupAddOutlined,

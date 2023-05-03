@@ -1,4 +1,5 @@
-import { Alert, Button, Modal, PageHeader, Space, Table } from 'antd'
+import { Alert, Button, Modal, Space, Table } from 'antd'
+import { PageHeader } from '@ant-design/pro-layout'
 import axios from 'axios';
 import type { GetServerSideProps } from 'next'
 import React, { useState } from 'react'
