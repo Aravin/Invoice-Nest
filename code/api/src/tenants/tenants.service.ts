@@ -33,7 +33,7 @@ export class TenantsService {
   }
 
   findOne(id: number) {
-    return this.tenantRepository.findOne(id);
+    return this.tenantRepository.findOne({ where: [{ tenantId: id }] });
   }
 
   update(id: number, updateTenantDto: UpdateTenantDto) {

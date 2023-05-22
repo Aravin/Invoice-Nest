@@ -21,7 +21,7 @@ export class TaxesService {
   }
 
   findOne(id: number) {
-    return this.taxRepository.findOne(id);
+    return this.taxRepository.findOne({ where: [{ taxId: id }] });
   }
 
   update(id: number, updateTaxDto: UpdateTaxDto) {
