@@ -21,7 +21,8 @@ export class InvoicesService {
   }
 
   findOne(id: number) {
-    return this.invoiceRepository.findOne(id, {
+    return this.invoiceRepository.findOne({
+      where: [{ invoiceId: id }],
       relations: ['customerId', 'taxes'],
     });
   }

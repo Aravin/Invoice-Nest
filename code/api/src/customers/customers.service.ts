@@ -1,6 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { Repository } from 'typeorm';
+import { FindOneOptions, Repository } from 'typeorm';
 import { CreateCustomerDto } from './dto/create-customer.dto';
 import { UpdateCustomerDto } from './dto/update-customer.dto';
 import { Customer } from './entities/customer.entity';
@@ -20,7 +20,7 @@ export class CustomersService {
     return this.customerRepository.find();
   }
 
-  findOne(id: number) {
+  findOne(id: FindOneOptions<Customer>) {
     return this.customerRepository.findOne(id);
   }
 

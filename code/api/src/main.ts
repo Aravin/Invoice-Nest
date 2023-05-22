@@ -4,8 +4,9 @@ import { SwaggerModule, DocumentBuilder } from '@nestjs/swagger';
 import { AppModule } from './app.module';
 import helmet from 'helmet';
 import { tenancyMiddleware } from './tenants/tenant.middleware';
-import { getConnection, getManager } from 'typeorm';
+import { DataSource, DataSourceOptions } from 'typeorm';
 import { getTenantConnection } from './tenants/tenant.utils';
+import { ormConfig } from 'orm.config';
 
 declare const module: any;
 
@@ -13,9 +14,11 @@ async function bootstrap() {
   const app = await NestFactory.create(AppModule);
   app.use(tenancyMiddleware);
 
-  await getConnection().runMigrations();
+  const dataSource = new DataSource(ormConfig as DataSourceOptions);
+  const conn = await dataSource.initialize();
+  await conn.runMigrations();
 
-  const schemas = await getManager().query(
+  const schemas = await conn.query(
     'select schema_name as name from information_schema.schemata;',
   );
 
@@ -26,7 +29,7 @@ async function bootstrap() {
       const tenantId = schema.replace('tenant_', '');
       const connection = await getTenantConnection(tenantId);
       await connection.runMigrations();
-      await connection.close();
+      await connection.destroy();
     }
   }
 

@@ -21,7 +21,9 @@ export class SalesPersonsService {
   }
 
   findOne(id: number) {
-    return this.salesPersonRepository.findOne(id);
+    return this.salesPersonRepository.findOne({
+      where: [{ salesPersonId: id }],
+    });
   }
 
   update(id: number, updateSalesPersonDto: UpdateSalesPersonDto) {

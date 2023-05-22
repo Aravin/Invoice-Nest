@@ -29,7 +29,9 @@ export class EstimatesController {
 
   @Get(':id')
   findOne(@Param('id') id: string) {
-    return this.estimatesService.findOne(+id);
+    return this.estimatesService.findOne({
+      where: [{ estimateId: +id }],
+    });
   }
 
   @Patch(':id')

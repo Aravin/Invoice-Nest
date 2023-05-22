@@ -1,6 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { Repository } from 'typeorm';
+import { FindOneOptions, Repository } from 'typeorm';
 import { CreateEstimateDto } from './dto/create-estimate.dto';
 import { UpdateEstimateDto } from './dto/update-estimate.dto';
 import { Estimate } from './entities/estimate.entity';
@@ -20,7 +20,7 @@ export class EstimatesService {
     return this.estimateRepository.find();
   }
 
-  findOne(id: number) {
+  findOne(id: FindOneOptions<Estimate>) {
     return this.estimateRepository.findOne(id);
   }
 

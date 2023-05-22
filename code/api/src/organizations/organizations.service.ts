@@ -16,9 +16,9 @@ export class OrganizationsService {
   ) {}
 
   async create(createOrganizationDto: CreateOrganizationDto) {
-    const user = await this.UserRepository.findOne(
-      createOrganizationDto.userId,
-    );
+    const user = await this.UserRepository.findOne({
+      where: [{ userId: createOrganizationDto.userId }],
+    });
 
     const organization = Object.assign(createOrganizationDto, {
       ...createOrganizationDto,
@@ -36,7 +36,10 @@ export class OrganizationsService {
   }
 
   findOne(id: number) {
-    return this.organizationRepository.findOne(id, { relations: ['users'] });
+    return this.organizationRepository.findOne({
+      where: [{ organizationId: id }],
+      relations: ['users'],
+    });
   }
 
   update(id: number, updateOrganizationDto: UpdateOrganizationDto) {

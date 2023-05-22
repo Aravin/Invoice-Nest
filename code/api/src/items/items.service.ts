@@ -21,7 +21,9 @@ export class ItemsService {
   }
 
   findOne(id: number) {
-    return this.itemRepository.findOne(id);
+    return this.itemRepository.findOne({
+      where: [{ itemId: id }],
+    });
   }
 
   update(id: number, updateItemDto: UpdateItemDto) {
