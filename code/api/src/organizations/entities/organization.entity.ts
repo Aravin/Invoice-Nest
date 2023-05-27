@@ -1,13 +1,7 @@
 // import { User } from 'src/users/entities/user.entity';
 import { Invoice } from 'src/invoices/entities/invoice.entity';
 import { User } from 'src/users/entities/user.entity';
-import {
-  Column,
-  Entity,
-  ManyToMany,
-  OneToMany,
-  PrimaryGeneratedColumn,
-} from 'typeorm';
+import { Column, Entity, OneToMany, PrimaryGeneratedColumn } from 'typeorm';
 
 @Entity()
 export class Organization {
@@ -49,6 +43,6 @@ export class Organization {
   // })
   organization: Organization;
 
-  @ManyToMany(() => User, (user) => user.users)
-  organizations: Organization[];
+  @OneToMany(() => User, (user) => user.organization)
+  users: User[];
 }

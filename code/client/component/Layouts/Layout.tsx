@@ -44,9 +44,9 @@ export default function AppLayout({ children }: any) {
   ];
 
   const settingsMenu = [
-    { key: '/settings/create', label: 'Settings' },
-    { key: '/users/create', label: 'Users' },
-    { key: '/taxes/create', label: 'Taxes' },
+    { key: '/settings', label: 'Settings' },
+    { key: '/users', label: 'Users' },
+    { key: '/taxes', label: 'Taxes' },
   ];
 
   const accountMenu = [
