@@ -4,9 +4,8 @@ import { SwaggerModule, DocumentBuilder } from '@nestjs/swagger';
 import { AppModule } from './app.module';
 import helmet from 'helmet';
 import { tenancyMiddleware } from './tenants/tenant.middleware';
-import { DataSource, DataSourceOptions } from 'typeorm';
 import { getTenantConnection } from './tenants/tenant.utils';
-import { ormConfig } from 'orm.config';
+import { dataSource } from 'orm.config';
 
 declare const module: any;
 
@@ -14,7 +13,6 @@ async function bootstrap() {
   const app = await NestFactory.create(AppModule);
   app.use(tenancyMiddleware);
 
-  const dataSource = new DataSource(ormConfig as DataSourceOptions);
   const conn = await dataSource.initialize();
   await conn.runMigrations();
 
