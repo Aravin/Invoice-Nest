@@ -2,7 +2,7 @@ import { InvoiceDetail } from './types/invoice-details';
 import { ItemId, TaxId } from './types/types';
 
 export class CreateInvoiceDto {
-  customerId: number;
+  customer: number;
   organizationId: number;
   items?: ItemId[];
   taxes?: TaxId[];
@@ -22,6 +22,6 @@ export class CreateInvoiceDto {
   notes?: string;
   tnc?: string;
   footer?: string;
-  status: string;
+  invoiceStatus: string;
   invoiceDetails: InvoiceDetail[];
 }

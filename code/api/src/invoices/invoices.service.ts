@@ -17,18 +17,18 @@ export class InvoicesService {
   }
 
   findAll() {
-    return this.invoiceRepository.find({ relations: ['customerId'] });
+    return this.invoiceRepository.find({ relations: { customer: true } });
   }
 
   findOne(id: number) {
     return this.invoiceRepository.findOne({
       where: [{ invoiceId: id }],
-      relations: ['customerId', 'taxes'],
+      relations: ['customer', 'taxes'],
     });
   }
 
   update(id: number, updateInvoiceDto: UpdateInvoiceDto) {
-    return this.invoiceRepository.update(id, updateInvoiceDto as any);
+    return this.invoiceRepository.save(updateInvoiceDto as any);
   }
 
   remove(id: number) {

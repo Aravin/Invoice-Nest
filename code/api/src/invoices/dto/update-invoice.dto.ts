@@ -4,7 +4,7 @@ import { InvoiceDetail } from './types/invoice-details';
 import { ItemId, TaxId } from './types/types';
 
 export class UpdateInvoiceDto extends PartialType(CreateInvoiceDto) {
-  customerId?: number;
+  customer?: number;
   organizationId?: number; // TODO: check
   items?: ItemId[];
   taxes?: TaxId[];
@@ -24,6 +24,6 @@ export class UpdateInvoiceDto extends PartialType(CreateInvoiceDto) {
   notes?: string;
   tnc?: string;
   footer?: string;
-  status?: string;
+  invoiceStatus?: string;
   invoiceDetails: InvoiceDetail[];
 }

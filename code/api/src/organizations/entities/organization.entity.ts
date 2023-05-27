@@ -1,9 +1,11 @@
+// import { User } from 'src/users/entities/user.entity';
+import { Invoice } from 'src/invoices/entities/invoice.entity';
 import { User } from 'src/users/entities/user.entity';
 import {
   Column,
   Entity,
-  JoinTable,
   ManyToMany,
+  OneToMany,
   PrimaryGeneratedColumn,
 } from 'typeorm';
 
@@ -39,11 +41,14 @@ export class Organization {
   @Column({ type: 'varchar', length: 5 })
   currency: string;
 
-  @ManyToMany(() => User, (user) => user.organizations, { cascade: ['insert'] })
-  @JoinTable({
-    name: 'organization_users',
-    joinColumns: [{ name: 'organizationId' }],
-    inverseJoinColumns: [{ name: 'userId' }],
-  })
-  users: User[];
+  @OneToMany(() => Invoice, (invoice) => invoice.organization)
+  // @JoinTable({
+  //   name: 'organization_users',
+  //   joinColumns: [{ name: 'organizationId' }],
+  //   inverseJoinColumns: [{ name: 'userId' }],
+  // })
+  organization: Organization;
+
+  @ManyToMany(() => User, (user) => user.users)
+  organizations: Organization[];
 }

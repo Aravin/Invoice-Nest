@@ -1,4 +1,11 @@
-import { Entity, Column, PrimaryGeneratedColumn } from 'typeorm';
+import { Invoice } from 'src/invoices/entities/invoice.entity';
+import {
+  Entity,
+  Column,
+  PrimaryGeneratedColumn,
+  ManyToMany,
+  JoinTable,
+} from 'typeorm';
 
 @Entity()
 export class Item {
@@ -16,4 +23,8 @@ export class Item {
 
   @Column({ type: 'smallint' })
   itemType: number;
+
+  @ManyToMany(() => Invoice, (invoice) => invoice.items)
+  @JoinTable()
+  invoices: Invoice[];
 }

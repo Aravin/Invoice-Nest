@@ -99,9 +99,9 @@ export default function InvoiceForm() {
           let modifiedResult = result.data;
           modifiedResult.invoiceDate = moment(modifiedResult.invoiceDate);
           modifiedResult.dueDate = moment(modifiedResult.dueDate);
-          modifiedResult.customerId = modifiedResult.customerId.customerId;
+          modifiedResult.customerId = modifiedResult.customer.customerId;
           modifiedResult.items = modifiedResult.invoiceDetails.items;
-          modifiedResult.taxId = modifiedResult.taxes[0].taxId;
+          modifiedResult.taxId = modifiedResult.taxes[0]?.taxId;
 
           form.setFieldsValue(modifiedResult);
         } catch (err) {
@@ -187,14 +187,16 @@ export default function InvoiceForm() {
 
       const data = values;
       data.invoiceDetails = { items: values.items };
-      data.taxes = [{ taxId: values.taxId }];
-      console.log(values.items.map((i: { itemId: number; }) => { return {itemId: i.itemId}}));
+      data.taxes = [{ taxId: values?.taxId }];
       data.items = values.items.map((i: { itemId: number; }) => { return {itemId: i.itemId}});
+      data.invoiceStatus = 'Created';
+      data.customer = data.customerId;
+      data.invoiceId = parseInt(invoiceId + '', 10);
 
       if (invoiceId) {
         await axios.patch(process.env.API_PATH + '/invoices/' + invoiceId, data);
       } else {
-        data.invoiceStatus = 'Created';
+        
         await axios.post(process.env.API_PATH + '/invoices', data);
       }
       router.push('/invoices');

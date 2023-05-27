@@ -6,9 +6,7 @@ import {
   PrimaryGeneratedColumn,
   ManyToOne,
   ManyToMany,
-  JoinTable,
   Entity,
-  JoinColumn,
 } from 'typeorm';
 import { Customer } from '../../customers/entities/customer.entity';
 import { InvoiceDetail } from '../dto/types/invoice-details';
@@ -18,20 +16,17 @@ export class Invoice {
   @PrimaryGeneratedColumn()
   invoiceId: number;
 
-  @ManyToOne(() => Customer, (customer) => customer.customerId)
-  @JoinColumn({ name: 'customerId' })
-  customerId: Customer;
+  @ManyToOne(() => Customer, (customer) => customer.customers)
+  customer: Customer;
 
-  @ManyToOne(() => Organization, (organization) => organization.organizationId)
-  @JoinColumn({ name: 'organizationId' })
-  organizationId: Organization;
+  @ManyToOne(() => Organization, (organization) => organization.organizations)
+  // @JoinColumn({ name: 'organizationId' })
+  organization: Organization;
 
-  @ManyToMany(() => Item)
-  @JoinTable()
+  @ManyToMany(() => Item, (item) => item.invoices, { onDelete: 'CASCADE' })
   items: Item[];
 
-  @ManyToMany(() => Tax)
-  @JoinTable()
+  @ManyToMany(() => Tax, (tax) => tax.invoices, { nullable: true })
   taxes: Tax[];
 
   @Column({ type: 'varchar', length: 36 })

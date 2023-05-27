@@ -56,8 +56,8 @@ export default function InvoiceListPage(props: any) {
     {
       title: 'Customer',
       dataIndex: 'customer',
-      key: 'customerId.firstName',
-      render: (text: any, record: any) => <span>{record.customerId.firstName}</span>
+      key: 'record.customer.firstName',
+      render: (text: any, record: any) => <span>{record.customer.firstName}</span>
     },
     {
       title: 'Status',
