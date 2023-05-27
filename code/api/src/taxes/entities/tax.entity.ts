@@ -1,11 +1,5 @@
 import { Invoice } from 'src/invoices/entities/invoice.entity';
-import {
-  Column,
-  Entity,
-  JoinTable,
-  ManyToMany,
-  PrimaryGeneratedColumn,
-} from 'typeorm';
+import { Column, Entity, ManyToMany, PrimaryGeneratedColumn } from 'typeorm';
 
 @Entity()
 export class Tax {
@@ -22,6 +16,5 @@ export class Tax {
   rate: string;
 
   @ManyToMany(() => Invoice, (invoice) => invoice.taxes)
-  @JoinTable()
   invoices: Invoice[];
 }

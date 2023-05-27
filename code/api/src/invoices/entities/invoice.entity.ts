@@ -7,6 +7,7 @@ import {
   ManyToOne,
   ManyToMany,
   Entity,
+  JoinTable,
 } from 'typeorm';
 import { Customer } from '../../customers/entities/customer.entity';
 import { InvoiceDetail } from '../dto/types/invoice-details';
@@ -24,9 +25,11 @@ export class Invoice {
   organization: Organization;
 
   @ManyToMany(() => Item, (item) => item.invoices, { onDelete: 'CASCADE' })
+  @JoinTable()
   items: Item[];
 
   @ManyToMany(() => Tax, (tax) => tax.invoices, { nullable: true })
+  @JoinTable()
   taxes: Tax[];
 
   @Column({ type: 'varchar', length: 36 })
