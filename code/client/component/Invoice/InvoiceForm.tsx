@@ -439,7 +439,7 @@ export default function InvoiceForm() {
           </Form.Item>
 
           <Row className='p-4 m-4 gap-4 justify-center'>
-            <Button type="primary" size="large" htmlType="submit" disabled={!form.isFieldsTouched() || formError}>Save</Button>
+            <Button type="primary" size="large" htmlType="submit" disabled={!(form.isFieldsTouched() && invoiceId) || formError}>Save</Button>
             <Button size="large" onClick={router.back}>Cancel</Button>
           </Row>
         </Form>
