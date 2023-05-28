@@ -1,2 +1,4 @@
 - add validation in invoice save page
 - add support to auto tenant creation
+- fix date issue in invoice edit view
+- fix toast/notify after save
