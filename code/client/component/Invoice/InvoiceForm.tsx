@@ -6,7 +6,9 @@ import CustomerForm from '../Customer/CustomerForm';
 import { useRouter } from 'next/router';
 import axios from 'axios';
 import Loader from '../Loader/Loader';
-import moment from 'moment';
+import dayjs from 'dayjs';
+// import utc from 'dayjs/plugin/utc';
+// dayjs.extend(utc)
 const { Option } = Select;
 import customerReducer from './customerReducer';
 import taxReducer from './taxReducer';
@@ -15,7 +17,7 @@ import ItemForm from '../Item/ItemForm';
 import TaxForm from '../tax/TaxForm';
 import { numberToCurrency } from '../Common/currencyFormats/numberToCurrency';
 
-const invoiceItemRowDefault = { itemId: null, description: null, quantity: 1, price: 0, total: 0, };
+const invoiceItemRowDefault = { itemId: null, description: null, quantity: 1, price: 0.0, total: 0, };
 
 export default function InvoiceForm() {
 
@@ -97,8 +99,9 @@ export default function InvoiceForm() {
           const result = await axios.get(process.env.API_PATH + '/invoices/' + invoiceId);
 
           let modifiedResult = result.data;
-          modifiedResult.invoiceDate = moment(modifiedResult.invoiceDate);
-          modifiedResult.dueDate = moment(modifiedResult.dueDate);
+          console.log({modifiedResult});
+          modifiedResult.invoiceDate = dayjs(modifiedResult.invoiceDate);
+          modifiedResult.dueDate = dayjs(modifiedResult.dueDate);
           modifiedResult.customerId = modifiedResult.customer.customerId;
           modifiedResult.items = modifiedResult.invoiceDetails.items;
           modifiedResult.taxId = modifiedResult.taxes[0]?.taxId;
@@ -115,8 +118,8 @@ export default function InvoiceForm() {
 
         form.setFieldsValue({
           invoiceNumber: 'INV' + invoiceNumber.padStart(8, '0'),
-          invoiceDate: moment(),
-          dueDate: moment(),
+          invoiceDate: dayjs(),
+          dueDate: dayjs(),
           items: [invoiceItemRowDefault],
           subTotal: 0.00,
         });
@@ -138,7 +141,7 @@ export default function InvoiceForm() {
       const row = v;
 
       row.description = !row.description ? name : row.description;
-      row.price = !row.price ? price : row.price;
+      row.price = row.price ? row.price : (price || 0.00);
       row.total = (v?.quantity * parseInt(price, 10)) || 0;
       formValues.subTotal += row.total;
 
@@ -176,6 +179,8 @@ export default function InvoiceForm() {
       await form.validateFields();
       setFormError(false);
     } catch (err) {
+      console.log({err});
+      
       setFormError(true);
     }
   }
@@ -295,7 +300,7 @@ export default function InvoiceForm() {
           </Form.Item>
 
           <Form.Item label="Invoice Date" name="invoiceDate">
-            <DatePicker />
+            <DatePicker/>
           </Form.Item>
 
           <Form.Item label="Due Date" name="dueDate" rules={[{ required: true, message: 'Due Date is Required' }]}>
@@ -439,7 +444,7 @@ export default function InvoiceForm() {
           </Form.Item>
 
           <Row className='p-4 m-4 gap-4 justify-center'>
-            <Button type="primary" size="large" htmlType="submit" disabled={!(form.isFieldsTouched() && invoiceId) || formError}>Save</Button>
+            <Button type="primary" size="large" htmlType="submit" disabled={!(form.isFieldsTouched() || invoiceId) || formError}>Save</Button>
             <Button size="large" onClick={router.back}>Cancel</Button>
           </Row>
         </Form>

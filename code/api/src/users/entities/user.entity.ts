@@ -1,5 +1,11 @@
 import { Organization } from 'src/organizations/entities/organization.entity';
-import { Column, Entity, ManyToOne, PrimaryGeneratedColumn } from 'typeorm';
+import {
+  Column,
+  Entity,
+  JoinTable,
+  ManyToMany,
+  PrimaryGeneratedColumn,
+} from 'typeorm';
 
 @Entity()
 export class User {
@@ -21,11 +27,12 @@ export class User {
   @Column({ type: 'bool', nullable: true })
   isActive: string;
 
-  @ManyToOne(() => Organization, (organization) => organization.users)
+  @ManyToMany(() => Organization, (organization) => organization.users)
+  @JoinTable()
   // @JoinTable({
   //   name: 'organization_users',
   //   joinColumns: [{ name: 'userId' }],
   //   inverseJoinColumns: [{ name: 'organizationId' }],
   // })
-  organization: Organization;
+  organizations: Organization[];
 }

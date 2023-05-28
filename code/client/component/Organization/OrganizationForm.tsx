@@ -6,8 +6,11 @@ import { useEffect, useState } from 'react';
 import CountrySelectField from '../Common/FormFields/CountryDropdown';
 import CurrencySelectField from '../Common/FormFields/CurrencyDropdown';
 import Loader from '../Loader/Loader';
+import { useAppState } from '../../states/appState';
 
 export default function OrganizationForm() {
+
+  const setTenantId = useAppState((state) => state.setTenantId);
 
   const router = useRouter();
   const action = router.query?.action;
@@ -48,8 +51,8 @@ export default function OrganizationForm() {
       if (action === 'edit') {
         await axios.patch(process.env.API_PATH + '/organizations/' + organizationId, {...values, userId: 6});
       } else {
-        console.log(values);
-        await axios.post(process.env.API_PATH + '/organizations', {...values, userId: 6});
+        const res = await axios.post(process.env.API_PATH + '/organizations', {...values, userId: 6});
+        setTenantId(res.data.organizationId);
       }
       router.push('/organizations');
       setSuccess(true);

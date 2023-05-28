@@ -20,7 +20,7 @@ export class Invoice {
   @ManyToOne(() => Customer, (customer) => customer.customers)
   customer: Customer;
 
-  @ManyToOne(() => Organization, (organization) => organization.organizations)
+  @ManyToOne(() => Organization, (organization) => organization.organization)
   // @JoinColumn({ name: 'organizationId' })
   organization: Organization;
 

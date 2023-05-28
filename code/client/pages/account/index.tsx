@@ -11,31 +11,31 @@ export default function Profile() {
   const { accountInfo, setAccountInfo } = useContext(AccountContext);
   const { tenantId, setTenantId } = useContext(TenantContext);
 
-  useEffect(() => {
-    if (!user) return;
+  // useEffect(() => {
+  //   if (!user) return;
  
-    const fetchData = async () => {
-      const userResponse = await axios.get(process.env.API_PATH + '/users/email/' + user?.email);
-      let userInfo = userResponse.data;
+  //   const fetchData = async () => {
+  //     const userResponse = await axios.get(process.env.API_PATH + '/users/email/' + user?.email);
+  //     let userInfo = userResponse.data;
 
-      if (!userInfo) {
-        const createUserResponse = await axios.post(process.env.API_PATH + '/users', { firstName: user?.name, email: user?.email });
-        userInfo = createUserResponse.data;
-      }
+  //     if (!userInfo) {
+  //       const createUserResponse = await axios.post(process.env.API_PATH + '/users', { firstName: user?.name, email: user?.email });
+  //       userInfo = createUserResponse.data;
+  //     }
 
-      setAccountInfo(userInfo);
+  //     setAccountInfo(userInfo);
 
-      if (userInfo?.organizations?.length) {
-        setTenantId(userInfo.organizations[0].organizationId);
-        router.push('/');
-      }
-      else {
-        router.push('/organizations/create');
-      }
-    };
+  //     if (userInfo?.organizations?.length) {
+  //       setTenantId(userInfo.organizations[0].organizationId);
+  //       router.push('/');
+  //     }
+  //     else {
+  //       router.push('/organizations/create');
+  //     }
+  //   };
 
-    fetchData();
-  }, [user]);
+  //   fetchData();
+  // }, [user]);
 
   if (isLoading) return <div>Loading...</div>;
   if (error) return <div>{error.message}</div>;

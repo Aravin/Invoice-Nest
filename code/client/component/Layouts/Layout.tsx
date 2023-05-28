@@ -1,6 +1,6 @@
 // import Navbar from './navbar'
 // import Footer from './footer'
-import React, { useContext, useState } from 'react'
+import React, { useContext, useEffect, useState } from 'react'
 // import 'antd/dist/antd.css';
 import { Layout, Menu, Button, Dropdown, Select } from 'antd';
 import {
@@ -16,8 +16,9 @@ import {
   ApartmentOutlined,
 } from '@ant-design/icons';
 import { useRouter } from 'next/router'
-import { AccountContext } from '../../contexts/accountContext';
-import { TenantContext } from '../../contexts/tenantContext';
+import { useAppState } from '../../states/appState';
+import { useUser } from '@auth0/nextjs-auth0';
+import axios from 'axios';
 
 const { Content, Footer, Sider } = Layout;
 const { SubMenu } = Menu;
@@ -25,10 +26,45 @@ const { Option } = Select;
 
 export default function AppLayout({ children }: any) {
 
+  const appState = useAppState((state) => state.appState);
+  const setAccountInfo = useAppState((state) => state.setAccountInfo);
+  const setTenantId = useAppState((state) => state.setTenantId);
+
+  const { user, error, isLoading } = useUser();
+
   const [collapsed, seCollapse] = useState(false);
   const router = useRouter();
-  const { accountInfo } = useContext(AccountContext);
-  const { setTenantId } = useContext(TenantContext);
+
+  useEffect(() => {
+    console.log('layout useeffect');
+    console.log({appState});
+
+    if (!user) return;
+
+    const fetchData = async () => {
+      if (appState.accountInfo) return;
+
+      const userResponse = await axios.get(process.env.API_PATH + '/users/email/' + user?.email);
+      let userInfo = userResponse.data;
+
+      if (!userInfo) {
+        const createUserResponse = await axios.post(process.env.API_PATH + '/users', { firstName: user?.name, email: user?.email });
+        userInfo = createUserResponse.data;
+      }
+
+      setAccountInfo(userInfo);
+
+      if (userInfo?.organizations?.length) {
+        setTenantId(userInfo.organizations[0].organizationId);
+        router.push('/');
+      }
+      else {
+        router.push('/organizations/create');
+      }
+    };
+
+    fetchData();
+  }, []);
 
   const handleClick = (e: any) => {
     console.log(e);
@@ -36,7 +72,7 @@ export default function AppLayout({ children }: any) {
   };
 
   const addNewMenu = [
-    { key: '/estimates/create', label: 'Add Estimate' },
+    // { key: '/estimates/create', label: 'Add Estimate' },
     { key: '/invoices/create', label: 'Add Invoice' },
     { key: '/customers/create', label: 'Add Customer' },
     { key: '/items/create', label: 'Add Item' },
@@ -71,7 +107,7 @@ export default function AppLayout({ children }: any) {
           { key: '/', label: 'Dashboard', icon: <PieChartOutlined /> },
           { key: 'divider1', type: 'divider', dashed: true },
           { key: '/invoices', label: 'Invoices', icon: <BookOutlined /> },
-          { key: '/estimates', label: 'Estimates', icon: <SnippetsOutlined /> },
+          // { key: '/estimates', label: 'Estimates', icon: <SnippetsOutlined /> },
           { key: 'divider2', type: 'divider', dashed: true },
           { key: '/customers', label: 'Customers', icon: <UsergroupAddOutlined /> },
           { key: '/items', label: 'Items', icon: <AppstoreOutlined /> },
@@ -88,11 +124,11 @@ export default function AppLayout({ children }: any) {
             </div>
             <div className="flex gap-2">
               {
-                accountInfo?.organizations &&
+                appState.accountInfo?.organizations &&
                 <div>
-                  <Select defaultValue={accountInfo?.organizations[0]?.organizationId} style={{ width: 150 }} onChange={(event) => setTenantId(event)}>
+                  <Select defaultValue={appState.accountInfo?.organizations[0]?.organizationId} style={{ width: 150 }} onChange={(event) => setTenantId(event)}>
                     {
-                      accountInfo?.organizations?.map((org: any) => {
+                      appState.accountInfo?.organizations?.map((org: any) => {
                         return <Option value={org.organizationId} key={org.organizationId}>{org.name}</Option>
                       })
                     }

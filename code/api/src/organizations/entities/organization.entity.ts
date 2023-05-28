@@ -1,7 +1,14 @@
 // import { User } from 'src/users/entities/user.entity';
 import { Invoice } from 'src/invoices/entities/invoice.entity';
 import { User } from 'src/users/entities/user.entity';
-import { Column, Entity, OneToMany, PrimaryGeneratedColumn } from 'typeorm';
+import {
+  Column,
+  DeleteDateColumn,
+  Entity,
+  ManyToMany,
+  OneToMany,
+  PrimaryGeneratedColumn,
+} from 'typeorm';
 
 @Entity()
 export class Organization {
@@ -35,6 +42,7 @@ export class Organization {
   @Column({ type: 'varchar', length: 5 })
   currency: string;
 
+  @DeleteDateColumn({ name: 'deleted_at' })
   @OneToMany(() => Invoice, (invoice) => invoice.organization)
   // @JoinTable({
   //   name: 'organization_users',
@@ -43,6 +51,6 @@ export class Organization {
   // })
   organization: Organization;
 
-  @OneToMany(() => User, (user) => user.organization)
+  @ManyToMany(() => User, (user) => user.organizations)
   users: User[];
 }
