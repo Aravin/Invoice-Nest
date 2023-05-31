@@ -5,7 +5,7 @@ import { AppModule } from './app.module';
 import helmet from 'helmet';
 import { tenancyMiddleware } from './tenants/tenant.middleware';
 import { getTenantConnection } from './tenants/tenant.utils';
-import { dataSource } from 'orm.config';
+import { dataSource } from 'orm-data-connection';
 
 declare const module: any;
 
@@ -13,7 +13,8 @@ async function bootstrap() {
   const app = await NestFactory.create(AppModule);
   app.use(tenancyMiddleware);
 
-  const conn = await dataSource.initialize();
+  const conn = await dataSource('default').initialize();
+  // await conn.synchronize();
   await conn.runMigrations();
 
   const schemas = await conn.query(
@@ -24,8 +25,12 @@ async function bootstrap() {
     const { name: schema } = schemas[i];
 
     if (schema.startsWith('tenant_')) {
-      const tenantId = schema.replace('tenant_', '');
-      const connection = await getTenantConnection(tenantId);
+      const connection = await getTenantConnection(schema);
+      console.log({
+        isConnectionActive: connection.isInitialized,
+        schema: connection.driver.schema,
+      });
+      // await connection.synchronize();
       await connection.runMigrations();
       await connection.destroy();
     }

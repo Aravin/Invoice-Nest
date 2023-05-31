@@ -19,6 +19,9 @@ export class Organization {
   name: string;
 
   @Column({ type: 'varchar', length: 96 })
+  email: string;
+
+  @Column({ type: 'varchar', length: 96 })
   country: string;
 
   @Column({ type: 'varchar', length: 96, nullable: true })

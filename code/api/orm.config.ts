@@ -1,10 +1,10 @@
 import { TypeOrmModuleOptions } from '@nestjs/typeorm';
 import * as dotenv from 'dotenv';
-import { DataSource } from 'typeorm';
+import { DataSourceOptions } from 'typeorm';
 
 dotenv.config();
 
-export const ormConfig: TypeOrmModuleOptions = {
+export const connectionConfig: DataSourceOptions = {
   type: process.env.DB_TYPE as any,
   host: process.env.DB_HOST,
   port: +process.env.DB_PORT,
@@ -12,10 +12,13 @@ export const ormConfig: TypeOrmModuleOptions = {
   password: process.env.DB_PWD,
   database: process.env.DB_NAME,
   logging: true,
-  autoLoadEntities: true,
   synchronize: true,
   entities: ['dist/**/*.entity{.ts,.js}'],
   migrations: ['dist/**/*.migration{.ts,.js}'],
+  name: 'default',
 };
 
-export const dataSource = new DataSource(ormConfig as any);
+export const ormConfig: TypeOrmModuleOptions = {
+  autoLoadEntities: true,
+  ...connectionConfig,
+};

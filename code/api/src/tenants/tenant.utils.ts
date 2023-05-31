@@ -1,22 +1,14 @@
-import { Connection, createConnection, getConnectionManager } from 'typeorm';
-import { PostgresConnectionOptions } from 'typeorm/driver/postgres/PostgresConnectionOptions';
+import { dataSource } from 'orm-data-connection';
+import { DataSource } from 'typeorm';
 
-import { tenantsOrmConfig } from '../../tenants-orm.config';
+export async function getTenantConnection(
+  tenantId: string,
+): Promise<DataSource> {
+  const connectionManager = dataSource(tenantId);
 
-export function getTenantConnection(tenantId: string): Promise<Connection> {
-  const connectionName = `tenant_${tenantId}`;
-  const connectionManager = getConnectionManager();
-
-  if (connectionManager.has(connectionName)) {
-    const connection = connectionManager.get(connectionName);
-    return Promise.resolve(
-      connection.isConnected ? connection : connection.connect(),
-    );
+  if (connectionManager.isInitialized) {
+    return await connectionManager;
   }
 
-  return createConnection({
-    ...(tenantsOrmConfig as unknown as PostgresConnectionOptions),
-    name: connectionName,
-    schema: connectionName,
-  });
+  return await connectionManager.initialize();
 }
