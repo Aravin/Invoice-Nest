@@ -1,4 +1,5 @@
-import { useUser, withPageAuthRequired } from '@auth0/nextjs-auth0';
+import { withPageAuthRequired } from '@auth0/nextjs-auth0';
+import { useUser } from '@auth0/nextjs-auth0/client';
 import { PageHeader } from '@ant-design/pro-layout'
 import type { NextPage } from 'next'
 import React, { } from 'react'

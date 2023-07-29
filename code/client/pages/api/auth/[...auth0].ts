@@ -7,7 +7,5 @@ const getLoginState: GetLoginState = (req: NextApiRequest, loginOptions: LoginOp
 };
 
 export default handleAuth({
-  async login(req, res) {
-    await handleLogin(req, res, { getLoginState });
-  }
+  login: handleLogin({ getLoginState })
 });

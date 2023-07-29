@@ -65,8 +65,8 @@ export default function OrganizationListPage(props: any) {
       width: 100,
       render: (text: any, record: any) => (
         <Space size="middle">
-          <a><Button icon={<EditFilled />} type='ghost' onClick={() => goToEditOrg(record.organizationId)} /></a>
-          <a><Button icon={<DeleteFilled />} type='ghost' onClick={() => deleteOrg(record.organizationId)} /></a>
+          <a><Button icon={<EditFilled />} type='dashed' onClick={() => goToEditOrg(record.organizationId)} /></a>
+          <a><Button icon={<DeleteFilled />} type='dashed' onClick={() => deleteOrg(record.organizationId)} /></a>
         </Space>
       ),
     },

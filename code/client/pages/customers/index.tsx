@@ -122,8 +122,8 @@ export default function CustomerPage(props: any) {
       width: 100,
       render: (text: any, record: any) => (
         <Space size="middle">
-          <a><Button icon={<EditFilled />} type='ghost' onClick={() => goToEditCustomer(record.customerId)} /></a>
-          <a><Button icon={<DeleteFilled />} type='ghost' onClick={() => deleteCustomer(record.customerId)} /></a>
+          <a><Button icon={<EditFilled />} type='dashed' onClick={() => goToEditCustomer(record.customerId)} /></a>
+          <a><Button icon={<DeleteFilled />} type='dashed' onClick={() => deleteCustomer(record.customerId)} /></a>
         </Space>
       ),
     },

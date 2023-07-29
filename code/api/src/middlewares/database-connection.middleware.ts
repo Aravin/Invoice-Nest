@@ -7,7 +7,6 @@ export function tenancyMiddleware(
   _res: Response,
   next: NextFunction,
 ): void {
-  const header = req.headers[TENANT_HEADER] as string;
-  req['tenantId'] = header?.toString() || null;
+  req['tenantId'] = req.headers[TENANT_HEADER] || null;
   next();
 }

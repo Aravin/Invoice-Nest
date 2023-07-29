@@ -5,7 +5,7 @@ import { DataSource, Repository } from 'typeorm';
 import { CreateOrganizationDto } from './dto/create-organization.dto';
 import { UpdateOrganizationDto } from './dto/update-organization.dto';
 import { Organization } from './entities/organization.entity';
-import { getTenantConnection } from 'src/tenants/tenant.utils';
+import { getTenantConnection } from './tenant.utils';
 
 @Injectable()
 export class OrganizationsService {
@@ -32,7 +32,7 @@ export class OrganizationsService {
     this.connection.query(`CREATE SCHEMA tenant_${tenantId}`);
     const tenantConnection = await getTenantConnection(`tenant_${tenantId}`);
     await tenantConnection.synchronize();
-    await tenantConnection.runMigrations({ transaction: 'each' });
+    await tenantConnection.runMigrations();
     await tenantConnection.destroy();
 
     return result;

@@ -65,8 +65,8 @@ export default function UserListPage(props: any) {
       width: 100,
       render: (text: any, record: any) => (
         <Space size="middle">
-          <a><Button icon={<EditFilled />} type='ghost' onClick={() => goToEditUser(record.userId)} /></a>
-          <a><Button icon={<DeleteFilled />} type='ghost' onClick={() => deleteUser(record.userId)} /></a>
+          <a><Button icon={<EditFilled />} type='dashed' onClick={() => goToEditUser(record.userId)} /></a>
+          <a><Button icon={<DeleteFilled />} type='dashed' onClick={() => deleteUser(record.userId)} /></a>
         </Space>
       ),
     },

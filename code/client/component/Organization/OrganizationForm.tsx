@@ -11,6 +11,7 @@ import { useAppState } from '../../states/appState';
 export default function OrganizationForm() {
 
   const setTenantId = useAppState((state) => state.setTenantId);
+  const appState = useAppState((state) => state.appState);
 
   const router = useRouter();
   const action = router.query?.action;
@@ -48,10 +49,15 @@ export default function OrganizationForm() {
     setLoader(true);
 
     try {
+      const organizationData = {
+        ...values,
+        userId: appState.accountInfo.userId,
+        email: appState.accountInfo.email,
+      }
       if (action === 'edit') {
-        await axios.patch(process.env.API_PATH + '/organizations/' + organizationId, {...values, userId: 6});
+        await axios.patch(process.env.API_PATH + '/organizations/' + organizationId, organizationData);
       } else {
-        const res = await axios.post(process.env.API_PATH + '/organizations', {...values, userId: 6});
+        const res = await axios.post(process.env.API_PATH + '/organizations', organizationData);
         setTenantId(res.data.organizationId);
       }
       router.push('/organizations');

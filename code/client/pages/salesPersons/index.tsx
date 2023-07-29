@@ -65,8 +65,8 @@ export default function SalesPersonListPage(props: any) {
       width: 100,
       render: (text: any, record: any) => (
         <Space size="middle">
-          <a><Button icon={<EditFilled />} type='ghost' onClick={() => goToEditSalesPerson(record.salesPersonId)} /></a>
-          <a><Button icon={<DeleteFilled />} type='ghost' onClick={() => deleteSalesPerson(record.salesPersonId)} /></a>
+          <a><Button icon={<EditFilled />} type='dashed' onClick={() => goToEditSalesPerson(record.salesPersonId)} /></a>
+          <a><Button icon={<DeleteFilled />} type='dashed' onClick={() => deleteSalesPerson(record.salesPersonId)} /></a>
         </Space>
       ),
     },

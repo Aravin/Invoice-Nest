@@ -81,8 +81,8 @@ export default function InvoiceListPage(props: any) {
       width: 100,
       render: (text: any, record: any) => (
         <Space size="middle">
-          <a><Button icon={<EditFilled />} type='ghost' onClick={() => goToEditInvoice(record.invoiceId)} /></a>
-          <a><Button icon={<DeleteFilled />} type='ghost' onClick={() => deleteInvoice(record.invoiceId)} /></a>
+          <a><Button icon={<EditFilled />} type='dashed' onClick={() => goToEditInvoice(record.invoiceId)} /></a>
+          <a><Button icon={<DeleteFilled />} type='dashed' onClick={() => deleteInvoice(record.invoiceId)} /></a>
         </Space>
       ),
     },

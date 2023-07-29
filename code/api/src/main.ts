@@ -3,8 +3,8 @@ import { NestFactory } from '@nestjs/core';
 import { SwaggerModule, DocumentBuilder } from '@nestjs/swagger';
 import { AppModule } from './app.module';
 import helmet from 'helmet';
-import { tenancyMiddleware } from './tenants/tenant.middleware';
-import { getTenantConnection } from './tenants/tenant.utils';
+import { tenancyMiddleware } from './organizations/tenant.middleware';
+import { getTenantConnection } from './organizations/tenant.utils';
 import { dataSource } from 'orm-data-connection';
 
 declare const module: any;
@@ -14,7 +14,7 @@ async function bootstrap() {
   app.use(tenancyMiddleware);
 
   const conn = await dataSource('default').initialize();
-  // await conn.synchronize();
+  await conn.synchronize();
   await conn.runMigrations();
 
   const schemas = await conn.query(
@@ -26,11 +26,7 @@ async function bootstrap() {
 
     if (schema.startsWith('tenant_')) {
       const connection = await getTenantConnection(schema);
-      console.log({
-        isConnectionActive: connection.isInitialized,
-        schema: connection.driver.schema,
-      });
-      // await connection.synchronize();
+      await connection.synchronize();
       await connection.runMigrations();
       await connection.destroy();
     }

@@ -17,7 +17,7 @@ import {
 } from '@ant-design/icons';
 import { useRouter } from 'next/router'
 import { useAppState } from '../../states/appState';
-import { useUser } from '@auth0/nextjs-auth0';
+import { useUser } from '@auth0/nextjs-auth0/client';
 import axios from 'axios';
 
 const { Content, Footer, Sider } = Layout;
@@ -42,6 +42,8 @@ export default function AppLayout({ children }: any) {
     if (!user) return;
 
     const fetchData = async () => {
+
+      // account info start //
       if (appState.accountInfo) return;
 
       const userResponse = await axios.get(process.env.API_PATH + '/users/email/' + user?.email);
@@ -53,7 +55,9 @@ export default function AppLayout({ children }: any) {
       }
 
       setAccountInfo(userInfo);
+      // account info ends //
 
+      // tenant state start //
       if (userInfo?.organizations?.length) {
         setTenantId(userInfo.organizations[0].organizationId);
         router.push('/');
@@ -61,6 +65,8 @@ export default function AppLayout({ children }: any) {
       else {
         router.push('/organizations/create');
       }
+
+      // tenant state ends //
     };
 
     fetchData();

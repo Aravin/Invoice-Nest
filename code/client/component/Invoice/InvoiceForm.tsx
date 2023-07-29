@@ -16,10 +16,13 @@ import itemReducer from './itemReducer';
 import ItemForm from '../Item/ItemForm';
 import TaxForm from '../tax/TaxForm';
 import { numberToCurrency } from '../Common/currencyFormats/numberToCurrency';
+import { useAppState } from '../../states/appState';
 
 const invoiceItemRowDefault = { itemId: null, description: null, quantity: 1, price: 0.0, total: 0, };
 
 export default function InvoiceForm() {
+
+  const appState = useAppState((state) => state.appState);
 
   const [isCustomerModalVisible, setCustomerModalVisible] = useState(false);
   const [isTaxModalVisible, setTaxModalVisible] = useState(false);
@@ -197,12 +200,15 @@ export default function InvoiceForm() {
       data.invoiceStatus = 'Created';
       data.customer = data.customerId;
       data.invoiceId = parseInt(invoiceId + '', 10);
+      data.organization = appState.tenantId;
 
       if (invoiceId) {
         await axios.patch(process.env.API_PATH + '/invoices/' + invoiceId, data);
       } else {
         
-        await axios.post(process.env.API_PATH + '/invoices', data);
+        await axios.post(process.env.API_PATH + '/invoices', data, { headers: {
+          'x-tenant-id': appState.tenantId,
+        }});
       }
       router.push('/invoices');
       setSuccess(true);

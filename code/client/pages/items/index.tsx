@@ -60,8 +60,8 @@ export default function ItemListPage(props: any) {
       width: 100,
       render: (text: any, record: any) => (
         <Space size="middle">
-          <a><Button icon={<EditFilled />} type='ghost' onClick={() => goToEditItem(record.itemId)} /></a>
-          <a><Button icon={<DeleteFilled />} type='ghost' onClick={() => deleteItem(record.itemId)} /></a>
+          <a><Button icon={<EditFilled />} type='dashed' onClick={() => goToEditItem(record.itemId)} /></a>
+          <a><Button icon={<DeleteFilled />} type='dashed' onClick={() => deleteItem(record.itemId)} /></a>
         </Space>
       ),
     },

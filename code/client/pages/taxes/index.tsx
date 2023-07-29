@@ -60,8 +60,8 @@ export default function TaxListPage(props: any) {
       width: 100,
       render: (text: any, record: any) => (
         <Space size="middle">
-          <a><Button icon={<EditFilled />} type='ghost' onClick={() => goToEditTax(record.taxId)} /></a>
-          <a><Button icon={<DeleteFilled />} type='ghost' onClick={() => deleteTax(record.taxId)} /></a>
+          <a><Button icon={<EditFilled />} type='dashed' onClick={() => goToEditTax(record.taxId)} /></a>
+          <a><Button icon={<DeleteFilled />} type='dashed' onClick={() => deleteTax(record.taxId)} /></a>
         </Space>
       ),
     },

@@ -13,7 +13,6 @@ import { TypeOrmModule, TypeOrmModuleOptions } from '@nestjs/typeorm';
 import { ConfigModule } from '@nestjs/config';
 import { ThrottlerGuard, ThrottlerModule } from '@nestjs/throttler';
 import { APP_GUARD } from '@nestjs/core';
-import { TenantsModule } from './tenants/tenants.module';
 import { ormConfig } from 'orm.config';
 
 @Module({
@@ -38,7 +37,6 @@ import { ormConfig } from 'orm.config';
     EstimatesModule,
     UsersModule,
     OrganizationsModule,
-    TenantsModule,
   ],
   exports: [TypeOrmModule],
   controllers: [AppController],
