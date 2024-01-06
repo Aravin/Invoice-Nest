@@ -1,9 +1,23 @@
-import { Form, Input, Button, Select, DatePicker, Space, Col, Row, Divider, InputNumber, Typography, Modal, Alert } from 'antd';
+import {
+  Form,
+  Input,
+  Button,
+  Select,
+  DatePicker,
+  Space,
+  Col,
+  Row,
+  Divider,
+  InputNumber,
+  Typography,
+  Modal,
+  Alert,
+} from 'antd';
 import { MinusCircleOutlined, PlusOutlined } from '@ant-design/icons';
 import TextArea from 'antd/lib/input/TextArea';
 import { useCallback, useEffect, useReducer, useState } from 'react';
 import CustomerForm from '../Customer/CustomerForm';
-import { useRouter } from 'next/router';
+import { useRouter, useSearchParams } from 'next/navigation';
 import axios from 'axios';
 import Loader from '../Loader/Loader';
 import dayjs from 'dayjs';
@@ -18,18 +32,26 @@ import TaxForm from '../tax/TaxForm';
 import { numberToCurrency } from '../Common/currencyFormats/numberToCurrency';
 import { useAppState } from '../../states/appState';
 
-const invoiceItemRowDefault = { itemId: null, description: null, quantity: 1, price: 0.0, total: 0, };
+const invoiceItemRowDefault = {
+  itemId: null,
+  description: null,
+  quantity: 1,
+  price: 0.0,
+  total: 0,
+};
 
 export default function InvoiceForm() {
-
   const appState = useAppState((state) => state.appState);
 
   const [isCustomerModalVisible, setCustomerModalVisible] = useState(false);
   const [isTaxModalVisible, setTaxModalVisible] = useState(false);
   const [isItemModalVisible, setItemModalVisible] = useState(false);
   const router = useRouter();
+  const searchParams = useSearchParams();
+
   // const action = router.query?.action;
-  const invoiceId = router.query?.invoiceId;
+  const invoiceId = searchParams?.get('invoiceId');
+  console.log({ invoiceId });
   const [isLoading, setLoader] = useState(false);
   const [isSuccess, setSuccess] = useState(false);
   const [isError, setError] = useState(false);
@@ -82,10 +104,9 @@ export default function InvoiceForm() {
 
   useEffect(() => {
     (async () => {
-
       dispatchItems({
         type: 'FETCH',
-        items: (await axios.get(process.env.API_PATH + '/items')).data
+        items: (await axios.get(process.env.API_PATH + '/items')).data,
       });
       dispatchCustomers({
         type: 'FETCH',
@@ -99,10 +120,12 @@ export default function InvoiceForm() {
       if (invoiceId) {
         try {
           setLoader(true);
-          const result = await axios.get(process.env.API_PATH + '/invoices/' + invoiceId);
+          const result = await axios.get(
+            process.env.API_PATH + '/invoices/' + invoiceId
+          );
 
           let modifiedResult = result.data;
-          console.log({modifiedResult});
+          console.log({ modifiedResult });
           modifiedResult.invoiceDate = dayjs(modifiedResult.invoiceDate);
           modifiedResult.dueDate = dayjs(modifiedResult.dueDate);
           modifiedResult.customerId = modifiedResult.customer.customerId;
@@ -117,21 +140,22 @@ export default function InvoiceForm() {
           setLoader(false);
         }
       } else {
-        const invoiceNumber = (await axios.get(process.env.API_PATH + '/invoices/sequence/next')).data[0].nextval;
+        const invoiceNumber = (
+          await axios.get(process.env.API_PATH + '/invoices/sequence/next')
+        ).data[0].nextval;
 
         form.setFieldsValue({
           invoiceNumber: 'INV' + invoiceNumber.padStart(8, '0'),
           invoiceDate: dayjs(),
           dueDate: dayjs(),
           items: [invoiceItemRowDefault],
-          subTotal: 0.00,
+          subTotal: 0.0,
         });
       }
     })();
   }, []);
 
   const onValuesChange = async (changedValues: any, formValues: any) => {
-
     formValues.subTotal = 0;
     formValues.total = 0;
     console.log(formValues);
@@ -140,39 +164,54 @@ export default function InvoiceForm() {
       // console.log({formValues: formValues.invoices[i], changedValues: changedValues?.invoices[i]});
       console.log(v?.itemId);
 
-      const { name, price } = items.find((item: any) => item.itemId === v?.itemId) || {};
+      const { name, price } =
+        items.find((item: any) => item.itemId === v?.itemId) || {};
       const row = v;
 
       row.description = !row.description ? name : row.description;
-      row.price = row.price ? row.price : (price || 0.00);
-      row.total = (v?.quantity * parseInt(price, 10)) || 0;
+      row.price = row.price ? row.price : price || 0.0;
+      row.total = v?.quantity * parseInt(price, 10) || 0;
       formValues.subTotal += row.total;
 
       console.log(formValues);
-
     });
 
     // set customer id again // maybe bug // todo
     if (formValues.customerId) {
-      customers.find((c: any) => c.selected)?.customerId
+      customers.find((c: any) => c.selected)?.customerId;
     }
 
     // tax calculation
     if (formValues.taxId) {
-      formValues.tax = ((formValues.subTotal || 0) * (parseInt(taxes.find((tax: any) => tax.taxId === formValues.taxId).rate, 10) || 0)) / 100;
+      formValues.tax =
+        ((formValues.subTotal || 0) *
+          (parseInt(
+            taxes.find((tax: any) => tax.taxId === formValues.taxId).rate,
+            10
+          ) || 0)) /
+        100;
     }
 
     // formValues.subTotal += ((formValues.subTotal || 0) * (formValues.tax || 0)) / 100;
 
-    formValues.discountType = formValues.discountType === 'abs' ? 'abs' : 'percent';
+    formValues.discountType =
+      formValues.discountType === 'abs' ? 'abs' : 'percent';
 
     // discount calculation
     if (formValues.discountValue) {
-      formValues.discount = formValues.discountType === 'abs' ? formValues.discountValue : (formValues.discountValue * formValues.subTotal) / 100;
+      formValues.discount =
+        formValues.discountType === 'abs'
+          ? formValues.discountValue
+          : (formValues.discountValue * formValues.subTotal) / 100;
       // formValues.discountValue = formValues.discount;
     }
 
-    formValues.total = formValues.subTotal + (formValues.tax || 0) + (formValues.shipping || 0) + (formValues.adjustment || 0) - (formValues.discount || 0);
+    formValues.total =
+      formValues.subTotal +
+      (formValues.tax || 0) +
+      (formValues.shipping || 0) +
+      (formValues.adjustment || 0) -
+      (formValues.discount || 0);
 
     formValues.total = numberToCurrency(formValues.total);
 
@@ -182,33 +221,38 @@ export default function InvoiceForm() {
       await form.validateFields();
       setFormError(false);
     } catch (err) {
-      console.log({err});
-      
+      console.log({ err });
+
       setFormError(true);
     }
-  }
+  };
 
   const onFinish = async (values: any) => {
     setLoader(true);
 
     try {
-
       const data = values;
       data.invoiceDetails = { items: values.items };
       data.taxes = [{ taxId: values?.taxId }];
-      data.items = values.items.map((i: { itemId: number; }) => { return {itemId: i.itemId}});
+      data.items = values.items.map((i: { itemId: number }) => {
+        return { itemId: i.itemId };
+      });
       data.invoiceStatus = 'Created';
       data.customer = data.customerId;
       data.invoiceId = parseInt(invoiceId + '', 10);
       data.organization = appState.tenantId;
 
       if (invoiceId) {
-        await axios.patch(process.env.API_PATH + '/invoices/' + invoiceId, data);
+        await axios.patch(
+          process.env.API_PATH + '/invoices/' + invoiceId,
+          data
+        );
       } else {
-        
-        await axios.post(process.env.API_PATH + '/invoices', data, { headers: {
-          'x-tenant-id': appState.tenantId,
-        }});
+        await axios.post(process.env.API_PATH + '/invoices', data, {
+          headers: {
+            'x-tenant-id': appState.tenantId,
+          },
+        });
       }
       router.push('/invoices');
       setSuccess(true);
@@ -235,32 +279,62 @@ export default function InvoiceForm() {
 
   return (
     <>
-      <Modal title="Add Customer" destroyOnClose={true} open={isCustomerModalVisible} onOk={handleCustomerModelOk} onCancel={handleCustomerModelCancel}>
-        <CustomerForm dispatch={dispatchCustomers} close={handleCustomerModelOk} />
+      <Modal
+        title="Add Customer"
+        destroyOnClose={true}
+        open={isCustomerModalVisible}
+        onOk={handleCustomerModelOk}
+        onCancel={handleCustomerModelCancel}
+      >
+        <CustomerForm
+          dispatch={dispatchCustomers}
+          close={handleCustomerModelOk}
+        />
       </Modal>
 
-      <Modal title="Add Tax" destroyOnClose={true} open={isTaxModalVisible} onOk={handleTaxModelOk} onCancel={handleTaxModelCancel}>
+      <Modal
+        title="Add Tax"
+        destroyOnClose={true}
+        open={isTaxModalVisible}
+        onOk={handleTaxModelOk}
+        onCancel={handleTaxModelCancel}
+      >
         <TaxForm dispatch={dispatchTaxes} close={handleTaxModelOk} />
       </Modal>
 
-      <Modal title="Add Item" destroyOnClose={true} open={isItemModalVisible} onOk={handleItemModelOk} onCancel={handleItemModelCancel}>
+      <Modal
+        title="Add Item"
+        destroyOnClose={true}
+        open={isItemModalVisible}
+        onOk={handleItemModelOk}
+        onCancel={handleItemModelCancel}
+      >
         <ItemForm dispatch={dispatchItems} close={handleItemModelOk} />
       </Modal>
 
-      {
-        isSuccess && <Alert message="New item added successfully!" type="success" closable showIcon className='p-4' />
-      }
-      {
-        isError && <Alert message="Unable to add/update the new item, please try again!" type="error" closable showIcon className='p-4' />
-      }
-      {
-        isLoading && <Loader />
-      }
-      {
-        !isLoading &&
+      {isSuccess && (
+        <Alert
+          message="New item added successfully!"
+          type="success"
+          closable
+          showIcon
+          className="p-4"
+        />
+      )}
+      {isError && (
+        <Alert
+          message="Unable to add/update the new item, please try again!"
+          type="error"
+          closable
+          showIcon
+          className="p-4"
+        />
+      )}
+      {isLoading && <Loader />}
+      {!isLoading && (
         <Form
           form={form}
-          layout='horizontal'
+          layout="horizontal"
           name="basic"
           labelCol={{ sm: { span: 8 }, lg: { span: 4 } }}
           wrapperCol={{ sm: { span: 12 }, lg: { span: 8 } }}
@@ -271,7 +345,6 @@ export default function InvoiceForm() {
           autoComplete="off"
           preserve={true}
         >
-
           <Form.Item label="Customer Name" name="customerId">
             <Select
               showSearch
@@ -280,21 +353,25 @@ export default function InvoiceForm() {
               fieldNames={{ label: 'fullName', value: 'customerId' }}
               options={customers}
               filterOption={(input, option) =>
-                (option?.children + '').toLowerCase().indexOf(input.toLowerCase()) >= 0
+                (option?.children + '')
+                  .toLowerCase()
+                  .indexOf(input.toLowerCase()) >= 0
               }
               dropdownRender={(menu: any) => (
                 <>
                   {menu}
                   <Divider style={{ margin: '8px 0' }} />
                   <Space align="center" style={{ padding: '0 8px 4px' }}>
-                    <Typography.Link onMouseDown={e => e.preventDefault()} onClick={showCustomerModal}>
+                    <Typography.Link
+                      onMouseDown={(e) => e.preventDefault()}
+                      onClick={showCustomerModal}
+                    >
                       <PlusOutlined /> Add item
                     </Typography.Link>
                   </Space>
                 </>
               )}
-            >
-            </Select>
+            ></Select>
           </Form.Item>
 
           <Form.Item label="Invoice Number" name="invoiceNumber">
@@ -306,23 +383,47 @@ export default function InvoiceForm() {
           </Form.Item>
 
           <Form.Item label="Invoice Date" name="invoiceDate">
-            <DatePicker/>
-          </Form.Item>
-
-          <Form.Item label="Due Date" name="dueDate" rules={[{ required: true, message: 'Due Date is Required' }]}>
             <DatePicker />
           </Form.Item>
 
-          <Row className='p-4 m-4'>
+          <Form.Item
+            label="Due Date"
+            name="dueDate"
+            rules={[{ required: true, message: 'Due Date is Required' }]}
+          >
+            <DatePicker />
+          </Form.Item>
+
+          <Row className="p-4 m-4">
             <Col>
               <strong>Invoice Items</strong>
               <Divider></Divider>
-              <Form.List name="items">
+              <Form.List
+                name="items"
+                rules={[
+                  {
+                    validator: async (_, names) => {
+                      if (!names) {
+                        return Promise.reject(new Error('Required'));
+                      }
+                    },
+                  },
+                ]}
+              >
                 {(fields, { add, remove }) => (
                   <>
                     {fields.map(({ key, name, ...restField }) => (
-                      <Space key={key} style={{ display: 'flex', marginBottom: 8 }} align="start" id="invoice_list">
-                        <Form.Item {...restField} name={[name, 'itemId']} noStyle>
+                      <Space
+                        key={key}
+                        style={{ display: 'flex', marginBottom: 8 }}
+                        align="start"
+                        id="invoice_list"
+                      >
+                        <Form.Item
+                          {...restField}
+                          name={[name, 'itemId']}
+                          noStyle
+                        >
                           <Select
                             showSearch
                             placeholder="Select a Item"
@@ -332,51 +433,87 @@ export default function InvoiceForm() {
                             // onChange={onChange}
                             // onSearch={onSearch}
                             // onSelect={onInvoiceItemChange}
+
                             filterOption={(input, option) =>
-                              (option?.children + '').toLowerCase().indexOf(input.toLowerCase()) >= 0
+                              (option?.children + '')
+                                .toLowerCase()
+                                .indexOf(input.toLowerCase()) >= 0
                             }
                             dropdownRender={(menu: any) => (
                               <>
                                 {menu}
                                 <Divider style={{ margin: '8px 0' }} />
-                                <Space align="center" style={{ padding: '0 8px 4px' }}>
-                                  <Typography.Link onMouseDown={e => e.preventDefault()} onClick={shoItemModal}>
+                                <Space
+                                  align="center"
+                                  style={{ padding: '0 8px 4px' }}
+                                >
+                                  <Typography.Link
+                                    onMouseDown={(e) => e.preventDefault()}
+                                    onClick={shoItemModal}
+                                  >
                                     <PlusOutlined /> Add item
                                   </Typography.Link>
                                 </Space>
                               </>
                             )}
-                          >
-                          </Select>
+                          ></Select>
                         </Form.Item>
-                        <Form.Item {...restField} name={[name, 'description']} noStyle >
+                        <Form.Item
+                          {...restField}
+                          name={[name, 'description']}
+                          noStyle
+                          required
+                        >
                           <TextArea rows={4} placeholder="description" />
                         </Form.Item>
                         <Form.Item
                           {...restField}
                           name={[name, 'quantity']}
-                          rules={[{ required: true, message: 'Missing quantity' }]}
+                          rules={[
+                            { required: true, message: 'Missing quantity' },
+                          ]}
                         >
-                          <InputNumber min={1} max={999999999} step={1} placeholder="quantity" />
+                          <InputNumber
+                            min={1}
+                            max={999999999}
+                            step={1}
+                            placeholder="quantity"
+                          />
                         </Form.Item>
                         <Form.Item
                           {...restField}
                           name={[name, 'price']}
                           rules={[{ required: true, message: 'Missing price' }]}
                         >
-                          <InputNumber min={1} max={999999999} step={0.25} placeholder="price" />
+                          <InputNumber
+                            min={1}
+                            max={999999999}
+                            step={0.25}
+                            placeholder="price"
+                          />
                         </Form.Item>
-                        <Form.Item
-                          {...restField}
-                          name={[name, 'total']}
-                        >
-                          <InputNumber min={1} max={999999999} step={0.25} placeholder="total" readOnly />
+                        <Form.Item {...restField} name={[name, 'total']}>
+                          <InputNumber
+                            min={1}
+                            max={999999999}
+                            step={0.25}
+                            placeholder="total"
+                            readOnly
+                          />
                         </Form.Item>
-                        <MinusCircleOutlined onClick={() => remove(name)} className='remove_invoice' />
+                        <MinusCircleOutlined
+                          onClick={() => remove(name)}
+                          className="remove_invoice"
+                        />
                       </Space>
                     ))}
                     <Form.Item>
-                      <Button type="dashed" onClick={() => add(invoiceItemRowDefault)} block icon={<PlusOutlined />}>
+                      <Button
+                        type="dashed"
+                        onClick={() => add(invoiceItemRowDefault)}
+                        block
+                        icon={<PlusOutlined />}
+                      >
                         Add New Invoice Item
                       </Button>
                     </Form.Item>
@@ -386,12 +523,18 @@ export default function InvoiceForm() {
             </Col>
           </Row>
 
-          <Row className='p-4 m-4'>
-            <Col sm={{ span: 24 }} lg={{ push: 6, span: 15 }} >
-              <Form.Item label="Sub Total" name='subTotal' >
-                <InputNumber min={1} max={999999999} step={0.25} defaultValue={0} readOnly />
+          <Row className="p-4 m-4">
+            <Col sm={{ span: 24 }} lg={{ push: 6, span: 15 }}>
+              <Form.Item label="Sub Total" name="subTotal">
+                <InputNumber
+                  min={1}
+                  max={999999999}
+                  step={0.25}
+                  defaultValue={0}
+                  readOnly
+                />
               </Form.Item>
-              <Form.Item name='tax' hidden />
+              <Form.Item name="tax" hidden />
               <Form.Item label="Tax:" name="taxId">
                 <Select
                   showSearch
@@ -402,42 +545,80 @@ export default function InvoiceForm() {
                   // onChange={onChange}
                   // onSearch={onSearch}
                   filterOption={(input, option) =>
-                    (option?.children + '').toLowerCase().indexOf(input.toLowerCase()) >= 0
+                    (option?.children + '')
+                      .toLowerCase()
+                      .indexOf(input.toLowerCase()) >= 0
                   }
                   dropdownRender={(menu: any) => (
                     <>
                       {menu}
                       <Divider style={{ margin: '8px 0' }} />
                       <Space align="center" style={{ padding: '0 8px 4px' }}>
-                        <Typography.Link onMouseDown={e => e.preventDefault()} onClick={showTaxModal}>
+                        <Typography.Link
+                          onMouseDown={(e) => e.preventDefault()}
+                          onClick={showTaxModal}
+                        >
                           <PlusOutlined /> Add item
                         </Typography.Link>
                       </Space>
                     </>
                   )}
-                >
-                </Select>
+                ></Select>
               </Form.Item>
-              <Form.Item label="Shipping" name='shipping'>
-                <InputNumber min={0} max={999999999} step={0.25} placeholder="shipping" defaultValue={0} />
+              <Form.Item label="Shipping" name="shipping">
+                <InputNumber
+                  min={0}
+                  max={999999999}
+                  step={0.25}
+                  placeholder="shipping"
+                  defaultValue={0}
+                />
               </Form.Item>
-              <Form.Item name='discount' hidden></Form.Item>
-              <Form.Item label="Discount" name='discountValue'>
-                <InputNumber min={0} max={999999999} step={0.25} placeholder="discount" addonAfter={discountSuffixSelector} defaultValue={0} />
+              <Form.Item name="discount" hidden></Form.Item>
+              <Form.Item label="Discount" name="discountValue">
+                <InputNumber
+                  min={0}
+                  max={999999999}
+                  step={0.25}
+                  placeholder="discount"
+                  addonAfter={discountSuffixSelector}
+                  defaultValue={0}
+                />
               </Form.Item>
-              <Form.Item label="Adjustment" name='adjustment'>
-                <InputNumber min={-999999999} max={999999999} step={0.25} placeholder="adjustment +/-" defaultValue={0} />
+              <Form.Item label="Adjustment" name="adjustment">
+                <InputNumber
+                  min={-999999999}
+                  max={999999999}
+                  step={0.25}
+                  placeholder="adjustment +/-"
+                  defaultValue={0}
+                />
               </Form.Item>
-              <Form.Item label="Total" name='total'>
-                <InputNumber min={1} max={999999999} step={0.25} placeholder="total" defaultValue={0} readOnly />
+              <Form.Item label="Total" name="total">
+                <InputNumber
+                  min={1}
+                  max={999999999}
+                  step={0.25}
+                  placeholder="total"
+                  defaultValue={0}
+                  readOnly
+                />
               </Form.Item>
             </Col>
 
             <Col>
-              <Form.Item><div></div></Form.Item>
-              <Form.Item><div>{numberToCurrency(formTax)}</div></Form.Item>
-              <Form.Item><div></div></Form.Item>
-              <Form.Item><div>{numberToCurrency(formDiscount)}</div></Form.Item>
+              <Form.Item>
+                <div></div>
+              </Form.Item>
+              <Form.Item>
+                <div>{numberToCurrency(formTax)}</div>
+              </Form.Item>
+              <Form.Item>
+                <div></div>
+              </Form.Item>
+              <Form.Item>
+                <div>{numberToCurrency(formDiscount)}</div>
+              </Form.Item>
             </Col>
           </Row>
 
@@ -449,12 +630,21 @@ export default function InvoiceForm() {
             <TextArea rows={2} />
           </Form.Item>
 
-          <Row className='p-4 m-4 gap-4 justify-center'>
-            <Button type="primary" size="large" htmlType="submit" disabled={!(form.isFieldsTouched() || invoiceId) || formError}>Save</Button>
-            <Button size="large" onClick={router.back}>Cancel</Button>
+          <Row className="p-4 m-4 gap-4 justify-center">
+            <Button
+              type="primary"
+              size="large"
+              htmlType="submit"
+              disabled={formError || !(invoiceId || form.isFieldsTouched())}
+            >
+              Save
+            </Button>
+            <Button size="large" onClick={router.back}>
+              Cancel
+            </Button>
           </Row>
         </Form>
-      }
+      )}
     </>
-  )
+  );
 }

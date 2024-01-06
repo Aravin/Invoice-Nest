@@ -1,21 +1,31 @@
-import { Breadcrumb, Button, Modal, Space, Table } from "antd";
-import axios from "axios";
-import type { GetServerSideProps } from "next";
-import React, { useState } from "react";
+'use client';
+
+import { Breadcrumb, Button, Modal, Space, Table } from 'antd';
+import axios from 'axios';
+import React, { useState } from 'react';
 import {
-  EditOutlined,
   EditFilled,
   DeleteFilled,
   ExclamationCircleOutlined,
   HomeOutlined,
-} from "@ant-design/icons";
-import { useRouter } from "next/router";
+} from '@ant-design/icons';
+import { useRouter } from 'next/navigation';
+import useSWR from 'swr';
 
-export default function InvoiceListPage(props: any) {
+export default function InvoiceListPage() {
   const router = useRouter();
   const [isSuccess, setSuccess] = useState(false);
   const [isError, setError] = useState(false);
   const { confirm } = Modal;
+
+  console.log(process.env.API_PATH + '/invoices');
+  const fetcher = (url: string) => axios.get(url).then((res) => res.data);
+  const { data, error, isLoading } = useSWR(
+    process.env.API_PATH + '/invoices',
+    fetcher
+  );
+  if (isLoading) return <div>Loading</div>;
+  if (error) return <div>Error</div>;
 
   const goToAddInvoice = () => router.push(`/invoices/create?action=new`);
   const goToEditInvoice = (id: string) =>
@@ -23,12 +33,12 @@ export default function InvoiceListPage(props: any) {
 
   const deleteInvoice = async (id: string) => {
     confirm({
-      title: "Do you want to delete this invoice?",
+      title: 'Do you want to delete this invoice?',
       icon: <ExclamationCircleOutlined />,
       async onOk() {
         try {
-          await axios.delete(process.env.API_PATH + "/invoices/" + id);
-          router.replace("/invoices");
+          await axios.delete(process.env.API_PATH + '/invoices/' + id);
+          router.replace('/invoices');
           setSuccess(true);
         } catch (err) {
           console.error(err);
@@ -36,54 +46,54 @@ export default function InvoiceListPage(props: any) {
         }
       },
       onCancel() {
-        console.log("Cancel");
+        console.log('Cancel');
       },
     });
   };
 
   const columns = [
     {
-      title: "Invoice Date",
-      dataIndex: "invoiceDate",
-      key: "invoiceDate",
+      title: 'Invoice Date',
+      dataIndex: 'invoiceDate',
+      key: 'invoiceDate',
     },
     {
-      title: "Invoice #",
-      dataIndex: "invoiceNumber",
-      key: "invoiceNumber",
+      title: 'Invoice #',
+      dataIndex: 'invoiceNumber',
+      key: 'invoiceNumber',
     },
     {
-      title: "Order #",
-      dataIndex: "orderNumber",
-      key: "orderNumber",
+      title: 'Order #',
+      dataIndex: 'orderNumber',
+      key: 'orderNumber',
     },
     {
-      title: "Customer",
-      dataIndex: "customer",
-      key: "record.customer.firstName",
+      title: 'Customer',
+      dataIndex: 'customer',
+      key: 'record.customer.firstName',
       render: (text: any, record: any) => (
         <span>{record.customer.firstName}</span>
       ),
     },
     {
-      title: "Status",
-      dataIndex: "invoiceStatus",
-      key: "invoiceStatus",
+      title: 'Status',
+      dataIndex: 'invoiceStatus',
+      key: 'invoiceStatus',
     },
     {
-      title: "Due Date",
-      dataIndex: "dueDate",
-      key: "dueDate",
+      title: 'Due Date',
+      dataIndex: 'dueDate',
+      key: 'dueDate',
     },
     {
-      title: "Total",
-      dataIndex: "total",
-      key: "total",
+      title: 'Total',
+      dataIndex: 'total',
+      key: 'total',
     },
     {
-      title: "Action",
-      key: "action",
-      fixed: "right" as any,
+      title: 'Action',
+      key: 'action',
+      fixed: 'right' as any,
       width: 100,
       render: (text: any, record: any) => (
         <Space size="middle">
@@ -110,16 +120,16 @@ export default function InvoiceListPage(props: any) {
     <div>
       <Breadcrumb
         items={[
-          { href: "", title: <HomeOutlined /> },
-          { title: "Invoices" },
-          { title: "List" },
+          { href: '', title: <HomeOutlined /> },
+          { title: 'Invoices' },
+          { title: 'List' },
         ]}
         className="p-4"
       />
 
       <Table
         columns={columns}
-        dataSource={props?.invoices}
+        dataSource={data?.map((v: any) => ({ ...v, key: v.invoiceId + '' }))}
         className="m-2"
         tableLayout="fixed"
         size="small"
@@ -127,13 +137,3 @@ export default function InvoiceListPage(props: any) {
     </div>
   );
 }
-
-export const getServerSideProps: GetServerSideProps = async (context: any) => {
-  const result = await axios.get(process.env.API_PATH + "/invoices");
-
-  return {
-    props: {
-      invoices: result.data,
-    },
-  };
-};
