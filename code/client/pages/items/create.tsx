@@ -1,24 +1,27 @@
+import { withPageAuthRequired } from "@auth0/nextjs-auth0";
 import type { NextPage } from "next";
 import React from "react";
-import UserForm from "../../../component/User/UserForm";
+import ItemForm from "../../component/Item/ItemForm";
 import { Breadcrumb } from "antd";
 import { HomeOutlined } from "@ant-design/icons";
 
-const CreateUserPage: NextPage = () => {
+const CreateItemPage: NextPage = () => {
   return (
     <div>
       <Breadcrumb
         items={[
           { href: "", title: <HomeOutlined /> },
-          { title: "Users" },
+          { title: "Items" },
           { title: "New" },
         ]}
         className="p-4"
       />
 
-      <UserForm></UserForm>
+      <ItemForm></ItemForm>
     </div>
   );
 };
 
-export default CreateUserPage;
+export default CreateItemPage;
+
+export const getServerSideProps = withPageAuthRequired();

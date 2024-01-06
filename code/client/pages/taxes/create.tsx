@@ -1,27 +1,27 @@
 import { withPageAuthRequired } from "@auth0/nextjs-auth0";
 import type { NextPage } from "next";
 import React from "react";
-import OrganizationForm from "../../../component/Organization/OrganizationForm";
+import TaxForm from "../../component/tax/TaxForm";
 import { Breadcrumb } from "antd";
 import { HomeOutlined } from "@ant-design/icons";
 
-const EditOrganizationPage: NextPage = () => {
+const CreateTaxPage: NextPage = () => {
   return (
     <div>
       <Breadcrumb
         items={[
           { href: "", title: <HomeOutlined /> },
-          { title: "Organizations" },
-          { title: "Edit" },
+          { title: "Taxes" },
+          { title: "New" },
         ]}
         className="p-4"
       />
 
-      <OrganizationForm></OrganizationForm>
+      <TaxForm></TaxForm>
     </div>
   );
 };
 
-export default EditOrganizationPage;
+export default CreateTaxPage;
 
 export const getServerSideProps = withPageAuthRequired();

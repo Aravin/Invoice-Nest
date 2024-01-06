@@ -1,27 +1,27 @@
 import { withPageAuthRequired } from "@auth0/nextjs-auth0";
+import { Breadcrumb, Col, Row } from "antd";
 import type { NextPage } from "next";
 import React from "react";
-import SalesPersonForm from "../../../component/SalesPerson/SalesPersonForm";
-import { Breadcrumb } from "antd";
+import CustomerForm from "../../component/Customer/CustomerForm";
 import { HomeOutlined } from "@ant-design/icons";
 
-const SalesPersonListPage: NextPage = () => {
+const CustomerPage: NextPage = () => {
   return (
     <div>
       <Breadcrumb
         items={[
           { href: "", title: <HomeOutlined /> },
-          { title: "Sales Persons" },
+          { title: "Customers" },
           { title: "New" },
         ]}
         className="p-4"
       />
 
-      <SalesPersonForm></SalesPersonForm>
+      <CustomerForm></CustomerForm>
     </div>
   );
 };
 
-export default SalesPersonListPage;
+export default CustomerPage;
 
 export const getServerSideProps = withPageAuthRequired();

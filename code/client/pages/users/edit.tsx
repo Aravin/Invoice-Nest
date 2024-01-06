@@ -1,6 +1,6 @@
 import type { NextPage } from "next";
 import React from "react";
-import UserForm from "../../../component/User/UserForm";
+import UserForm from "../../component/User/UserForm";
 import { Breadcrumb } from "antd";
 import { HomeOutlined } from "@ant-design/icons";
 
