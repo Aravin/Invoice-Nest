@@ -8,6 +8,7 @@ import {
   EditFilled,
   DeleteFilled,
   ExclamationCircleOutlined,
+  HomeOutlined,
 } from "@ant-design/icons";
 
 export default function SalesPersonListPage(props: any) {
@@ -92,7 +93,7 @@ export default function SalesPersonListPage(props: any) {
     <div>
       <Breadcrumb
         items={[
-          { title: "Dashboard" },
+          { href: "", title: <HomeOutlined /> },
           { title: "Sales Persons" },
           { title: "List" },
         ]}

@@ -1,24 +1,24 @@
-import type { NextPage } from 'next'
-import React, { } from 'react'
-import UserForm from '../../../component/User/UserForm'
-import { Breadcrumb } from 'antd'
+import type { NextPage } from "next";
+import React from "react";
+import UserForm from "../../../component/User/UserForm";
+import { Breadcrumb } from "antd";
+import { HomeOutlined } from "@ant-design/icons";
 
 const EditUserPage: NextPage = () => {
   return (
     <div>
-      {/* <PageHeader
-        className="site-page-header"
-        title="User"
-        subTitle="Edit"
-      /> */}
       <Breadcrumb
-        items={[{ title: "Dashboard" }]}
-        className="site-page-header"
+        items={[
+          { href: "", title: <HomeOutlined /> },
+          { title: "Users" },
+          { title: "Edit" },
+        ]}
+        className="p-4"
       />
 
       <UserForm></UserForm>
     </div>
-  )
-}
+  );
+};
 
-export default EditUserPage
+export default EditUserPage;

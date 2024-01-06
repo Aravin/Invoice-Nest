@@ -5,6 +5,7 @@ import { useRouter } from "next/router";
 import { AccountContext } from "../../../contexts/accountContext";
 import { TenantContext } from "../../../contexts/tenantContext";
 import { Breadcrumb } from "antd";
+import { HomeOutlined } from "@ant-design/icons";
 
 export default function Profile() {
   const { user, error, isLoading } = useUser();
@@ -45,7 +46,7 @@ export default function Profile() {
     user && (
       <div>
         <Breadcrumb
-          items={[{ title: "Dashboard" }, { title: "Account" }]}
+          items={[{ href: "", title: <HomeOutlined /> }, { title: "Account" }]}
           className="p-4"
         />
         <img src={user?.picture || ""} alt={user?.name + " profile"} />

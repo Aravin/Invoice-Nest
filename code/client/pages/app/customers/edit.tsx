@@ -3,13 +3,14 @@ import type { NextPage } from "next";
 import React from "react";
 import CustomerForm from "../../../component/Customer/CustomerForm";
 import { Breadcrumb } from "antd";
+import { HomeOutlined } from "@ant-design/icons";
 
 const CustomerPage: NextPage = () => {
   return (
     <div>
       <Breadcrumb
         items={[
-          { title: "Dashboard" },
+          { href: "", title: <HomeOutlined /> },
           { title: "Customers" },
           { title: "Edit" },
         ]}

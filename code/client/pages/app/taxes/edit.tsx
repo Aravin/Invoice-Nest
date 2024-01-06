@@ -3,12 +3,17 @@ import type { NextPage } from "next";
 import React from "react";
 import ItemForm from "../../../component/Item/ItemForm";
 import { Breadcrumb } from "antd";
+import { HomeOutlined } from "@ant-design/icons";
 
 const EditTaxPage: NextPage = () => {
   return (
     <div>
       <Breadcrumb
-        items={[{ title: "Dashboard" }, { title: "Taxes" }, { title: "Edit" }]}
+        items={[
+          { href: "", title: <HomeOutlined /> },
+          { title: "Taxes" },
+          { title: "Edit" },
+        ]}
         className="p-4"
       />
 

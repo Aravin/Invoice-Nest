@@ -3,13 +3,14 @@ import type { NextPage } from "next";
 import React from "react";
 import OrganizationForm from "../../../component/Organization/OrganizationForm";
 import { Breadcrumb } from "antd";
+import { HomeOutlined } from "@ant-design/icons";
 
 const EditOrganizationPage: NextPage = () => {
   return (
     <div>
       <Breadcrumb
         items={[
-          { title: "Dashboard" },
+          { href: "", title: <HomeOutlined /> },
           { title: "Organizations" },
           { title: "Edit" },
         ]}

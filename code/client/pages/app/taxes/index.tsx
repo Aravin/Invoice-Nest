@@ -7,6 +7,7 @@ import {
   EditFilled,
   DeleteFilled,
   ExclamationCircleOutlined,
+  HomeOutlined,
 } from "@ant-design/icons";
 import { useRouter } from "next/router";
 
@@ -85,7 +86,11 @@ export default function TaxListPage(props: any) {
   return (
     <div>
       <Breadcrumb
-        items={[{ title: "Dashboard" }, { title: "Taxes" }, { title: "New" }]}
+        items={[
+          { href: "", title: <HomeOutlined /> },
+          { title: "Taxes" },
+          { title: "New" },
+        ]}
         className="p-4"
       />
 

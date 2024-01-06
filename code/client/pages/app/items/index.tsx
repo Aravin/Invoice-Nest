@@ -7,6 +7,7 @@ import {
   EditFilled,
   DeleteFilled,
   ExclamationCircleOutlined,
+  HomeOutlined,
 } from "@ant-design/icons";
 import { useRouter } from "next/router";
 
@@ -85,7 +86,11 @@ export default function ItemListPage(props: any) {
   return (
     <div>
       <Breadcrumb
-        items={[{ title: "Dashboard" }, { title: "Items" }, { title: "List" }]}
+        items={[
+          { href: "", title: <HomeOutlined /> },
+          { title: "Items" },
+          { title: "List" },
+        ]}
         className="p-4"
       />
 

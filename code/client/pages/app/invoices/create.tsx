@@ -3,13 +3,14 @@ import type { GetServerSideProps } from "next";
 import React from "react";
 import { Breadcrumb } from "antd";
 import InvoiceForm from "../../../component/Invoice/InvoiceForm";
+import { HomeOutlined } from "@ant-design/icons";
 
 export default function CreateInvoicePage(props: any) {
   return (
     <div>
       <Breadcrumb
         items={[
-          { title: "Dashboard" },
+          { href: "", title: <HomeOutlined /> },
           { title: "Invoices" },
           { title: "New" },
         ]}
