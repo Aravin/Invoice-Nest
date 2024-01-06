@@ -1,11 +1,13 @@
+'use client';
+
 import { Form, Input, Button, Row, Alert } from 'antd';
 import TextArea from 'antd/lib/input/TextArea';
 import axios from 'axios';
 import { useRouter } from 'next/router';
 import { useEffect, useState } from 'react';
 import CountrySelectField from '../Common/FormFields/CountryDropdown';
-import { DispatchActionType } from '../Invoice/dispatchActionType';
 import Loader from '../Loader/Loader';
+import { DispatchActionType } from '../Invoice/dispatchActionType';
 
 export default function CustomerForm({ dispatch, close }: any) {
 

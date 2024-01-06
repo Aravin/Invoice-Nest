@@ -1,21 +1,17 @@
 import '../styles/globals.css'
-import type { AppProps } from 'next/app';
-import AppLayout from '../component/Layouts/Layout';
-import NextNProgress from 'nextjs-progressbar';
 import { UserProvider } from '@auth0/nextjs-auth0/client';
+import NextTopLoader from 'nextjs-toploader';
+import AppLayout from '../component/Layouts/Layout';
 
-function AccountApp({ Component, pageProps }: AppProps) {
-
+export default function MyApp({ Component, pageProps }: any) {
   return (
     <>
-      <NextNProgress color='#09d61d' height={5} showOnShallow={true} />
-      <UserProvider>
+        <NextTopLoader color='#09d61d' height={5} />
+        <UserProvider>
           <AppLayout>
             <Component {...pageProps} />
           </AppLayout>
-      </UserProvider>
+        </UserProvider>
     </>
   )
 }
-
-export default AccountApp

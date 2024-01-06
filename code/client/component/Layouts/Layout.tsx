@@ -1,13 +1,11 @@
-// import Navbar from './navbar'
-// import Footer from './footer'
-import React, { useContext, useEffect, useState } from 'react'
-// import 'antd/dist/antd.css';
+'use client';
+
+import React, { useEffect, useState } from 'react'
 import { Layout, Menu, Button, Dropdown, Select } from 'antd';
 import {
   UsergroupAddOutlined,
   PieChartOutlined,
   AppstoreOutlined,
-  SnippetsOutlined,
   UserOutlined,
   BookOutlined,
   SettingOutlined,
@@ -15,7 +13,7 @@ import {
   LogoutOutlined,
   ApartmentOutlined,
 } from '@ant-design/icons';
-import { useRouter } from 'next/router'
+import { useRouter } from 'next/navigation'
 import { useAppState } from '../../states/appState';
 import { useUser } from '@auth0/nextjs-auth0/client';
 import axios from 'axios';
@@ -74,7 +72,7 @@ export default function AppLayout({ children }: any) {
 
   const handleClick = (e: any) => {
     console.log(e);
-    router.push(e.key);
+    router.push('/app' + e.key);
   };
 
   const addNewMenu = [
