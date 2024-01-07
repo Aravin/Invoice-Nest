@@ -105,7 +105,7 @@ export default function Page() {
 
       <Table
         columns={columns}
-        dataSource={data?.map((v: any) => ({ ...v, key: v.invoiceId + '' }))}
+        dataSource={data?.map((v: any) => ({ ...v, key: v.itemId + '' }))}
         className="m-2"
         tableLayout="fixed"
         size="small"
