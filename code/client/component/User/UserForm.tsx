@@ -1,16 +1,19 @@
-import { Form, Input, Button, Row, Tabs, Alert, InputNumber, Radio } from 'antd';
-import TextArea from 'antd/lib/input/TextArea';
+'use client';
+
+import { Form, Input, Button, Row, Alert } from 'antd';
 import axios from 'axios';
-import { useRouter } from 'next/router';
+import { useRouter } from 'next/navigation';
 import React from 'react';
 import { useEffect, useState } from 'react';
 import Loader from '../Loader/Loader';
+import { useSearchParams, usePathname } from 'next/navigation';
 
 export default function UserForm() {
-
   const router = useRouter();
-  const action = router.query?.action;
-  const userId = router.query?.id;
+  const searchParams = useSearchParams();
+  const pathname = usePathname();
+  const userId = searchParams?.get('userId');
+
   const [isLoading, setLoader] = useState(false);
   const [isSuccess, setSuccess] = useState(false);
   const [isError, setError] = useState(false);
@@ -25,10 +28,12 @@ export default function UserForm() {
 
   useEffect(() => {
     (async () => {
-      if (action === 'edit') {
+      if (userId) {
         try {
           setLoader(true);
-          const result = await axios.get(process.env.API_PATH + '/users/' + userId);
+          const result = await axios.get(
+            process.env.API_PATH + '/users/' + userId
+          );
           form.setFieldsValue(result.data);
         } catch (err) {
           console.error(err);
@@ -38,13 +43,13 @@ export default function UserForm() {
         }
       }
     })();
-  }, [])
+  }, []);
 
   const onFinish = async (values: any) => {
     setLoader(true);
 
     try {
-      if (action === 'edit') {
+      if (userId) {
         await axios.patch(process.env.API_PATH + '/users/' + userId, values);
       } else {
         await axios.post(process.env.API_PATH + '/users', values);
@@ -65,21 +70,29 @@ export default function UserForm() {
 
   return (
     <div>
-      {
-        isSuccess && <Alert message="New user added successfully!" type="success" closable showIcon className='p-4' />
-      }
-      {
-        isError && <Alert message="Unable to add/update the new user, please try again!" type="error" closable showIcon className='p-4' />
-      }
-      {
-        isLoading && <Loader />
-      }
-      {
-        !isLoading &&
-
+      {isSuccess && (
+        <Alert
+          message="New user added successfully!"
+          type="success"
+          closable
+          showIcon
+          className="p-4"
+        />
+      )}
+      {isError && (
+        <Alert
+          message="Unable to add/update the new user, please try again!"
+          type="error"
+          closable
+          showIcon
+          className="p-4"
+        />
+      )}
+      {isLoading && <Loader />}
+      {!isLoading && (
         <Form
           form={form}
-          layout='horizontal'
+          layout="horizontal"
           name="basic"
           labelCol={{ sm: { span: 8 }, lg: { span: 4 } }}
           wrapperCol={{ sm: { span: 12 }, lg: { span: 8 } }}
@@ -88,28 +101,32 @@ export default function UserForm() {
           onFinishFailed={onFinishFailed}
           autoComplete="off"
         >
-          <Form.Item label="First Name" name='firstName' required={true}>
+          <Form.Item label="First Name" name="firstName" required={true}>
             <Input />
           </Form.Item>
 
-          <Form.Item label="Last Name" name='lastName'>
+          <Form.Item label="Last Name" name="lastName">
             <Input />
           </Form.Item>
 
-          <Form.Item label="Email" name='email' required={true}>
+          <Form.Item label="Email" name="email" required={true}>
             <Input />
           </Form.Item>
 
-          <Form.Item label="Phone" name='phone'>
+          <Form.Item label="Phone" name="phone">
             <Input />
           </Form.Item>
 
-          <Row className='p-4 m-4 gap-4 justify-center'>
-            <Button type="primary" size="large" htmlType="submit">Save</Button>
-            <Button size="large" onClick={router.back}>Cancel</Button>
+          <Row className="p-4 m-4 gap-4 justify-center">
+            <Button type="primary" size="large" htmlType="submit">
+              Save
+            </Button>
+            <Button size="large" onClick={router.back}>
+              Cancel
+            </Button>
           </Row>
         </Form>
-      }
+      )}
     </div>
-  )
+  );
 }

@@ -1,34 +1,43 @@
-import { Breadcrumb, Button, Modal, Space, Table } from "antd";
-import axios from "axios";
-import type { GetServerSideProps } from "next";
-import React, { useState } from "react";
+'use client';
+
+import { Breadcrumb, Button, Modal, Space, Table } from 'antd';
+import axios from 'axios';
+import React, { useState } from 'react';
 import {
-  EditOutlined,
   EditFilled,
   DeleteFilled,
   ExclamationCircleOutlined,
   HomeOutlined,
-} from "@ant-design/icons";
-import { useRouter } from "next/router";
+} from '@ant-design/icons';
+import { useRouter } from 'next/navigation';
+import useSWR from 'swr';
 
-export default function UserListPage(props: any) {
+export default function Page() {
   const router = useRouter();
   const [isSuccess, setSuccess] = useState(false);
   const [isError, setError] = useState(false);
   const { confirm } = Modal;
 
+  const fetcher = (url: string) => axios.get(url).then((res) => res.data);
+  const { data, error, isLoading } = useSWR(
+    process.env.API_PATH + '/users',
+    fetcher
+  );
+  if (isLoading) return <div>Loading</div>;
+  if (error) return <div>Error</div>;
+
   const goToAddUser = () => router.push(`/users/create?action=new`);
   const goToEditUser = (id: string) =>
-    router.push(`/users/create?action=edit&id=${id}`);
+    router.push(`/users/create?action=edit&userId=${id}`);
 
   const deleteUser = async (id: string) => {
     confirm({
-      title: "Do you want to delete this items?",
+      title: 'Do you want to delete this items?',
       icon: <ExclamationCircleOutlined />,
       async onOk() {
         try {
-          await axios.delete(process.env.API_PATH + "/users/" + id);
-          router.replace("/users");
+          await axios.delete(process.env.API_PATH + '/users/' + id);
+          router.replace('/users');
           setSuccess(true);
         } catch (err) {
           console.error(err);
@@ -36,36 +45,36 @@ export default function UserListPage(props: any) {
         }
       },
       onCancel() {
-        console.log("Cancel");
+        console.log('Cancel');
       },
     });
   };
 
   const columns = [
     {
-      title: "First Name",
-      dataIndex: "firstName",
-      key: "firstName",
+      title: 'First Name',
+      dataIndex: 'firstName',
+      key: 'firstName',
     },
     {
-      title: "Last Name",
-      dataIndex: "lastName",
-      key: "lastName",
+      title: 'Last Name',
+      dataIndex: 'lastName',
+      key: 'lastName',
     },
     {
-      title: "Email",
-      dataIndex: "email",
-      key: "email",
+      title: 'Email',
+      dataIndex: 'email',
+      key: 'email',
     },
     {
-      title: "Phone",
-      dataIndex: "phone",
-      key: "phone",
+      title: 'Phone',
+      dataIndex: 'phone',
+      key: 'phone',
     },
     {
-      title: "Action",
-      key: "action",
-      fixed: "right" as any,
+      title: 'Action',
+      key: 'action',
+      fixed: 'right' as any,
       width: 100,
       render: (text: any, record: any) => (
         <Space size="middle">
@@ -92,16 +101,16 @@ export default function UserListPage(props: any) {
     <div>
       <Breadcrumb
         items={[
-          { href: "", title: <HomeOutlined /> },
-          { title: "Users" },
-          { title: "List" },
+          { href: '', title: <HomeOutlined /> },
+          { title: 'Users' },
+          { title: 'List' },
         ]}
         className="p-4"
       />
 
       <Table
         columns={columns}
-        dataSource={props?.users}
+        dataSource={data?.map((v: any) => ({ ...v, key: v.invoiceId + '' }))}
         className="m-2"
         tableLayout="fixed"
         size="small"
@@ -109,13 +118,3 @@ export default function UserListPage(props: any) {
     </div>
   );
 }
-
-export const getServerSideProps: GetServerSideProps = async (context: any) => {
-  const result = await axios.get(process.env.API_PATH + "/users");
-
-  return {
-    props: {
-      users: result.data,
-    },
-  };
-};
