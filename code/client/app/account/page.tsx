@@ -1,15 +1,15 @@
-import React, { useContext, useEffect } from "react";
-import { useUser } from "@auth0/nextjs-auth0/client";
-import axios from "axios";
-import { useRouter } from "next/router";
-import { AccountContext } from "../../contexts/accountContext";
-import { TenantContext } from "../../contexts/tenantContext";
-import { Breadcrumb } from "antd";
-import { HomeOutlined } from "@ant-design/icons";
+'use client';
+
+import React, { useContext, useEffect } from 'react';
+import { useUser } from '@auth0/nextjs-auth0/client';
+import axios from 'axios';
+import { AccountContext } from '../../contexts/accountContext';
+import { TenantContext } from '../../contexts/tenantContext';
+import { Breadcrumb } from 'antd';
+import { HomeOutlined } from '@ant-design/icons';
 
 export default function Profile() {
   const { user, error, isLoading } = useUser();
-  const router = useRouter();
   const { accountInfo, setAccountInfo } = useContext(AccountContext);
   const { tenantId, setTenantId } = useContext(TenantContext);
 
@@ -46,10 +46,10 @@ export default function Profile() {
     user && (
       <div>
         <Breadcrumb
-          items={[{ href: "", title: <HomeOutlined /> }, { title: "Account" }]}
+          items={[{ href: '', title: <HomeOutlined /> }, { title: 'Account' }]}
           className="p-4"
         />
-        <img src={user?.picture || ""} alt={user?.name + " profile"} />
+        <img src={user?.picture || ''} alt={user?.name + ' profile'} />
         <h2>{user.name}</h2>
         <p>{user.email}</p>
       </div>
