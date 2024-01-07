@@ -1,6 +1,6 @@
-import { Form, Input, Button, Row, Tabs, Alert, InputNumber, Radio } from 'antd';
+import { Form, Input, Button, Row, Alert } from 'antd';
 import axios from 'axios';
-import { useRouter } from 'next/router';
+import { useRouter, useSearchParams } from 'next/navigation';
 import React from 'react';
 import { useEffect, useState } from 'react';
 import CountrySelectField from '../Common/FormFields/CountryDropdown';
@@ -9,13 +9,14 @@ import Loader from '../Loader/Loader';
 import { useAppState } from '../../states/appState';
 
 export default function OrganizationForm() {
-
   const setTenantId = useAppState((state) => state.setTenantId);
   const appState = useAppState((state) => state.appState);
 
   const router = useRouter();
-  const action = router.query?.action;
-  const organizationId = router.query?.id;
+  const searchParams = useSearchParams();
+
+  const organizationId = searchParams?.get('organizationId');
+
   const [isLoading, setLoader] = useState(false);
   const [isSuccess, setSuccess] = useState(false);
   const [isError, setError] = useState(false);
@@ -30,10 +31,12 @@ export default function OrganizationForm() {
 
   useEffect(() => {
     (async () => {
-      if (action === 'edit') {
+      if (organizationId) {
         try {
           setLoader(true);
-          const result = await axios.get(process.env.API_PATH + '/organizations/' + organizationId);
+          const result = await axios.get(
+            process.env.API_PATH + '/organizations/' + organizationId
+          );
           form.setFieldsValue(result.data);
         } catch (err) {
           console.error(err);
@@ -43,7 +46,7 @@ export default function OrganizationForm() {
         }
       }
     })();
-  }, [])
+  }, []);
 
   const onFinish = async (values: any) => {
     setLoader(true);
@@ -53,11 +56,18 @@ export default function OrganizationForm() {
         ...values,
         userId: appState.accountInfo.userId,
         email: appState.accountInfo.email,
-      }
-      if (action === 'edit') {
-        await axios.patch(process.env.API_PATH + '/organizations/' + organizationId, organizationData);
+      };
+
+      if (organizationId) {
+        await axios.patch(
+          process.env.API_PATH + '/organizations/' + organizationId,
+          organizationData
+        );
       } else {
-        const res = await axios.post(process.env.API_PATH + '/organizations', organizationData);
+        const res = await axios.post(
+          process.env.API_PATH + '/organizations',
+          organizationData
+        );
         setTenantId(res.data.organizationId);
       }
       router.push('/organizations');
@@ -76,21 +86,29 @@ export default function OrganizationForm() {
 
   return (
     <div>
-      {
-        isSuccess && <Alert message="New organization added successfully!" type="success" closable showIcon className='p-4' />
-      }
-      {
-        isError && <Alert message="Unable to add/update the new organization, please try again!" type="error" closable showIcon className='p-4' />
-      }
-      {
-        isLoading && <Loader />
-      }
-      {
-        !isLoading &&
-
+      {isSuccess && (
+        <Alert
+          message="New organization added successfully!"
+          type="success"
+          closable
+          showIcon
+          className="p-4"
+        />
+      )}
+      {isError && (
+        <Alert
+          message="Unable to add/update the new organization, please try again!"
+          type="error"
+          closable
+          showIcon
+          className="p-4"
+        />
+      )}
+      {isLoading && <Loader />}
+      {!isLoading && (
         <Form
           form={form}
-          layout='horizontal'
+          layout="horizontal"
           name="basic"
           labelCol={{ sm: { span: 8 }, lg: { span: 4 } }}
           wrapperCol={{ sm: { span: 12 }, lg: { span: 8 } }}
@@ -99,7 +117,7 @@ export default function OrganizationForm() {
           onFinishFailed={onFinishFailed}
           autoComplete="off"
         >
-          <Form.Item label="Name" name='name' required={true}>
+          <Form.Item label="Name" name="name" required={true}>
             <Input />
           </Form.Item>
 
@@ -107,36 +125,40 @@ export default function OrganizationForm() {
 
           <CurrencySelectField />
 
-          <Form.Item label="Address Line1" name='addressLine1'>
+          <Form.Item label="Address Line1" name="addressLine1">
             <Input />
           </Form.Item>
 
-          <Form.Item label="Address Line2" name='addressLine2'>
+          <Form.Item label="Address Line2" name="addressLine2">
             <Input />
           </Form.Item>
 
-          <Form.Item label="City" name='city'>
+          <Form.Item label="City" name="city">
             <Input />
           </Form.Item>
 
-          <Form.Item label="State" name='state'>
+          <Form.Item label="State" name="state">
             <Input />
           </Form.Item>
 
-          <Form.Item label="Zip" name='zip'>
+          <Form.Item label="Zip" name="zip">
             <Input />
           </Form.Item>
 
-          <Form.Item label="GST" name='gst'>
+          <Form.Item label="GST" name="gst">
             <Input />
           </Form.Item>
 
-          <Row className='p-4 m-4 gap-4 justify-center'>
-            <Button type="primary" size="large" htmlType="submit">Save</Button>
-            <Button size="large" onClick={router.back}>Cancel</Button>
+          <Row className="p-4 m-4 gap-4 justify-center">
+            <Button type="primary" size="large" htmlType="submit">
+              Save
+            </Button>
+            <Button size="large" onClick={router.back}>
+              Cancel
+            </Button>
           </Row>
         </Form>
-      }
+      )}
     </div>
-  )
+  );
 }

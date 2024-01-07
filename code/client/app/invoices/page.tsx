@@ -18,7 +18,6 @@ export default function InvoiceListPage() {
   const [isError, setError] = useState(false);
   const { confirm } = Modal;
 
-  console.log(process.env.API_PATH + '/invoices');
   const fetcher = (url: string) => axios.get(url).then((res) => res.data);
   const { data, error, isLoading } = useSWR(
     process.env.API_PATH + '/invoices',

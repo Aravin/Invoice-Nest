@@ -1,21 +1,32 @@
-import { Breadcrumb, Button, Modal, Space, Table } from "antd";
-import axios from "axios";
-import type { GetServerSideProps } from "next";
-import React, { useState } from "react";
+'use client';
+
+import { Breadcrumb, Button, Modal, Space, Table } from 'antd';
+import axios from 'axios';
+import type { GetServerSideProps } from 'next';
+import React, { useState } from 'react';
 import {
   EditOutlined,
   EditFilled,
   DeleteFilled,
   ExclamationCircleOutlined,
   HomeOutlined,
-} from "@ant-design/icons";
-import { useRouter } from "next/router";
+} from '@ant-design/icons';
+import { useRouter } from 'next/navigation';
+import useSWR from 'swr';
 
-export default function OrganizationListPage(props: any) {
+export default function Page() {
   const router = useRouter();
   const [isSuccess, setSuccess] = useState(false);
   const [isError, setError] = useState(false);
   const { confirm } = Modal;
+
+  const fetcher = (url: string) => axios.get(url).then((res) => res.data);
+  const { data, error, isLoading } = useSWR(
+    process.env.API_PATH + '/organizations',
+    fetcher
+  );
+  if (isLoading) return <div>Loading</div>;
+  if (error) return <div>Error</div>;
 
   const goToAddOrg = () => router.push(`/organizations/create?action=new`);
   const goToEditOrg = (id: string) =>
@@ -23,12 +34,12 @@ export default function OrganizationListPage(props: any) {
 
   const deleteOrg = async (id: string) => {
     confirm({
-      title: "Do you want to delete this items?",
+      title: 'Do you want to delete this items?',
       icon: <ExclamationCircleOutlined />,
       async onOk() {
         try {
-          await axios.delete(process.env.API_PATH + "/organizations/" + id);
-          router.replace("/organizations");
+          await axios.delete(process.env.API_PATH + '/organizations/' + id);
+          router.replace('/organizations');
           setSuccess(true);
         } catch (err) {
           console.error(err);
@@ -36,36 +47,36 @@ export default function OrganizationListPage(props: any) {
         }
       },
       onCancel() {
-        console.log("Cancel");
+        console.log('Cancel');
       },
     });
   };
 
   const columns = [
     {
-      title: "Name",
-      dataIndex: "name",
-      key: "name",
+      title: 'Name',
+      dataIndex: 'name',
+      key: 'name',
     },
     {
-      title: "City",
-      dataIndex: "city",
-      key: "city",
+      title: 'City',
+      dataIndex: 'city',
+      key: 'city',
     },
     {
-      title: "Country",
-      dataIndex: "country",
-      key: "country",
+      title: 'Country',
+      dataIndex: 'country',
+      key: 'country',
     },
     {
-      title: "Currency",
-      dataIndex: "currency",
-      key: "currency",
+      title: 'Currency',
+      dataIndex: 'currency',
+      key: 'currency',
     },
     {
-      title: "Action",
-      key: "action",
-      fixed: "right" as any,
+      title: 'Action',
+      key: 'action',
+      fixed: 'right' as any,
       width: 100,
       render: (text: any, record: any) => (
         <Space size="middle">
@@ -92,16 +103,19 @@ export default function OrganizationListPage(props: any) {
     <div>
       <Breadcrumb
         items={[
-          { href: "", title: <HomeOutlined /> },
-          { title: "Organizations" },
-          { title: "List" },
+          { href: '', title: <HomeOutlined /> },
+          { title: 'Organizations' },
+          { title: 'List' },
         ]}
         className="p-4"
       />
 
       <Table
         columns={columns}
-        dataSource={props?.organizations}
+        dataSource={data?.map((v: any) => ({
+          ...v,
+          key: v.organizationId + '',
+        }))}
         className="m-2"
         tableLayout="fixed"
         size="small"
@@ -109,13 +123,3 @@ export default function OrganizationListPage(props: any) {
     </div>
   );
 }
-
-export const getServerSideProps: GetServerSideProps = async (context: any) => {
-  const result = await axios.get(process.env.API_PATH + "/organizations");
-
-  return {
-    props: {
-      organizations: result.data,
-    },
-  };
-};

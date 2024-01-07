@@ -51,7 +51,7 @@ export default function InvoiceForm() {
 
   // const action = router.query?.action;
   const invoiceId = searchParams?.get('invoiceId');
-  console.log({ invoiceId });
+
   const [isLoading, setLoader] = useState(false);
   const [isSuccess, setSuccess] = useState(false);
   const [isError, setError] = useState(false);
