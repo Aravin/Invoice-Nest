@@ -1,21 +1,30 @@
-import { Alert, Breadcrumb, Button, Modal, Space, Table } from "antd";
-import axios from "axios";
-import type { GetServerSideProps } from "next";
-import React, { useState } from "react";
+'use client';
+
+import { Alert, Breadcrumb, Button, Modal, Space, Table } from 'antd';
+import axios from 'axios';
+import React, { useState } from 'react';
 import {
-  EditOutlined,
   EditFilled,
   DeleteFilled,
   ExclamationCircleOutlined,
   HomeOutlined,
-} from "@ant-design/icons";
-import { useRouter } from "next/router";
+} from '@ant-design/icons';
+import { useRouter } from 'next/navigation';
+import useSWR from 'swr';
 
-export default function CustomerPage(props: any) {
+export default function Page() {
   const router = useRouter();
   const [isSuccess, setSuccess] = useState(false);
   const [isError, setError] = useState(false);
   const { confirm } = Modal;
+
+  const fetcher = (url: string) => axios.get(url).then((res) => res.data);
+  const { data, error, isLoading } = useSWR(
+    process.env.API_PATH + '/customers',
+    fetcher
+  );
+  if (isLoading) return <div>Loading</div>;
+  if (error) return <div>Error</div>;
 
   const goToAddCustomer = () => router.push(`/customers/create?action=new`);
   const goToEditCustomer = (id: string) =>
@@ -23,12 +32,12 @@ export default function CustomerPage(props: any) {
 
   const deleteCustomer = async (id: string) => {
     confirm({
-      title: "Do you want to delete this items?",
+      title: 'Do you want to delete this items?',
       icon: <ExclamationCircleOutlined />,
       async onOk() {
         try {
-          await axios.delete(process.env.API_PATH + "/customers/" + id);
-          router.replace("/customers");
+          await axios.delete(process.env.API_PATH + '/customers/' + id);
+          router.replace('/customers');
           setSuccess(true);
         } catch (err) {
           console.error(err);
@@ -36,93 +45,93 @@ export default function CustomerPage(props: any) {
         }
       },
       onCancel() {
-        console.log("Cancel");
+        console.log('Cancel');
       },
     });
   };
 
   const columns = [
     {
-      title: "Name",
-      dataIndex: "firstName",
-      key: "firstName",
-      fixed: "left" as any,
+      title: 'Name',
+      dataIndex: 'firstName',
+      key: 'firstName',
+      fixed: 'left' as any,
     },
     {
-      title: "Company",
-      dataIndex: "company",
-      key: "company",
-      fixed: "left" as any,
+      title: 'Company',
+      dataIndex: 'company',
+      key: 'company',
+      fixed: 'left' as any,
     },
     {
-      title: "Email",
-      dataIndex: "email",
-      key: "email",
+      title: 'Email',
+      dataIndex: 'email',
+      key: 'email',
     },
     {
-      title: "Phone",
-      key: "phone",
-      dataIndex: "phone",
+      title: 'Phone',
+      key: 'phone',
+      dataIndex: 'phone',
     },
     {
-      title: "Website",
-      key: "website",
-      dataIndex: "website",
+      title: 'Website',
+      key: 'website',
+      dataIndex: 'website',
     },
     {
-      title: "GST",
-      key: "gst",
-      dataIndex: "gst",
+      title: 'GST',
+      key: 'gst',
+      dataIndex: 'gst',
     },
     {
-      title: "PAN",
-      key: "pan",
-      dataIndex: "pan",
+      title: 'PAN',
+      key: 'pan',
+      dataIndex: 'pan',
     },
     {
-      title: "Tax ID",
-      key: "taxId",
-      dataIndex: "taxId",
+      title: 'Tax ID',
+      key: 'taxId',
+      dataIndex: 'taxId',
     },
     {
-      title: "Address Line1",
-      key: "addressLine1",
-      dataIndex: "addressLine1",
+      title: 'Address Line1',
+      key: 'addressLine1',
+      dataIndex: 'addressLine1',
     },
     {
-      title: "Address Line2",
-      key: "addressLine2",
-      dataIndex: "addressLine2",
+      title: 'Address Line2',
+      key: 'addressLine2',
+      dataIndex: 'addressLine2',
     },
     {
-      title: "City",
-      key: "city",
-      dataIndex: "city",
+      title: 'City',
+      key: 'city',
+      dataIndex: 'city',
     },
     {
-      title: "State",
-      key: "state",
-      dataIndex: "state",
+      title: 'State',
+      key: 'state',
+      dataIndex: 'state',
     },
     {
-      title: "Country",
-      key: "country",
-      dataIndex: "country",
+      title: 'Country',
+      key: 'country',
+      dataIndex: 'country',
     },
     {
-      title: "Zip",
-      key: "zip",
-      dataIndex: "zip",
+      title: 'Zip',
+      key: 'zip',
+      dataIndex: 'zip',
     },
     {
-      title: "Remarks",
-      key: "remarks",
-      dataIndex: "remarks",
+      title: 'Remarks',
+      key: 'remarks',
+      dataIndex: 'remarks',
     },
     {
-      title: "Action",
-      key: "action",
-      fixed: "right" as any,
+      title: 'Action',
+      key: 'action',
+      fixed: 'right' as any,
       width: 100,
       render: (text: any, record: any) => (
         <Space size="middle">
@@ -149,9 +158,9 @@ export default function CustomerPage(props: any) {
     <div>
       <Breadcrumb
         items={[
-          { href: "", title: <HomeOutlined /> },
-          { title: "Customer" },
-          { title: "List" },
+          { href: '', title: <HomeOutlined /> },
+          { title: 'Customer' },
+          { title: 'List' },
         ]}
         className="p-4"
       />
@@ -177,7 +186,7 @@ export default function CustomerPage(props: any) {
 
       <Table
         columns={columns}
-        dataSource={props?.customers}
+        dataSource={data?.map((v: any) => ({ ...v, key: v.customerId + '' }))}
         scroll={{ x: 3000 }}
         className="m-2"
         tableLayout="fixed"
@@ -186,13 +195,3 @@ export default function CustomerPage(props: any) {
     </div>
   );
 }
-
-export const getServerSideProps: GetServerSideProps = async (context: any) => {
-  const result = await axios.get(process.env.API_PATH + "/customers");
-
-  return {
-    props: {
-      customers: result.data,
-    },
-  };
-};
