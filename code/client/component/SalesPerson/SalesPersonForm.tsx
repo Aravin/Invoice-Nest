@@ -1,16 +1,17 @@
-/* eslint-disable react/jsx-no-undef */
+'use client';
+
 import { Form, Input, Button, Row, Tabs, Alert } from 'antd';
 import axios from 'axios';
-import { useRouter } from 'next/router';
+import { usePathname, useRouter, useSearchParams } from 'next/navigation';
 import React, { useState, useEffect } from 'react';
 import Loader from '../Loader/Loader';
-const { TabPane } = Tabs;
 
 export default function SalesPersonForm() {
-
   const router = useRouter();
-  const action = router.query?.action;
-  const salesPersonId = router.query?.id;
+  const searchParams = useSearchParams();
+  const pathname = usePathname();
+
+  const salesPersonId = searchParams?.get('salesPersonId');
   const [isLoading, setLoader] = useState(false);
   const [isSuccess, setSuccess] = useState(false);
   const [isError, setError] = useState(false);
@@ -25,10 +26,12 @@ export default function SalesPersonForm() {
 
   useEffect(() => {
     (async () => {
-      if (action === 'edit') {
+      if (salesPersonId) {
         try {
           setLoader(true);
-          const result = await axios.get(process.env.API_PATH + '/sales-persons/' + salesPersonId);
+          const result = await axios.get(
+            process.env.API_PATH + '/sales-persons/' + salesPersonId
+          );
           form.setFieldsValue(result.data);
         } catch (err) {
           console.error(err);
@@ -38,18 +41,21 @@ export default function SalesPersonForm() {
         }
       }
     })();
-  }, [])
+  }, []);
 
   const onFinish = async (values: any) => {
     setLoader(true);
 
     try {
-      if (action === 'edit') {
-        await axios.patch(process.env.API_PATH + '/sales-persons/' + salesPersonId, values);
+      if (salesPersonId) {
+        await axios.patch(
+          process.env.API_PATH + '/sales-persons/' + salesPersonId,
+          values
+        );
       } else {
         await axios.post(process.env.API_PATH + '/sales-persons', values);
       }
-      router.push('/salesPersons');
+      router.push('/sales-persons');
       setSuccess(true);
     } catch (err) {
       console.log(err);
@@ -65,20 +71,29 @@ export default function SalesPersonForm() {
 
   return (
     <div>
-      {
-        isSuccess && <Alert message="New sales person added successfully!" type="success" closable showIcon className='p-4' />
-      }
-      {
-        isError && <Alert message="Unable to add/update the new sales person, please try again!" type="error" closable showIcon className='p-4' />
-      }
-      {
-        isLoading && <Loader />
-      }
-      {
-        !isLoading &&
+      {isSuccess && (
+        <Alert
+          message="New sales person added successfully!"
+          type="success"
+          closable
+          showIcon
+          className="p-4"
+        />
+      )}
+      {isError && (
+        <Alert
+          message="Unable to add/update the new sales person, please try again!"
+          type="error"
+          closable
+          showIcon
+          className="p-4"
+        />
+      )}
+      {isLoading && <Loader />}
+      {!isLoading && (
         <Form
           form={form}
-          layout='horizontal'
+          layout="horizontal"
           name="basic"
           labelCol={{ sm: { span: 8 }, lg: { span: 4 } }}
           wrapperCol={{ sm: { span: 12 }, lg: { span: 8 } }}
@@ -87,29 +102,32 @@ export default function SalesPersonForm() {
           onFinishFailed={onFinishFailed}
           autoComplete="off"
         >
-
-          <Form.Item label="Full Name" name='name' required={true}>
+          <Form.Item label="Full Name" name="name" required={true}>
             <Input />
           </Form.Item>
 
-          <Form.Item label="Role" name='role'>
+          <Form.Item label="Role" name="role">
             <Input />
           </Form.Item>
 
-          <Form.Item label="Email" name='email'>
+          <Form.Item label="Email" name="email">
             <Input />
           </Form.Item>
 
-          <Form.Item label="Phone" name='phone'>
+          <Form.Item label="Phone" name="phone">
             <Input />
           </Form.Item>
 
-          <Row className='p-4 m-4 gap-4 justify-center'>
-            <Button type="primary" size="large" htmlType="submit">Save</Button>
-            <Button size="large" onClick={router.back}>Cancel</Button>
+          <Row className="p-4 m-4 gap-4 justify-center">
+            <Button type="primary" size="large" htmlType="submit">
+              Save
+            </Button>
+            <Button size="large" onClick={router.back}>
+              Cancel
+            </Button>
           </Row>
         </Form>
-      }
+      )}
     </div>
-  )
+  );
 }

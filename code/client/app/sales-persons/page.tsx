@@ -1,35 +1,44 @@
-import { Breadcrumb, Button, Modal, Space, Table } from "antd";
-import axios from "axios";
-import type { GetServerSideProps } from "next";
-import { useRouter } from "next/router";
-import React, { useState } from "react";
+'use client';
+
+import { Breadcrumb, Button, Modal, Space, Table } from 'antd';
+import axios from 'axios';
+import { useRouter } from 'next/navigation';
+import React, { useState } from 'react';
 import {
-  EditOutlined,
   EditFilled,
   DeleteFilled,
   ExclamationCircleOutlined,
   HomeOutlined,
-} from "@ant-design/icons";
+} from '@ant-design/icons';
+import useSWR from 'swr';
 
-export default function SalesPersonListPage(props: any) {
+export default function Page() {
   const router = useRouter();
   const [isSuccess, setSuccess] = useState(false);
   const [isError, setError] = useState(false);
   const { confirm } = Modal;
 
+  const fetcher = (url: string) => axios.get(url).then((res) => res.data);
+  const { data, error, isLoading } = useSWR(
+    process.env.API_PATH + '/sales-persons',
+    fetcher
+  );
+  if (isLoading) return <div>Loading</div>;
+  if (error) return <div>Error</div>;
+
   const goToAddSalesPerson = () =>
-    router.push(`/salesPersons/create?action=new`);
+    router.push(`/sales-persons/create?action=new`);
   const goToEditSalesPerson = (id: string) =>
-    router.push(`/salesPersons/create?action=edit&id=${id}`);
+    router.push(`/sales-persons/create?action=edit&salesPersonId=${id}`);
 
   const deleteSalesPerson = async (id: string) => {
     confirm({
-      title: "Do you want to delete this items?",
+      title: 'Do you want to delete this items?',
       icon: <ExclamationCircleOutlined />,
       async onOk() {
         try {
-          await axios.delete(process.env.API_PATH + "/sales-persons/" + id);
-          router.replace("/salesPersons");
+          await axios.delete(process.env.API_PATH + '/sales-persons/' + id);
+          router.replace('/sales-persons');
           setSuccess(true);
         } catch (err) {
           console.error(err);
@@ -37,36 +46,36 @@ export default function SalesPersonListPage(props: any) {
         }
       },
       onCancel() {
-        console.log("Cancel");
+        console.log('Cancel');
       },
     });
   };
 
   const columns = [
     {
-      title: "Name",
-      dataIndex: "name",
-      key: "name",
+      title: 'Name',
+      dataIndex: 'name',
+      key: 'name',
     },
     {
-      title: "Role",
-      dataIndex: "role",
-      key: "role",
+      title: 'Role',
+      dataIndex: 'role',
+      key: 'role',
     },
     {
-      title: "Phone",
-      dataIndex: "phone",
-      key: "phone",
+      title: 'Phone',
+      dataIndex: 'phone',
+      key: 'phone',
     },
     {
-      title: "Email",
-      dataIndex: "email",
-      key: "email",
+      title: 'Email',
+      dataIndex: 'email',
+      key: 'email',
     },
     {
-      title: "Action",
-      key: "action",
-      fixed: "right" as any,
+      title: 'Action',
+      key: 'action',
+      fixed: 'right' as any,
       width: 100,
       render: (text: any, record: any) => (
         <Space size="middle">
@@ -93,16 +102,16 @@ export default function SalesPersonListPage(props: any) {
     <div>
       <Breadcrumb
         items={[
-          { href: "", title: <HomeOutlined /> },
-          { title: "Sales Persons" },
-          { title: "List" },
+          { href: '', title: <HomeOutlined /> },
+          { title: 'Sales Persons' },
+          { title: 'List' },
         ]}
         className="p-4"
       />
 
       <Table
         columns={columns}
-        dataSource={props?.salesPersons}
+        dataSource={data?.map((v: any) => ({ ...v, key: v.invoiceId + '' }))}
         className="m-2"
         tableLayout="fixed"
         size="small"
@@ -110,13 +119,3 @@ export default function SalesPersonListPage(props: any) {
     </div>
   );
 }
-
-export const getServerSideProps: GetServerSideProps = async (context: any) => {
-  const result = await axios.get(process.env.API_PATH + "/sales-persons");
-
-  return {
-    props: {
-      salesPersons: result.data,
-    },
-  };
-};
